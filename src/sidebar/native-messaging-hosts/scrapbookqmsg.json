@@ -1,0 +1,7 @@
+{
+  "name": "scrapbookqmsg",
+  "description": "ScrapBookQ host for native messaging",
+  "path": "/home/yourname/Downloads/scrapbookq/scrapbookqmsg.py",  
+  "type": "stdio",
+  "allowed_extensions": [ "tahama@163.com" ]
+}

@@ -1,0 +1,79 @@
+{
+  "extensionName": {
+    "message": "ScrapbookQ",
+    "description": "Name der Erweiterung."
+  },
+  "extensionDescription": {
+    "message": "Erfasst die Webseite in den lokalen Speicher und verwaltet die erfassten Seiten in der Browser-Seitenleiste Kompatibel mit ScrapBook-Dokumenten, unterstützt das Importieren alter ScrapBook-Dokumente.",
+    "description": "Description of the extension."
+  },
+  "CapturePage": {
+    "message": "Seite erfassen"
+  },
+  "OpenDownloadDir": {
+    "message": "Öffnen Sie das Download-Verzeichnis"
+  },
+   "ToggleSidebar": {
+    "message": "Toggle Seitenleiste"
+  },
+  "SaveData": {
+    "message": "Daten speichern"
+  }, 
+   "SaveDataModified": {
+    "message": "*Daten speichern"
+  }, 
+  "LoadDataUp": {
+    "message": "Informationen ∧"
+  }, 
+  "LoadDataDown": {
+    "message": "Informationen ∨"
+  },          
+   "OpenInNewTab": {
+    "message": "In neuem Tab öffnen"
+  },  
+   "OpenOriginURL": {
+    "message": "Öffnen Sie die Ursprungs-URL"
+  },  
+  "Property": {
+    "message": "Eigentum"
+  },    
+  "Cut": {
+    "message": "Schnitt"
+  },  
+   "Paste": {
+    "message": "Einfügen"
+  },  
+   "Delete": {
+    "message": "Löschen"
+  },  
+   "NewDirectory": {
+    "message": "Neues Verzeichnis"
+  },
+   "ConfirmDeleteDirectory": {
+    "message": "Dies ist ein Verzeichnis, wirklich Löschen Sie es und alle Dateien im Verzeichnis?"
+  },
+  "ConfirmInitDirectory": {
+    "message": "Dadurch wird die ScrapbookQ-Konfigurationsdatei überschrieben, wenn Sie ScrapbookQ zuvor installiert haben."
+  },  
+  "StartServer": {
+    "message": "Starten Sie den Server"
+  },  
+   "CloseServer": {
+    "message": "Schließen Sie den Server"
+  },  
+   "InitDownloadDirectory": {
+    "message": "Initialisieren Sie das Download-Verzeichnis"
+  },
+   "TestCase": {
+    "message": "Testfall"
+  },
+   "ManualTitle": {
+    "message": "ScrapbookQ Handbuch."
+  } , 
+  "NativeAppConnectError": {
+    "message": "Das lokale Verbindungsprogramm ist fehlgeschlagen, überprüfen Sie die Konfigurationsdatei: ~./mozilla/native-messaging-hosts/scrapbookqmsg.json, Korrektes Konfigurieren von  \"path\"  als True Path für lokale Programme."
+  },
+  "Loading": {
+	  "message": "Laden..."
+  }
+}

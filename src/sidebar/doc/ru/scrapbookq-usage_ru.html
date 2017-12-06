@@ -1,0 +1,183 @@
+<html>
+
+<head>
+    <meta charset="utf8" />
+    <title>Инструкции ScrapbookQ для использования</title>
+</head>
+
+<body>
+    <h1>Руководство по установке ScrapbookQ</h1>
+    Добро пожаловать в ScrapbookQ
+    <br> Процесс установки очень прост, простейшей автоматической установке нужно только нажать кнопку, выполнить команду
+    <br> Для компьютерных экспертов следуйте инструкциям, которые необходимо выбрать для установки вручную.
+    <br> Следующие шаги предполагают:
+    <br> Домашний каталог пользователя (/home/yourname)，каталог загрузки браузера по умолчанию(/home/yourname/Downloads)
+    <br> Просьба внести соответствующие изменения в соответствии с фактической ситуацией
+    <br>
+    <h2>Автоматизация шагов установки</h2>
+    <ol>
+        <li>
+            <button id="initScrapbookQDirectory">инициализация</button>Нажмите кнопку инициализации, не забудьте открыть путь к каталогу загрузки</li>
+        <li>Выполните следующую команду на консоли (замените
+            <span style="color:red">yourname/Downloads</span>открытым каталогом каталога загрузки):
+            <br>
+            <p>cd /home/
+                <span style="color:red">yourname/Downloads</span>/scrapbookq;chmod +x initscrapbookq.py;python3 initscrapbookq.py</p>
+        </li>
+        <li>Перезапустить браузер Firefox</li>
+    </ol>
+    <h2>Простая процедура установки</h2>
+    <ol>
+        <li>Нажмите кнопку «Инициализировать»</li>
+        <li>Переместить /home/yourname/Downloads/scrapbookq/native-messaging-hosts в ~/.mozilla/</li>
+        <li>редактировать native-messaging-hosts/scrapbookqmsg.json，модификация"path"</li>
+        <li>редактировать ~/Downlaods/scrapbookq/scrapbookq.conf，модификацияrdfspath</li>
+        <li>chmod +x init.sh; sh init.sh</li>
+    </ol>
+    <h2>Подробные этапы установки</h2>
+    <ol>
+        <li>Установите плагины ScrapbookQ, вы можете видеть, что этот документ показывает, что начальная установка завершена</li>
+        <li>Нажмите кнопку, чтобы инициализировать папку ScrapbookQ и файлы(/home/yourname/Downloads/scrapbookq)</li>
+        <li>Откройте каталог scrapbookeq, переместите папку native-messaging-hosts в папку конфигурации firefox (native-messaging-hosts)Папка
+            в папку конфигурации firefox(/home/yourname/.mozilla/)</li>
+        <li>редактировать(native-messaging-hosts)Файл в папке(scrapbookqmsg.json)</li>
+        <li> Файлы в папке (scrapbookqmsg.json)внутри значени"path" для пути файла python папки scrapbookq</li>
+        <li>После завершения поправки об этом:("path": "/home/yourname/Downloads/scrapbookq/scrapbookqmsg.py")</li>
+        <li>Отредактируйте файл конфигурации scrapbookq scrapbookq.conf, значение rdfs будет изменено на путь каталога scrapbookq</li>
+        <li>После завершения пересмотра этого вида:：(rdfspath = /home/yourname/Downloads/scrapbookq/;)</li>
+        <li>Наконец, задайте исполняемые свойства локального файла программы:chmode +x scrapbookqmsg.py</li>
+        <li> Измените файл сохранения и перезапустите браузер, он увидит каталог ScrapbookQ на боковой панели</li>
+
+
+        Измените (scrapbookqmsg.json) я «путь» Измените (scrapbookqmsg.json) внутри значения «путь» для пути файла python папки scrapbookq
+        («путь»: «/home/yourname/Downloads/scrapbookq/scrapbookqmsg.py») (rdfspath = / home / yourname / Downloads / scrapbookq
+        /;) chmode + x scrapbookqmsg.py
+
+
+
+    </ol>
+    <h2>После установки и настройки папки и файла</h2>
+    <ul>
+        <li>Папки и документы
+            <ol>
+                <li>/home/yourname/Downloads/scrapbookq/</li>
+                <li>/home/yourname/Downloads/scrapbookq/scrapbookq.conf</li>
+                <li>/home/yourname/Downloads/scrapbookq/scrapbookq.rdf</li>
+                <li>/home/yourname/Downloads/scrapbookq/scrapbookqmsg.py</li>
+                <li>/home/yourname/.mozilla/native-messaging-hosts/</li>
+                <li>/home/yourname/.mozilla/native-messaging-hosts/scrapbookqmsg.json</li>
+            </ol>
+        </li>
+        <li>профили</li>
+        <ul>
+            <li>/home/yourname/Downloads/scrapbookq/scrapbookq.conf
+                <br>
+                <textarea rows="7" cols="30">
+{
+ "name": "scrapbookqmsg",
+ "description": "ScrapBookQ host for native messaging",
+ "path": "/home/yourname/Downloads/scrapbookq/scrapbookqmsg.py",  
+ "type": "stdio",
+ "allowed_extensions": [ "tahama@163.com" ]
+}
+                </textarea>
+
+            </li>
+            <li>/home/yourname/.mozilla/native-messaging-hosts/scrapbookqmsg.json
+                <br>
+                <textarea rows="7" cols="30">
+[rdfs]
+rdfscount = 1
+rdfspath = /home/yourname/Downloads/scrapbookq/;
+rdfloaded = 0
+[server]
+servertype = http
+serverport = 3338
+                </textarea>
+            </li>
+        </ul>
+    </ul>
+    <h1>Инструкции ScrapbookQ для использования</h1>
+    <ol>
+        <li>После установки плагина ScrapbookQ значок значка ScrapbookQ добавляется на панель инструментов браузера
+            <img src="../../icons/main.png" />
+        </li>
+        <li>Левый щелчок мышью на панели инструментов Icon ScrapbookQ
+            <img src="../../icons/main.png" />Каталог ScrapbookQ открывается на боковой панели браузера</li>
+        <li>Если ScrapbookQ не отображается на боковой панели браузера, выберите ScrapbookQ из раскрывающегося списка в верхней
+            части боковой панели браузера</li>
+        <li>После новой установки плагина ScrapbookQ вам необходимо инициализировать папки и файлы ScrapbookQ:
+            <button>инициализация</button>
+        </li>
+        <li>Нажмите кнопку, чтобы завершить инициализацию, каталог загрузки по умолчанию в браузере пользователя, создать новую
+            папку с записками и необходимые файлы конфигурации и файлы локальных программ</li>
+        <li>Страница каталога ScrapbookQ, открытая на боковой панели браузера, директория ScrapbookQ может управляться с помощью
+            меню правой кнопки мыши</li>
+        <li>После установки плагина ScrapbookQ меню ScrapbookQ и пункты меню отображаются в меню правой кнопки мыши браузера:
+            <ul>
+                <li>Сохранить страницу: сохранить открытую страницу в настоящее время в каталоге ScrapbookQ</li>
+                <li>Переключить боковую панель: открывает / закрывает боковую панель браузера</li>
+                <li>Откройте каталог загрузки: откройте каталог загрузки по умолчанию в браузере, каталог ScrapbookQ находится
+                    здесь</li>
+            </ul>
+        </li>
+
+        <li>Страница каталога ScrapbookQ позволяет вам сделать следующее:
+            <table border="1">
+                <tr>
+                    <td colspan="2">Левая кнопка мыши</td>
+                    <td>Откройте ссылку на файл ScrapbookQ объекта click на текущей вкладке</td>
+                </tr>
+                <tr>
+                    <td rowspan="7">Меню правой кнопки мыши</td>
+                    <td>
+                        <img src="../../icons/file0.png" />Открыть в новой вкладке</td>
+                    <td>Откройте ссылку на файл ScrapbookQ объекта click на вкладке «Создать»</td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="../../icons/file1.png" />Открыть ссылку источника</td>
+                    <td>Откройте начальную ссылку URL-адреса щелкнутого объекта на текущей вкладке</td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="../../icons/folder0.png" />Создать новую папку</td>
+                    <td>Создайте новую папку, прежде чем нажимать на объект</td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="../../icons/star0.png" />собственности</td>
+                    <td>Просмотр свойств объекта click</td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="../../icons/delete.png" />ножницы</td>
+                    <td>Вырезать ссылку или папку файла объекта</td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="../../icons/file1.png" />ручка</td>
+                    <td>Вставить ссылку или папку файла разреза до / внутри объекта клика</td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="../../icons/delete.png" />удалять</td>
+                    <td>Удалить ссылку или папку файла щелкнутого объекта</td>
+                </tr>
+            </table>
+        </li>
+        <li>
+            <img src="../../icons/main.png" />В любой момент вы можете щелкнуть значок панели инструментов ScrapbookQ, чтобы активировать эту страницу, вы
+            также можете щелкнуть правой кнопкой мыши значок, чтобы активировать контекстное меню</li>
+    </ol>
+    <h1>Импорт данных ScrapBook</h1>
+    <ol>
+        <li>модификацияscrapbookq/scrapbookq.conf</li>
+        <li>Добавьте путь, в котором файл данных ScrapBook scrapbook.rdf находится в конце значения rdfspath</li>
+        <li>Вероятно, так:rdfspath = /home/yourname/Downloads/scrapbookq/;/home/windowsD/Documents/firefox/ScrapBook/</li>
+        <li>Перезапустите браузер firefox, если исходные данные ScrapBook больше, первые прочитанные данные будут немного медленными</li>
+    </ol>
+    <script type="text/javascript" src="initscrapbookqdir.js"></script>
+</body>
+
+</html>

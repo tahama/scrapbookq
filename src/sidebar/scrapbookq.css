@@ -1,0 +1,126 @@
+.sul {
+  list-style-type: none;
+  border: solid 1px transparent;
+  padding: 0px;
+  width: 130;
+}
+
+.sli {
+  border: solid 1px;
+  width: 120px;
+}
+
+.liMenu {
+  border: outset 1px;
+  width: 120px;
+  background: #D8D8D8;
+  border-radius: 4px;
+  text-align: center;
+  user-select: none;
+}
+
+.liMenuOver {
+  border: outset 1px;
+  width: 120px;
+  background: #E8E8E8;
+  border-radius: 4px;
+  text-align: center;
+  user-select: none;
+}
+
+.liMenuPress {
+  border: outset 1px;
+  width: 120px;
+  background: #B8B8B8;
+  border-radius: 4px;
+  text-align: center;
+  user-select: none;
+}
+
+.liMouseOver {
+  border: solid 1px;
+  width: 120px;
+  background: #3399cc;
+}
+
+.liShow {
+  display: block;
+}
+
+.liHide {
+  display: none;
+  background: red;
+}
+
+
+li {
+  list-style-type: none;
+  position: relative;
+  margin-left: 2px;
+}
+
+li::before {
+  content: url("");  
+}
+
+li.done {
+  background: #CCFF99;
+}
+
+li.done::before {
+  content: url("");  
+}
+
+a.done {
+  background: #CCFF99;
+}
+
+.tree-root {
+	margin: 0px 0px 0px 0px;	
+}
+
+
+.tree-node {
+	margin: 0px 0px 0px 20px;	
+}
+
+.tree-leaf {
+	margin: 0px 0px 0px 20px;	
+}
+	
+summary.done {
+		background: #CCFF99;
+}
+
+summary {
+  display: block;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+summary::before {
+	/*content: '\229e';*/
+	content: url("icons/folder0.png") 
+}
+
+details[open] > summary::before {
+  content: url("icons/folder1.png");
+}  
+
+.docDetailTable {
+  background: #D8D8D8;
+  font-size:100%;
+}
+
+.docDetailTableHide {
+  background: #D8D8D8;
+  font-size:100%;
+  display: none;
+}
+
+body{
+	width:1280px;
+	overflow-x:scroll;
+	}

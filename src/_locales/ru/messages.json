@@ -1,0 +1,79 @@
+{
+  "extensionName": {
+    "message": "ScrapbookQ",
+    "description": "Имя расширения."
+  },
+  "extensionDescription": {
+    "message": "Захватывает веб-страницу в локальном хранилище и управляет захваченными страницами на боковой панели браузера. Совместимость с документами ScrapBook, поддерживающая импорт старых документов ScrapBook.",
+    "description": "Описание расширения."
+  },
+  "CapturePage": {
+    "message": "Страница захвата"
+  },
+  "OpenDownloadDir": {
+    "message": "Открыть каталог загрузки"
+  },
+   "ToggleSidebar": {
+    "message": "Переключить боковую панель"
+  },
+  "SaveData": {
+    "message": "Сохранить данные"
+  }, 
+   "SaveDataModified": {
+    "message": "*Сохранить данные"
+  }, 
+  "LoadDataUp": {
+    "message": "информация ∧"
+  }, 
+  "LoadDataDown": {
+    "message": "информация ∨"
+  },          
+   "OpenInNewTab": {
+    "message": "Открыть в новой вкладке"
+  },  
+   "OpenOriginURL": {
+    "message": "Открытый URL-адрес источника"
+  },  
+  "Property": {
+    "message": "собственности"
+  },    
+  "Cut": {
+    "message": "покрой"
+  },  
+   "Paste": {
+    "message": "клейстер"
+  },  
+   "Delete": {
+    "message": "удалять"
+  },  
+   "NewDirectory": {
+    "message": "Новый каталог"
+  },
+   "ConfirmDeleteDirectory": {
+    "message": "Это каталог, действительно удалить его и все файлы в каталоге?"
+  },
+  "ConfirmInitDirectory": {
+    "message": "Это будет перезаписывать конфигурационный файл ScrapbookQ, если вы уже установили ScrapbookQ. Действительно ли запустить каталог ScrapbookQ?"
+  },  
+  "StartServer": {
+    "message": "Запустить сервер"
+  },  
+   "CloseServer": {
+    "message": "Закрыть сервер"
+  },  
+   "InitDownloadDirectory": {
+    "message": "Инициализировать папку загрузки"
+  },
+   "TestCase": {
+    "message": "Тест-драйв"
+  },
+   "ManualTitle": {
+    "message": "Руководство пользователя ScrapbookQ."
+  }, 
+  "NativeAppConnectError": {
+    "message": "Сбой локальной программы подключения, проверьте файл конфигурации з:  ~./mozilla/native-messaging-hosts/scrapbookqmsg.json, Правильная настройка  \"path\" в качестве подлинного пути для локальных программ."
+  },
+  "Loading": {
+	  "message": "Загрузка..."
+  }
+}

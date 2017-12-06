@@ -1,0 +1,79 @@
+<html>
+
+<head>
+    <meta charset="utf8" />
+    <title>属性</title>
+</head>
+
+<body>
+    <table border="0">
+        <tr>
+            <td>
+                <lable>标题：</lable>
+            </td>
+            <td>
+                <input type="text" id="title" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <lable>URL：</lable>
+            </td>
+            <td>
+                <input type="text" id="url" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <lable>图标：</lable>
+            </td>
+            <td>
+                <img src="file0.png" height="14" width="12" id="icon" />
+                <select name="icons" id="icons">
+                    <option value="default" selected="selected" id="icondefault">Default</option>
+                    <option value="customized" id="iconcustomized">Customized</option>
+                    <option value="url" id="iconurl">URL</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <lable>ID：</lable>
+            </td>
+            <td>
+                <lable id="id"></lable>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <lable>类型：</lable>
+            </td>
+            <td>
+                <lable id="type"> </lable>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <lable>日期：</lable>
+            </td>
+            <td>
+                <lable id="date"></lable>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <lable>备注：</lable>
+            </td>
+            <td>
+                <textarea cols="16" rows="2" name="comment" id="comment"></textarea>
+            </td>
+        </tr>
+    </table>
+
+    <button type="button" name="cancel" value="Cancel" id="cancel">Cancel</button>
+    <button type="button" name="okl" value="OK" id="ok">OK</button>
+    <script type="text/javascript" src="scrapdetail.js"></script>
+</body>
+
+
+</html>

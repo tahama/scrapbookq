@@ -1,0 +1,79 @@
+{
+  "extensionName": {
+    "message": "ScrapbookQ",
+    "description": "Name of the extension."
+  },
+  "extensionDescription": {
+    "message": "Captures the web page into local storage and manages captured pages in the browser sidebar. Compatible with ScrapBook documents, supporting import old ScrapBook documents.",
+    "description": "Description of the extension."
+  },
+  "CapturePage": {
+    "message": "Capture Page"
+  },
+  "OpenDownloadDir": {
+    "message": "Open Download directory"
+  },
+   "ToggleSidebar": {
+    "message": "Toggle Sidebar"
+  },
+  "SaveData": {
+    "message": "Save Data"
+  }, 
+   "SaveDataModified": {
+    "message": "*Save Data"
+  }, 
+  "LoadDataUp": {
+    "message": "Information ∧"
+  }, 
+  "LoadDataDown": {
+    "message": "Information ∨"
+  },          
+   "OpenInNewTab": {
+    "message": "Open In New Tab"
+  },  
+   "OpenOriginURL": {
+    "message": "Open origin URL"
+  },  
+  "Property": {
+    "message": "Property"
+  },    
+  "Cut": {
+    "message": "Cut"
+  },  
+   "Paste": {
+    "message": "Paste"
+  },  
+   "Delete": {
+    "message": "Delete"
+  },  
+   "NewDirectory": {
+    "message": "New Directory"
+  },
+   "ConfirmDeleteDirectory": {
+    "message": "This is a directory, really Delete it and all files in the directory?"
+  },
+  "ConfirmInitDirectory": {
+    "message": "This will rewrite ScrapbookQ config file if you have installed ScrapbookQ before. Really init ScrapbookQ directory？"
+  },  
+  "StartServer": {
+    "message": "Start Server"
+  },  
+   "CloseServer": {
+    "message": "Close Server"
+  },  
+   "InitDownloadDirectory": {
+    "message": "Initialize Download Directory"
+  },
+   "TestCase": {
+    "message": "Test Case"
+  },
+   "ManualTitle": {
+    "message": "ScrapbookQ Manual."
+  }, 
+  "NativeAppConnectError": {
+    "message": "Connection local program failed, please check the configuration file ~./mozilla/native-messaging-hosts/scrapbookqmsg.json, Correctly configure \"path\" as the true path for local programs."
+  },
+  "Loading": {
+	  "message": "Loading..."
+  }
+}

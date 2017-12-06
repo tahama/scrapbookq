@@ -1,0 +1,50 @@
+<html>
+
+<head>
+  <meta charset=utf8>
+ <link style="text/css" rel="stylesheet" href="scrapbookq.css" />
+</head>
+
+<body>
+
+  <table>
+    <tr>
+      <td>
+        <ul id="myul" class="sul">
+          <li id="informationli" class="liMenu">Information ∨</li>
+          <li id="scrapbookqli" class="liHide">
+            <input type="checkbox" id="scrapbookqrdf">scrapbookq</li>
+          <li id="scrapbookli" class="liHide">
+            <input type="checkbox" id="scrapbookrdf">scrapbook</li>
+          <li id="nativeappli" class="liHide">
+            <input type="checkbox" id="nativeapp">NativeApp</li>
+          <li id="nativeserverli" class="liHide">
+            <input type="checkbox" id="nativeserver">NativeServer</li>
+        </ul>
+      </td>
+      <td>
+        <ul id="myulsavedata" class="sul">
+          <li id="mylisavedata" class="liMenu">SaveData</li>
+        </ul>
+      </td>
+    </tr>
+  </table>
+
+  <div class="docDetail-Container"></div>
+  <div contextmenu="popup-menu" class="scrap-container"></div>
+  <menu type="context" id="popup-menu">
+    <menuitem id="opennewtab" label="OpenInNewTab" icon="icons/file0.png"></menuitem>
+    <menuitem id="opensourceurl" label="OpenOriginURL" icon="icons/file1.png"></menuitem>
+    <menuitem id="menuCreate" label="NewDirectory" icon="icons/folder0.png"></menuitem>
+    <menuitem id="menuDetail" label="Property" icon="icons/star0.png"></menuitem>
+    <menuitem id="menuCut" label="Cut" icon="icons/delete.png"></menuitem>
+    <menuitem id="menuPaste" label="Paste" icon="icons/file1.png"></menuitem>
+    <menuitem id="menuDelete" label="Delete" icon="icons/delete.png"></menuitem>
+  </menu>
+  
+  
+  <script type="text/javascript" src="scrapbookq.js"></script>
+
+</body>
+
+</html>

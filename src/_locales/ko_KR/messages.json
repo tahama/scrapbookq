@@ -1,0 +1,79 @@
+{
+  "extensionName": {
+    "message": "ScrapbookQ",
+    "description": "확장 프로그램 이름."
+  },
+  "extensionDescription": {
+    "message": "웹 페이지를 로컬 저장소로 캡처하고 브라우저 사이드 바에서 캡쳐 된 페이지를 관리합니다. 스크랩북 문서와 호환되며 오래된 스크랩북 문서 가져 오기 지원.",
+    "description": "Description of the extension."
+  },
+  "CapturePage": {
+    "message": "페이지 캡처"
+  },
+  "OpenDownloadDir": {
+    "message": "다운로드 디렉토리 열기"
+  },
+   "ToggleSidebar": {
+    "message": "사이드 바 전환"
+  },
+  "SaveData": {
+    "message": "데이터 저장"
+  }, 
+   "SaveDataModified": {
+    "message": "*데이터 저장"
+  }, 
+  "LoadDataUp": {
+    "message": "정보 ∧"
+  }, 
+  "LoadDataDown": {
+    "message": "정보 ∨"
+  },          
+   "OpenInNewTab": {
+    "message": "새 탭에서 열기"
+  },  
+   "OpenOriginURL": {
+    "message": "공개 된 URL"
+  },  
+  "Property": {
+    "message": "속성"
+  },    
+  "Cut": {
+    "message": "자르다"
+  },  
+   "Paste": {
+    "message": "붙여 넣기"
+  },  
+   "Delete": {
+    "message": "삭제"
+  },  
+   "NewDirectory": {
+    "message": "새 디렉토리"
+  },
+   "ConfirmDeleteDirectory": {
+    "message": "이 디렉토리입니다, 정말 그것을 삭제하고 디렉토리에있는 모든 파일?"
+  },
+  "ConfirmInitDirectory": {
+    "message": "ScrapbookQ를 설치했다면 ScrapbookQ 설정 파일을 다시 쓰게됩니다. 정말로 ScrapbookQ 디렉토리를 초기화 하시겠습니까?"
+  },  
+  "StartServer": {
+    "message": "서버 시작"
+  },  
+   "CloseServer": {
+    "message": "서버 닫기"
+  },  
+   "InitDownloadDirectory": {
+    "message": "다운로드 폴더 초기화"
+  },
+   "TestCase": {
+    "message": "테스트 케이스"
+  },
+   "ManualTitle": {
+    "message": "ScrapbookQ 매뉴얼."
+  }, 
+  "NativeAppConnectError": {
+    "message": "결 로컬 프로그램이 실패 했습니다, 구성 파일을 확인 하십시오: ~./mozilla/native-messaging-hosts/scrapbookqmsg.json, 로컬 프로그램의 실제 경로로 \"path\" 를 올바르게 구성."
+  },
+  "Loading": {
+	  "message": "로드..."
+  } 
+}

@@ -1,0 +1,169 @@
+<html>
+
+<head>
+    <meta charset="utf8" />
+    <title>ScrapbookQ 使用說明</title>
+</head>
+
+<body>
+    <h1>ScrapbookQ 安裝指南</h1>
+    歡迎使用ScrapbookQ
+    <br> 安裝過程很簡單，最簡單的自動化安裝只需要點一下按鈕，執行一個命令即可
+    <br> 對於計算機專家也可以按照說明選擇手動安裝
+    <br> 以下步驟假定：
+    <br> 用戶主目錄為(/home/yourname)，瀏覽器默認下載目錄為(/home/yourname/Downloads)
+    <br> 請根據實際情況進行相應修改
+    <br>
+    <h2>自動化安裝步驟</h2>
+    <ol>
+        <li>
+            <button id="initScrapbookQDirectory">初始化</button>點擊初始化按鈕，記住打開的下載目錄路徑</li>
+        <li>在控制台執行以下命令(替換
+            <span style="color:red">yourname/Downloads</span>為打開的下載目錄路徑)：
+            <br>
+            <p>cd /home/
+                <span style="color:red">yourname/Downloads</span>/scrapbookq;chmod +x initscrapbookq.py;python3 initscrapbookq.py</p>
+        </li>
+        <li>重新啟動firefox瀏覽器</li>
+    </ol>
+    <h2>簡單安裝步驟</h2>
+    <ol>
+        <li>點擊初始化按鈕</li>
+        <li>移動 /home/yourname/Downloads/scrapbookq/native-messaging-hosts 到 ~/.mozilla/</li>
+        <li>編輯 native-messaging-hosts/scrapbookqmsg.json，修改"path"</li>
+        <li>編輯 ~/Downlaods/scrapbookq/scrapbookq.conf，修改rdfspath</li>
+        <li>chmod +x init.sh; sh init.sh</li>
+    </ol>
+    <h2>詳細安裝步驟</h2>
+    <ol>
+        <li>安裝ScrapbookQ插件，能看到此文檔說明已經初步安裝好了</li>
+        <li>點擊按鈕初始化ScrapbookQ文件夾和文件(/home/yourname/Downloads/scrapbookq)</li>
+        <li>打開scrapbookeq目錄，移動(native-messaging-hosts)文件夾到firefox配置文件夾裏(/home/yourname/.mozilla/)</li>
+        <li>編輯(native-messaging-hosts)文件夾裏的文件(scrapbookqmsg.json)</li>
+        <li>修改(scrapbookqmsg.json)裏面"path"一項的值為scrapbookq文件夾裏python文件的路徑</li>
+        <li>修改完成後大概這個樣子：("path": "/home/yourname/Downloads/scrapbookq/scrapbookqmsg.py")</li>
+        <li>編輯scrapbookq目錄裏的配置文件scrapbookq.conf，將rdfs的值修改為scrapbookq目錄的路徑</li>
+        <li>修改完成後大概這個樣子：(rdfspath = /home/yourname/Downloads/scrapbookq/;)</li>
+        <li>最後設置本地程序文件可執行屬性：chmode +x scrapbookqmsg.py</li>
+        <li>修改保存文件後重新啟動瀏覽器會看到側邊欄裏的ScrapbookQ目錄</li>
+    </ol>
+    <h2>安裝配置完成後文件夾及文件</h2>
+    <ul>
+        <li>文件夾及文件
+            <ol>
+                <li>/home/yourname/Downloads/scrapbookq/</li>
+                <li>/home/yourname/Downloads/scrapbookq/scrapbookq.conf</li>
+                <li>/home/yourname/Downloads/scrapbookq/scrapbookq.rdf</li>
+                <li>/home/yourname/Downloads/scrapbookq/scrapbookqmsg.py</li>
+                <li>/home/yourname/.mozilla/native-messaging-hosts/</li>
+                <li>/home/yourname/.mozilla/native-messaging-hosts/scrapbookqmsg.json</li>
+            </ol>
+        </li>
+        <li>配置文件</li>
+        <ul>
+            <li>/home/yourname/Downloads/scrapbookq/scrapbookq.conf
+                <br>
+                <textarea rows="7" cols="30">
+{
+ "name": "scrapbookqmsg",
+ "description": "ScrapBookQ host for native messaging",
+ "path": "/home/yourname/Downloads/scrapbookq/scrapbookqmsg.py",  
+ "type": "stdio",
+ "allowed_extensions": [ "tahama@163.com" ]
+}
+                </textarea>
+
+            </li>
+            <li>/home/yourname/.mozilla/native-messaging-hosts/scrapbookqmsg.json
+                <br>
+                <textarea rows="7" cols="30">
+[rdfs]
+rdfscount = 1
+rdfspath = /home/yourname/Downloads/scrapbookq/;
+rdfloaded = 0
+[server]
+servertype = http
+serverport = 3338
+                </textarea>
+            </li>
+        </ul>
+    </ul>
+    <h1>ScrapbookQ 使用說明</h1>
+    <ol>
+        <li>安裝ScrapbookQ插件後，會在瀏覽器工具欄添加一個ScrapbookQ圖標
+            <img src="../../icons/main.png" />
+        </li>
+        <li>鼠標左鍵點擊工具欄ScrapbookQ圖標
+            <img src="../../icons/main.png" />會在瀏覽器側邊欄打開ScrapbookQ目錄</li>
+        <li>如果瀏覽器側邊欄裏沒有出現ScrapbookQ目錄請在瀏覽器側邊欄頂部下拉列表裏選中ScrapbookQ</li>
+        <li>全新安裝ScrapbookQ插件後需要初始化ScrapbookQ文件夾和文件：
+            <button>初始化</button>
+        </li>
+        <li>點擊按鈕完成初始化後，會在用戶瀏覽器默認下載目錄裏新建scrapbook文件夾及必要的配置文件和本地程序文件</li>
+        <li>在瀏覽器側邊欄裏打開的ScrapbookQ目錄頁面上，可以通過鼠標右鍵菜單管理ScrapbookQ目錄</li>
+        <li>安裝ScrapbookQ插件後，在瀏覽器鼠標右鍵菜單會出現ScrapbookQ菜單和菜單項：
+            <ul>
+                <li>保存頁面： 保存當前打開的頁面到ScrapbookQ目錄裏</li>
+                <li>切換側邊欄： 打開/關閉瀏覽器側邊欄</li>
+                <li>打開下載目錄： 打開瀏覽器默認下載目錄，ScrapbookQ目錄就放在這裏</li>
+            </ul>
+        </li>
+
+        <li>ScrapbookQ目錄頁面上可以進行以下操作：
+            <table border="1">
+                <tr>
+                    <td colspan="2">鼠標左鍵</td>
+                    <td>在當前標簽頁打開點擊對象的ScrapbookQ文件鏈接</td>
+                </tr>
+                <tr>
+                    <td rowspan="7">右鍵菜單</td>
+                    <td>
+                        <img src="../../icons/file0.png" />在新建標簽頁中打開</td>
+                    <td>在新建標簽頁打開點擊對象的ScrapbookQ文件鏈接</td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="../../icons/file1.png" />打開源鏈接</td>
+                    <td>在當前標簽頁打開點擊對象的初始URL鏈接</td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="../../icons/folder0.png" />新建文件夾</td>
+                    <td>在點擊對象之前新建文件夾</td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="../../icons/star0.png" />屬性</td>
+                    <td>查看點擊對象的屬性</td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="../../icons/delete.png" />剪切</td>
+                    <td>剪切點擊對象的文件鏈接或者文件夾</td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="../../icons/file1.png" />粘貼</td>
+                    <td>粘貼已剪切的文件鏈接或者文件夾到點擊對象之前/之內</td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="../../icons/delete.png" />刪除</td>
+                    <td>刪除點擊對象的文件鏈接或者文件夾</td>
+                </tr>
+            </table>
+        </li>
+        <li>隨時可以點擊瀏覽器工具欄的ScrapbookQ圖標
+            <img src="../../icons/main.png" />激活本頁面，也可以右擊圖標激活右鍵菜單</li>
+    </ol>
+    <h1>導入ScrapBook數據</h1>
+    <ol>
+        <li>修改scrapbookq/scrapbookq.conf</li>
+        <li>在rdfspath值的末尾添加ScrapBook數據文件scrapbook.rdf所在路徑</li>
+        <li>大概這個樣子：rdfspath = /home/yourname/Downloads/scrapbookq/;/home/windowsD/Documents/firefox/ScrapBook/</li>
+        <li>重新啟動firefox瀏覽器、如果原有ScrapBook數據比較多，第一次讀取數據會有點慢</li>
+    </ol>
+    <script type="text/javascript" src="initscrapbookqdir.js"></script>
+</body>
+
+</html>

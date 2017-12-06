@@ -1,0 +1,55 @@
+{
+  "manifest_version": 2,
+  "name": "__MSG_extensionName__",
+  "description": "__MSG_extensionDescription__",
+  "version": "0.1.2",
+  "author": "Joey Liu",
+   "default_locale": "en",
+   
+  "applications": {
+    "gecko": {
+		"id": "tahama@163.com",
+      "strict_min_version": "57.0"
+    }
+  },
+  "icons": {
+    "32": "icons/main_32.png",
+    "24": "icons/main_24.png",
+    "16": "icons/main_16.png"
+  },
+  "background": {
+    "scripts": [
+      "sidebar/background.js"
+    ]
+  },
+  "sidebar_action": {
+    "default_icon": "icons/star.png",
+    "default_title": "ScrapbookQ",
+    "default_panel": "sidebar/scrapbookq.html"
+  },
+  "browser_action": {
+    "default_icon": "icons/main_128.png"
+  },
+  "permissions": [	
+    "nativeMessaging", 
+    "contextMenus",
+        "menus",
+      "downloads",
+      "bookmarks",
+      "storage",
+      "activeTab",
+      "tabs",
+      "webNavigation",
+      "webRequest",
+      "webRequestBlocking",
+      "http://*/*",
+      "https://*/*"
+  ],
+  "commands": {
+    "_execute_sidebar_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+Y"
+      }
+    }
+  }
+}

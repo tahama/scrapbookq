@@ -1,0 +1,79 @@
+{
+  "extensionName": {
+    "message": "ScrapbookQ",
+    "description": "内線番号."
+  },
+  "extensionDescription": {
+    "message": "Webページをローカルストレージにキャプチャし、ブラウザサイドバーでキャプチャされたページを管理します。ScrapBookドキュメントと互換性があり、古いScrapBookドキュメントをインポートできます。.",
+    "description": "拡張機能の説明."
+  },
+  "CapturePage": {
+    "message": "キャプチャページ"
+  },
+  "OpenDownloadDir": {
+    "message": "ダウンロードディレクトリを開く"
+  },
+   "ToggleSidebar": {
+    "message": "サイドバーの切り替え"
+  },
+  "SaveData": {
+    "message": "データを保存する"
+  }, 
+   "SaveDataModified": {
+    "message": "*データを保存する"
+  }, 
+  "LoadDataUp": {
+    "message": "情報 ∧"
+  }, 
+  "LoadDataDown": {
+    "message": "情報 ∨"
+  },          
+   "OpenInNewTab": {
+    "message": "新しいタブで開く"
+  },  
+   "OpenOriginURL": {
+    "message": "公開先URL"
+  },  
+  "Property": {
+    "message": "プロパティ"
+  },    
+  "Cut": {
+    "message": "カット"
+  },  
+   "Paste": {
+    "message": "ペースト"
+  },  
+   "Delete": {
+    "message": "削除"
+  },  
+   "NewDirectory": {
+    "message": "新しいディレクトリ"
+  },
+   "ConfirmDeleteDirectory": {
+    "message": "これはディレクトリです、本当にそれを削除し、ディレクトリ内のすべてのファイル？"
+  },
+  "ConfirmInitDirectory": {
+    "message": "以前にScrapbookQをインストールしていた場合、これはScrapbookQ設定ファイルを書き換えます。本当にScrapbookQディレクトリを初期化しますか？"
+  },  
+  "StartServer": {
+    "message": "サーバーの起動"
+  },  
+   "CloseServer": {
+    "message": "サーバーを閉じる"
+  },  
+   "InitDownloadDirectory": {
+    "message": "ダウンロードディレクトリを初期化する"
+  },
+   "TestCase": {
+    "message": "テストケース"
+  },
+   "ManualTitle": {
+    "message": "ScrapbookQ マニュアル."
+  }, 
+  "NativeAppConnectError": {
+    "message": "接続ローカルプログラムが失敗しました、構成ファイル : ~./mozilla/native-messaging-hosts/scrapbookqmsg.json  を確認してください, ローカルプログラムの真のパスとして \"path\" を正しく設定する."
+  },
+  "Loading": {
+	  "message": "読み込み..."
+  }  
+}

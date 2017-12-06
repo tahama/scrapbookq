@@ -1,0 +1,79 @@
+{
+  "extensionName": {
+    "message": "ScrapbookQ",
+    "description": "Name of the extension."
+  },
+  "extensionDescription": {
+    "message": "保存网页到本地存储，通过浏览器侧边栏里便捷地管理已保存的网页. 兼容ScrapBook档案文件，支持导入ScrapBook档案文件。",
+    "description": "Description of the extension."
+  },
+  "CapturePage": {
+    "message": "保存页面"
+  },
+  "OpenDownloadDir": {
+    "message": "打开下载目录"
+  },
+   "ToggleSidebar": {
+    "message": "切换侧边栏"
+  },
+   "SaveData": {
+    "message": "保存数据"
+  }, 
+   "SaveDataModified": {
+    "message": "*保存数据"
+  },   
+  "LoadDataUp": {
+    "message": "状态信息 ∧"
+  }, 
+  "LoadDataDown": {
+    "message": "状态信息 ∨"
+  },    
+   "OpenInNewTab": {
+    "message": "在新标签页打开"
+  },   
+  "OpenOriginURL": {
+    "message": "打开源链接"
+  },    
+   "Property": {
+    "message": "属性"
+  },    
+  "Cut": {
+    "message": "剪切"
+  },  
+   "Paste": {
+    "message": "粘贴"
+  },  
+   "Delete": {
+    "message": "删除"
+  },  
+   "NewDirectory": {
+    "message": "新建文件夹"
+  },
+   "ConfirmDeleteDirectory": {
+    "message": "这是一个文件夹，确定要删除这个文件夹和里面的全部文件吗？"
+  }, 
+  "ConfirmInitDirectory": {
+    "message": "如果以前安装过ScrapbookQ,这会覆盖原有的配置文件。确定要初始化ScrapbookQ文件夹吗？ "
+  },
+  "StartServer": {
+    "message": "启动服务器"
+  },  
+   "CloseServer": {
+    "message": "关闭服务器"
+  },  
+   "InitDownloadDirectory": {
+    "message": "初始化下载文件夹"
+  },
+   "TestCase": {
+    "message": "测试案例"
+  },
+   "ManualTitle": {
+    "message": "ScrapbookQ使用说明。"
+  }, 
+  "NativeAppConnectError": {
+    "message": "连接本地程序失败, 请检查配置文件: ~./mozilla/native-messaging-hosts/scrapbookqmsg.json, 正确配置 \"path\"为本地程序的真实路径"
+  },
+  "Loading": {
+	  "message": "加载中..."
+  }
+}

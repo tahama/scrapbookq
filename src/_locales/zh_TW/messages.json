@@ -1,0 +1,79 @@
+{
+  "extensionName": {
+    "message": "ScrapbookQ",
+    "description": "Name of the extension."
+  },
+  "extensionDescription": {
+    "message": "保存網頁到本地存儲，通過瀏覽器側邊欄裏便捷地管理已保存的網頁. 兼容ScrapBook檔案文件，支持導入ScrapBook檔案文件。",
+    "description": "Description of the extension."
+  },
+  "CapturePage": {
+    "message": "保存頁面"
+  },
+  "OpenDownloadDir": {
+    "message": "打開下載目錄"
+  },
+   "ToggleSidebar": {
+    "message": "切換側邊欄"
+  },
+   "SaveData": {
+    "message": "保存數據"
+  }, 
+   "SaveDataModified": {
+    "message": "*保存數據"
+  },   
+  "LoadDataUp": {
+    "message": "狀態信息 ∧"
+  }, 
+  "LoadDataDown": {
+    "message": "狀態信息 ∨"
+  },    
+   "OpenInNewTab": {
+    "message": "在新標簽頁打開"
+  },   
+  "OpenOriginURL": {
+    "message": "打開源鏈接"
+  },    
+   "Property": {
+    "message": "屬性"
+  },    
+  "Cut": {
+    "message": "剪切"
+  },  
+   "Paste": {
+    "message": "粘貼"
+  },  
+   "Delete": {
+    "message": "刪除"
+  },  
+   "NewDirectory": {
+    "message": "新建文件夾"
+  },
+   "ConfirmDeleteDirectory": {
+    "message": "這是一個文件夾，確定要刪除這個文件夾和裏面的全部文件嗎？"
+  }, 
+  "ConfirmInitDirectory": {
+    "message": "如果以前安裝過ScrapbookQ,這會覆蓋原有的配置文件。確定要初始化ScrapbookQ文件夾嗎？ "
+  },
+  "StartServer": {
+    "message": "啟動服務器"
+  },  
+   "CloseServer": {
+    "message": "關閉服務器"
+  },  
+   "InitDownloadDirectory": {
+    "message": "初始化下載文件夾"
+  },
+   "TestCase": {
+    "message": "測試案例"
+  },
+   "ManualTitle": {
+    "message": "ScrapbookQ使用說明。"
+  }, 
+  "NativeAppConnectError": {
+    "message": "連接本地程序失敗, 請檢查配置文件: ~./mozilla/native-messaging-hosts/scrapbookqmsg.json, 正確配置 \"path\"為本地程序的真實路徑"
+  },
+  "Loading": {
+	  "message": "載入..."
+  }
+}

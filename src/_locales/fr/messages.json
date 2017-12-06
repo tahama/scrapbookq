@@ -1,0 +1,80 @@
+{
+  "extensionName": {
+    "message": "ScrapbookQ",
+    "description": "Name of the extension."
+  },
+  "extensionDescription": {
+    "message": "Capture la page Web dans le stockage local et gère les pages capturées dans la barre latérale du navigateur. Compatible avec les documents ScrapBook, prenant en charge l'importation de vieux documents ScrapBook.",
+    "description": "Description of the extension."
+  },
+  "CapturePage": {
+    "message": "Capture de la page"
+  },
+  "OpenDownloadDir": {
+    "message": "Ouvrir le répertoire de téléchargement"
+  },
+   "ToggleSidebar": {
+    "message": "Basculer la barre latérale"
+  },
+  "SaveData": {
+    "message": "Enregistrer des données"
+  }, 
+   "SaveDataModified": {
+    "message": "*Enregistrer des données"
+  }, 
+  "LoadDataUp": {
+    "message": "Information ∧"
+  }, 
+  "LoadDataDown": {
+    "message": "Information ∨"
+  },          
+   "OpenInNewTab": {
+    "message": "Ouvrir dans un nouvel onglet"
+  },  
+   "OpenOriginURL": {
+    "message": "URL d'origine ouverte"
+  },  
+  "Property": {
+    "message": "Propriété"
+  },    
+  "Cut": {
+    "message": "Couper"
+  },  
+   "Paste": {
+    "message": "Coller"
+  },  
+   "Delete": {
+    "message": "Effacer"
+  },  
+   "NewDirectory": {
+    "message": "Nouveau répertoire"
+  },
+   "ConfirmDeleteDirectory": {
+    "message": "Ceci est un répertoire, vraiment le supprimer et tous les fichiers dans le répertoire?"
+  },
+  "ConfirmInitDirectory": {
+    "message": "Cela va réécrire le fichier de configuration ScrapbookQ si vous avez déjà installé ScrapbookQ. Vraiment init répertoire ScrapbookQ?"
+  },  
+  "StartServer": {
+    "message": "Démarrer le serveur"
+  },  
+   "CloseServer": {
+    "message": "Fermer le serveur"
+  },  
+   "InitDownloadDirectory": {
+    "message": "Initialiser le dossier de téléchargement"
+  },
+   "TestCase": {
+    "message": "Cas de test"
+  },
+   "ManualTitle": {
+    "message": "ScrapbookQ Manuel."
+  }, 
+  "NativeAppConnectError": {
+    "message": "Le programme local de connexion a échoué, veuillez vérifier le fichier de configuration: ~./mozilla/native-messaging-hosts/scrapbookqmsg.json, Configurer correctement  \"path\" xxxx comme chemin d'accès réel pour les programmes locaux."
+  },
+  "Loading": {
+	  "message": "chargement..."
+  } 
+}
+
