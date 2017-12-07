@@ -1,6 +1,7 @@
 # scrapbookq
 
-ScrapbookQ is a Firefox extension, which helps you to save Web pages and easily manage collections. 
+ScrapbookQ is a Firefox extension, which helps you to save Web pages and easily manage collections.
+
 ScrapbookQ = ScrapBook for Quantum
 
 
@@ -14,7 +15,7 @@ ScrapbookQ = ScrapBook for Quantum
 
 * Current version only support Linux and Python3
 * Installation needs user do something: click one button and then enter one line bash command
-* Without a corean manual because Korean looks like a shading pattern and can't tell which line machine translation should be inserted into
+* Without a Korean manual because Korean looks like a shading pattern and can't tell which line machine translation should be inserted into
 
 ## Todo
 
