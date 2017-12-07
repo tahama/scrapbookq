@@ -75,5 +75,11 @@
   },
   "Loading": {
 	  "message": "Laden..."
-  }
+  },
+  "ReloadSidebar": {
+	  "message": "Seitenleiste neu laden"
+  },
+  "ConfirmReloadSidebar": {
+	  "message": "Reload Sidebar dauert ein wenig Zeit, warten Sie bitte geduldig."
+  }  
 }

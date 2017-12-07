@@ -75,6 +75,12 @@
   },
   "Loading": {
 	  "message": "chargement..."
+  },
+  "ReloadSidebar": {
+	  "message": "Barre latérale de rechargement"
+  },
+  "ConfirmReloadSidebar": {
+	  "message": "Rechargement Sidebar prend un peu de temps, s'il vous plaît attendre patiemment."
   } 
 }
 

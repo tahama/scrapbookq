@@ -75,5 +75,11 @@
   },
   "Loading": {
 	  "message": "Loading..."
+  },
+  "ReloadSidebar": {
+	  "message": "Reload Sidebar"
+  },
+  "ConfirmReloadSidebar": {
+	  "message": "Reloading sidebar takes a little time, please wait patiently."
   }
 }

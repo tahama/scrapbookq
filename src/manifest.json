@@ -37,6 +37,7 @@
       "downloads",
       "bookmarks",
       "storage",
+       "unlimitedStorage",
       "activeTab",
       "tabs",
       "webNavigation",

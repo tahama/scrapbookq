@@ -75,5 +75,11 @@
   },
   "Loading": {
 	  "message": "로드..."
+  },
+  "ReloadSidebar": {
+	  "message": "다시 로드 사이드바"
+  },
+  "ConfirmReloadSidebar": {
+	  "message": "사이드바를 다시 로드 하는 시간이 좀 걸립니다 인내심을 기다려주십시오。"
   } 
 }

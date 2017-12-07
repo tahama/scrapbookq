@@ -308,7 +308,7 @@ port.onMessage.addListener((response) => {
   if (response.indexOf("TEST") != -1) {
     const servertest = response.split(":");
     console.log("background.js sendMessage test" + servertest[1] + servertest[2] + servertest[3] + servertest[4]);
-    browser.runtime.sendMessage({ test: "TEST", sbqrdf: servertest[1], sbqhtml: servertest[2], sbrdf: servertest[3], openmanual: servertest[4] });
+    browser.runtime.sendMessage({ test: "TEST", sbqrdf: servertest[1], sbqhtml: servertest[2], sbrdf: servertest[3], serverstatus: servertest[4] });
   }
   //format: SERVERS:folders:ports:rdfloaded
   if (response.indexOf("SERVERS") != -1) {

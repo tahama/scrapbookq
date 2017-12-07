@@ -236,6 +236,7 @@ openmanual = cfg.get("rdfs", "openmanual")
 scrapbookqrdf = "0"
 scrapbookqhtml = "0"
 scrapbookrdf = "0"
+serverstatus = "0"
 for path in rdfspath:
     if path.split("/")[-2] == "scrapbookq":
         folderspath["scrapbookq"] = path
@@ -253,7 +254,7 @@ print("TEST:" + scrapbookqrdf + ":" + scrapbookqhtml +  ":" + scrapbookrdf)
 while True:
     receivedMessage = getMessage()
     if receivedMessage == "TESTSERVER":
-        sendMessage(encodeMessage("TEST:" + scrapbookqrdf + ":" + scrapbookqhtml +  ":" + scrapbookrdf + ":" + openmanual))
+        sendMessage(encodeMessage("TEST:" + scrapbookqrdf + ":" + scrapbookqhtml +  ":" + scrapbookrdf + ":" + serverstatus))
     if receivedMessage[:7] == "DELETE:":
         deleteFiles(receivedMessage[7:])
         sendMessage(encodeMessage("DELETED:" + receivedMessage[7:]))
@@ -263,6 +264,7 @@ while True:
     if receivedMessage == "CLOSESERVER":
         for path in rdfspath:
             scrpbookq_httpds[path].shutdown()
+        serverstatus = "0"
         sendMessage(encodeMessage("CLOSESERVER DONE"))
     if receivedMessage == "STARTERVER": 
         for path in rdfspath:
@@ -273,8 +275,9 @@ while True:
             time.sleep(1)
             folders += path.split("/")[-2] + ";"
             ports += str(serverPort) + ";"
-            serverPort += 1 
-        sendMessage(encodeMessage("STARTSERVER OK"))
+            serverPort += 1
+        serverstatus = "1"
+        sendMessage(encodeMessage("STARTSERVER OK serverstatus:" + serverstatus))
         sendMessage(encodeMessage("SERVERS:" + folders + ":" + ports + ":" + str(cfg.getint("rdfs", "rdfloaded"))))
     #if receivedMessage.startswith("GET:"): 
         #scrapbookqId = "20171127195340"

@@ -75,5 +75,11 @@
   },
   "Loading": {
 	  "message": "加载中..."
+  },
+  "ReloadSidebar": {
+	  "message": "重新加载侧边栏"
+  },
+  "ConfirmReloadSidebar": {
+	  "message": "重新加载侧边栏需要花费一点时间，请耐心等待。"
   }
 }

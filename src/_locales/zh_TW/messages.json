@@ -75,5 +75,11 @@
   },
   "Loading": {
 	  "message": "載入..."
+  },
+  "ReloadSidebar": {
+	  "message": "重新載入側邊欄"
+  },
+  "ConfirmReloadSidebar": {
+	  "message": "重新載入側邊欄需要花費一點時間，請耐心等待。"
   }
 }

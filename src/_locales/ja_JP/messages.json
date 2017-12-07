@@ -75,5 +75,11 @@
   },
   "Loading": {
 	  "message": "読み込み..."
+  },
+   "ReloadSidebar": {
+	  "message": "サイドバーのリロード"
+  },
+  "ConfirmReloadSidebar": {
+	  "message": "サイドバーをリロードする少し時間がかかる、辛抱強く待ってください。"
   }  
 }
