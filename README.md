@@ -47,7 +47,7 @@ The author is a newbee in Javascript programming. He even can not write a correc
 
 **Q: What is ScrapbookQ?**
 
-This is a big problem. ScrapbookQ do the same thing like a firefox extension named ScrapBook. Please goole for ScrapBook extension for firefox.
+This is a big problem. ScrapbookQ does the same thing as a firefox extension named ScrapBook does. Please google "ScrapBook firefox extension".
 
 **Q: Can I use ScrapbookQ on windows?**
 
@@ -55,7 +55,7 @@ Current version only support Linux and Python3, next version will do somework to
 
 **Q: How to get ScrapbookQ?**
 
-Press on [ScrapbookQ](https://addons.mozilla.org/firefox/addon/scrapbookq) can lead to ScrapbookQ, and then click "Add this extension to firefox" bule button in the website.
+Press on [ScrapbookQ](https://addons.mozilla.org/firefox/addon/scrapbookq) can lead to ScrapbookQ, and then click "Add this extension to firefox" blue button in the website.
 
 **Q: How to help improve this project?**
 
@@ -63,4 +63,4 @@ Fork this project and improve it, or develop a new extension better than Scrapbo
 
 **Q: How to help the author?**
 
-Stars for this project on [github](https://github.com/tahama/scrapbookq) and [Firefox](https://addons.mozilla.org/firefox/addon/scrapbookq) is good enough. And if you're a millionaire, just do what you like.
+Stars for this project on [github](https://github.com/tahama/scrapbookq) and [Firefox](https://addons.mozilla.org/firefox/addon/scrapbookq) is good enough. And if you're a millionaire, just do what you like and familiar.
