@@ -204,6 +204,7 @@ function initScrapbookqHeader() {
 
 	//避免未选中任何对象时操作scrapbookq
 	currentTarget = document.getElementById("scrapbookq");
+	//如果arr没有数据就新建一个，这种情况出现在第一次安装ScrapbookQ的情况下
 	if (arrNodes == null) {
 		arrNodes = new Array();
 		arrNodes.push(new scrapNode(
@@ -351,7 +352,7 @@ function initScrapbookqHeader() {
 	}
 }
 
-//插入到目标id的后面,如果时folder插进去
+//插入到目标id的后面,如果是folder插进去，总觉得这句注释哪里有点不对劲啊
 function insertScrapNode(scrapArray, currentId, scrapNodeObj) {
 	var subNode = null;
 	for (var i = 0; i < scrapArray.length; i++) {
@@ -1183,6 +1184,7 @@ function getScrapNodes(RDFResource, arrNodes) {
 	}
 }
 
+/*保存sidebar的arr和html以及几个必须状态值到local storage*/
 function ScrapBookQApp(arrayNodes, sidebarhtml, folderport, scrapbookqhtmlok, scrapbookqrdfok, scrapbookrdfok, rdfloaded) {
 	this.arrayNodes = arrayNodes;
 	this.sidebarhtml = sidebarhtml;
@@ -1192,7 +1194,6 @@ function ScrapBookQApp(arrayNodes, sidebarhtml, folderport, scrapbookqhtmlok, sc
 	this.scrapbookrdfok = scrapbookrdfok;
 	this.rdfloaded = rdfloaded;
 }
-
 function scrapNode(about, id, type, title, chars, icon, source, comment, subNodes, foldername) {
 	this.about = about;
 	this.id = id;
@@ -1217,6 +1218,8 @@ function loadXMLDoc(dname) {
 	if (xmlhttp != null) {
 		xmlhttp.open("GET", dname, false);
 		//xmlhttp.setRequestHeader("Content-Type", "text/xml");
+
+		//rdf文件server不能正确返回content type，需要进行重写
 		if (dname.indexOf(".rdf") != -1) {
 			xmlhttp.overrideMimeType("text/xml");
 		}
@@ -1345,6 +1348,7 @@ function onDeleteDocument(event) {
 function getNow() {
 	var now = new Date();
 	var ns = "".concat(now.getFullYear());
+	//getMonth()是从0开始的，其他的从1开始，这不是有毛病嘛
 	ns = ns.concat(now.getMonth() + 1 < 10 ? "0".concat(now.getMonth() + 1) : now.getMonth() + 1);
 	ns = ns.concat(now.getDate() < 10 ? "0".concat(now.getDate()) : now.getDate());
 	ns = ns.concat(now.getHours() < 10 ? "0".concat(now.getHours()) : now.getHours());
@@ -1353,6 +1357,7 @@ function getNow() {
 	return ns;
 }
 
+//扩展不支持拖放，放弃了
 function allowDrop(event) {
 	event.preventDefault();
 }
@@ -1390,6 +1395,7 @@ function drop(event) {
 	}
 }
 
+/*保存dom到rdf文件*/
 function downloadScrapbookqData(domHtml) {
 
 	function onStartedDownload(id) {
@@ -1399,7 +1405,6 @@ function downloadScrapbookqData(domHtml) {
 	function onFailed(error) {
 		console.log(`Download failed: ${error}`);
 	}
-
 	//alert("保存文件到scrapbookq/scrapbookq.rdf");
 
 	//pageHtml = request.pagecontent; pageFiles = request.pagefiles;
