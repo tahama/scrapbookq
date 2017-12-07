@@ -1,6 +1,14 @@
 # scrapbookq
 
-ScrapbookQ is a Firefox extension, which helps you to save Web pages and easily manage collections. Compatible with old ScrapBook extension, Suppert manage captures at browser sidebar.
+ScrapbookQ is a Firefox extension, which helps you to save Web pages and easily manage collections. 
+
+ScrapbookQ = ScrapBook for Quantum
+
+## Funtion:
+
+1. Compatible with old ScrapBook extension
+1. Support import ScrapBook data
+1. Support manage captures at browser sidebar
 
 ## 特性
 
