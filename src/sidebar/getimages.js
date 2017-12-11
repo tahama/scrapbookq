@@ -22,17 +22,20 @@ document.body.appendChild(label);
 */
 
 for (imgs = 0; imgs < document.images.length; imgs++) {
-    imagesURL.push(document.images[imgs].src);
-    //去掉文件名前后的/和?等内容
-    let index0 = document.images[imgs].src.lastIndexOf("/");
-    let index1 = document.images[imgs].src.search(/[?]/g);
-    let str0 = null;
-    if (index1 < 0) {
-        index1 = document.images[imgs].src.length;
+    let imgurl = null;
+    imgurl = document.images[imgs].src;
+    if (imgurl.indexOf("://") != -1) {
+        imagesURL.push(imgurl);
+        //去掉文件名前后的/和?等内容
+        let index0 = document.images[imgs].src.lastIndexOf("/");
+        let index1 = document.images[imgs].src.search(/[?]/g);
+        let str0 = null;
+        if (index1 < 0) {
+            index1 = document.images[imgs].src.length;
+        }
+        str0 = document.images[imgs].src.substr(index0 + 1, index1 - index0 - 1);
+        document.images[imgs].src = str0;
     }
-    str0 = document.images[imgs].src.substr(index0 + 1, index1 - index0 - 1);
-    document.images[imgs].src = str0;
-
     /*
     var i = document.images[imgs].src.search(/[?]/g);
     var len = document.images[imgs].src.lenght;
@@ -46,18 +49,22 @@ for (imgs = 0; imgs < document.images.length; imgs++) {
     document.body.appendChild(label);
     */
 }
-  
+
 
 var links = document.getElementsByTagName("link");
 var lnks;
 for (lnks = 0; lnks < links.length; lnks++) {
-    if (links[lnks].getAttribute("rel") == "stylesheet" || links[lnks].getAttribute("rel") == "shortcut icon") {
+    let imgurl = null;
+    if (links[lnks].getAttribute("href") != null && (links[lnks].getAttribute("rel") == "stylesheet" || links[lnks].getAttribute("rel") == "shortcut icon")) {
         //href以/开头就是从域名根目录算起
         if (links[lnks].getAttribute("href")[0] == "/") {
-            imagesURL.push(document.URL.slice(0, document.URL.indexOf("/")) + "//" + document.domain + links[lnks].getAttribute("href"));
+            imgurl = document.URL.slice(0, document.URL.indexOf("/")) + "//" + document.domain + links[lnks].getAttribute("href");
         }
         else {
-            imagesURL.push(document.URL + links[lnks].getAttribute("href"));
+            imgurl = document.URL + links[lnks].getAttribute("href");
+        }
+        if (imgurl.indexOf("://") != -1) {
+            imagesURL.push(imgurl);
         }
 
         //去掉文件名前后的/和?等内容

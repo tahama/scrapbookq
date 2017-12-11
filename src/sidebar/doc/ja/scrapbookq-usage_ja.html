@@ -18,11 +18,12 @@
     <ol>
         <li>
             <button id="initScrapbookQDirectory">初期化</button>[初期化] ボタン，ダウンロードディレクトリのパスを開くことを忘れないでください</li>
-        <li>在コンソールは次のコマンドを実行します。(交換
+            <li>Windows のユーザーが見つかりました scrapbookq ディレクトリを開いているダウンロードディレクトリ, 実行 init_scrapbookq.bat バッチファイルの scrapbookq ディレクトリ</li>
+        <li>Linux ユーザー 在コンソールは次のコマンドを実行します。(交換
             <span style="color:red">yourname/Downloads</span>ダウンロードディレクトリのパスを開く)：
             <br>
             <p>cd /home/
-                <span style="color:red">yourname/Downloads</span>/scrapbookq;chmod +x initscrapbookq.py;python3 initscrapbookq.py</p>
+                <span style="color:red">yourname/Downloads</span>/scrapbookq;chmod +x scrapbookqmsg;./scrapbookqmsg init</p>
         </li>
         <li>Firefox ブラウザを再始動しなさい</li>
     </ol>
@@ -31,8 +32,8 @@
         <li>点[初期化] ボタン</li>
         <li>モバイル /home/yourname/Downloads/scrapbookq/native-messaging-hosts 宛先 ~/.mozilla/</li>
         <li>編集 native-messaging-hosts/scrapbookqmsg.json，変更"path"</li>
-        <li>編集~/Downlaods/scrapbookq/scrapbookq.conf，変更rdfspath</li>
-        <li>コマンドの実行 chmod +x init.sh; sh init.sh</li>
+        <li>編集~/Downlaods/scrapbookq/scrapbookq.conf，変更rdfpath</li>
+        <li>コマンドの実行 chmod +x scrapbookqmsg;./scrapbookqmsg</li>
     </ol>
     <h2>詳細なインストール手順</h2>
     <ol>
@@ -40,11 +41,11 @@
         <li>ボタンをクリックして、Scrapbookq フォルダとファイルを初期化します。(/home/yourname/Downloads/scrapbookq)</li>
         <li>打Scrapbookeq ディレクトリを開く, 移動(native-messaging-hosts)フォルダを Firefox の設定フォルダに(/home/yourname/.mozilla/)</li>
         <li>編集(native-messaging-hosts)フォルダ内のファイル(scrapbookqmsg.json)</li>
-        <li>変更(scrapbookqmsg.json)中に"path"項目の値はscrapbookqフォルダpythonファイルへのパス</li>
-        <li>これは、変更後のように見えます。：("path": "/home/yourname/Downloads/scrapbookq/scrapbookqmsg.py")</li>
-        <li>编SCRAPBOOKQ カタログの設定ファイルscrapbookq.conf，Rdfs の値を SCRAPBOOKQ ディレクトリのパスに変更します。</li>
-        <li>変更が完了すると、次のようになります。：(rdfspath = /home/yourname/Downloads/scrapbookq/;)</li>
-        <li>最後に、ローカルプログラムファイルの実行可能なプロパティを設定します：chmode +x scrapbookqmsg.py</li>
+        <li>変更(scrapbookqmsg.json)中に"path"項目の値はscrapbookqフォルダscrapbookqmsgファイルへのパス</li>
+        <li>これは、変更後のように見えます。：("path": "/home/yourname/Downloads/scrapbookq/scrapbookqmsg")</li>
+        <li>编SCRAPBOOKQ カタログの設定ファイルscrapbookq.conf，rdfpath の値を ScrapBook ディレクトリのパスに変更します。</li>
+        <li>変更が完了すると、次のようになります。：(rdfpath = /home/windowsD/Documents/firefox/ScrapBook/)</li>
+        <li>最後に、ローカルプログラムファイルの実行可能なプロパティを設定します：chmode +</li>
         <li>保存ファイルを変更した後、ブラウザを再起動して、サイドバーに SCRAPBOOKQ ディレクトリを表示します。</li>
     </ol>
     <h2>インストールの構成が完了した後のフォルダとファイル</h2>
@@ -54,7 +55,7 @@
                 <li>/home/yourname/Downloads/scrapbookq/</li>
                 <li>/home/yourname/Downloads/scrapbookq/scrapbookq.conf</li>
                 <li>/home/yourname/Downloads/scrapbookq/scrapbookq.rdf</li>
-                <li>/home/yourname/Downloads/scrapbookq/scrapbookqmsg.py</li>
+                <li>/home/yourname/Downloads/scrapbook</li>
                 <li>/home/yourname/.mozilla/native-messaging-hosts/</li>
                 <li>/home/yourname/.mozilla/native-messaging-hosts/scrapbookqmsg.json</li>
             </ol>
@@ -63,27 +64,23 @@
         <ul>
             <li>/home/yourname/Downloads/scrapbookq/scrapbookq.conf
                 <br>
-                <textarea rows="7" cols="30">
-{
- "name": "scrapbookqmsg",
- "description": "ScrapBookQ host for native messaging",
- "path": "/home/yourname/Downloads/scrapbookq/scrapbookqmsg.py",  
- "type": "stdio",
- "allowed_extensions": [ "tahama@163.com" ]
-}
+                <textarea rows="3" cols="30">
+rdfpath=/home/windowsC/Documents/firefox/ScrapBook/
+rdfloaded=0
+serverport=33338
                 </textarea>
 
             </li>
             <li>/home/yourname/.mozilla/native-messaging-hosts/scrapbookqmsg.json
                 <br>
                 <textarea rows="7" cols="30">
-[rdfs]
-rdfscount = 1
-rdfspath = /home/yourname/Downloads/scrapbookq/;
-rdfloaded = 0
-[server]
-servertype = http
-serverport = 3338
+{
+  "name": "scrapbookqmsg",
+  "description": "ScrapBookQ host for native messaging",
+  "path": "/home/yourname/Downloads/scrapbookq/scrapbookqmsg",  
+  "type": "stdio",
+  "allowed_extensions": [ "tahama@163.com" ]
+}
                 </textarea>
             </li>
         </ul>
@@ -159,8 +156,8 @@ serverport = 3338
     <h1>スクラップブックデータのインポート</h1>
     <ol>
         <li>変更scrapbookq/scrapbookq.conf</li>
-        <li>Rdfspath 値スクラップブックの末尾にスクラップブックデータファイルを追加します。 RDF パス</li>
-        <li>このように。：rdfspath = /home/yourname/Downloads/scrapbookq/;/home/windowsD/Documents/firefox/ScrapBook/</li>
+        <li>Rdfpath 値スクラップブックの末尾にスクラップブックデータファイルを追加します。 RDF パス</li>
+        <li>このように。：rdfpath = /home/windowsD/Documents/firefox/ScrapBook/</li>
         <li>元のスクラップブックのデータがより多くの場合、Firefox のブラウザを再起動すると、データを読み取るために最初の時間は少し遅いです</li>
     </ol>
     <script type="text/javascript" src="initscrapbookqdir.js"></script>

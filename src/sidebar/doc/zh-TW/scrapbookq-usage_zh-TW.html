@@ -18,11 +18,12 @@
     <ol>
         <li>
             <button id="initScrapbookQDirectory">初始化</button>點擊初始化按鈕，記住打開的下載目錄路徑</li>
-        <li>在控制台執行以下命令(替換
+            <li>windows使用者在打開的下載目錄裡找到scrapbookq目錄，執行scrapbookq目錄裡面的init_scrapbookq.bat批次檔</li>
+        <li>linux使用者在控制台執行以下命令(替換
             <span style="color:red">yourname/Downloads</span>為打開的下載目錄路徑)：
             <br>
             <p>cd /home/
-                <span style="color:red">yourname/Downloads</span>/scrapbookq;chmod +x initscrapbookq.py;python3 initscrapbookq.py</p>
+                <span style="color:red">yourname/Downloads</span>/scrapbookq;chmod +x scrapbookqmsg;./scrapbookqmsg init</p>
         </li>
         <li>重新啟動firefox瀏覽器</li>
     </ol>
@@ -31,8 +32,8 @@
         <li>點擊初始化按鈕</li>
         <li>移動 /home/yourname/Downloads/scrapbookq/native-messaging-hosts 到 ~/.mozilla/</li>
         <li>編輯 native-messaging-hosts/scrapbookqmsg.json，修改"path"</li>
-        <li>編輯 ~/Downlaods/scrapbookq/scrapbookq.conf，修改rdfspath</li>
-        <li>chmod +x init.sh; sh init.sh</li>
+        <li>編輯 ~/Downlaods/scrapbookq/scrapbookq.conf，修改rdfpath</li>
+        <li>chmod +x scrapbookqmsg;./scrapbookqmsg</li>
     </ol>
     <h2>詳細安裝步驟</h2>
     <ol>
@@ -40,11 +41,11 @@
         <li>點擊按鈕初始化ScrapbookQ文件夾和文件(/home/yourname/Downloads/scrapbookq)</li>
         <li>打開scrapbookeq目錄，移動(native-messaging-hosts)文件夾到firefox配置文件夾裏(/home/yourname/.mozilla/)</li>
         <li>編輯(native-messaging-hosts)文件夾裏的文件(scrapbookqmsg.json)</li>
-        <li>修改(scrapbookqmsg.json)裏面"path"一項的值為scrapbookq文件夾裏python文件的路徑</li>
-        <li>修改完成後大概這個樣子：("path": "/home/yourname/Downloads/scrapbookq/scrapbookqmsg.py")</li>
-        <li>編輯scrapbookq目錄裏的配置文件scrapbookq.conf，將rdfs的值修改為scrapbookq目錄的路徑</li>
-        <li>修改完成後大概這個樣子：(rdfspath = /home/yourname/Downloads/scrapbookq/;)</li>
-        <li>最後設置本地程序文件可執行屬性：chmode +x scrapbookqmsg.py</li>
+        <li>修改(scrapbookqmsg.json)裏面"path"一項的值為ScrapBook文件夾裏scrapbookqmsg文件的路徑</li>
+        <li>修改完成後大概這個樣子：("path": "/home/yourname/Downloads/scrapbookq/scrapbookqmsg")</li>
+        <li>編輯scrapbookq目錄裏的配置文件scrapbookq.conf，將rdfpath的值修改為ScrapBook目錄的路徑</li>
+        <li>修改完成後大概這個樣子：(rdfpath = /home/windowsD/Documents/firefox/ScrapBook/)</li>
+        <li>最後設置本地程序文件可執行屬性：chmode +</li>
         <li>修改保存文件後重新啟動瀏覽器會看到側邊欄裏的ScrapbookQ目錄</li>
     </ol>
     <h2>安裝配置完成後文件夾及文件</h2>
@@ -54,7 +55,7 @@
                 <li>/home/yourname/Downloads/scrapbookq/</li>
                 <li>/home/yourname/Downloads/scrapbookq/scrapbookq.conf</li>
                 <li>/home/yourname/Downloads/scrapbookq/scrapbookq.rdf</li>
-                <li>/home/yourname/Downloads/scrapbookq/scrapbookqmsg.py</li>
+                <li>/home/yourname/Downloads/scrapbook</li>
                 <li>/home/yourname/.mozilla/native-messaging-hosts/</li>
                 <li>/home/yourname/.mozilla/native-messaging-hosts/scrapbookqmsg.json</li>
             </ol>
@@ -63,27 +64,23 @@
         <ul>
             <li>/home/yourname/Downloads/scrapbookq/scrapbookq.conf
                 <br>
-                <textarea rows="7" cols="30">
-{
- "name": "scrapbookqmsg",
- "description": "ScrapBookQ host for native messaging",
- "path": "/home/yourname/Downloads/scrapbookq/scrapbookqmsg.py",  
- "type": "stdio",
- "allowed_extensions": [ "tahama@163.com" ]
-}
+                <textarea rows="3" cols="30">
+rdfpath=/home/windowsC/Documents/firefox/ScrapBook/
+rdfloaded=0
+serverport=33338
                 </textarea>
 
             </li>
             <li>/home/yourname/.mozilla/native-messaging-hosts/scrapbookqmsg.json
                 <br>
                 <textarea rows="7" cols="30">
-[rdfs]
-rdfscount = 1
-rdfspath = /home/yourname/Downloads/scrapbookq/;
-rdfloaded = 0
-[server]
-servertype = http
-serverport = 3338
+{
+  "name": "scrapbookqmsg",
+  "description": "ScrapBookQ host for native messaging",
+  "path": "/home/yourname/Downloads/scrapbookq/scrapbookqmsg",  
+  "type": "stdio",
+  "allowed_extensions": [ "tahama@163.com" ]
+}
                 </textarea>
             </li>
         </ul>
@@ -159,8 +156,8 @@ serverport = 3338
     <h1>導入ScrapBook數據</h1>
     <ol>
         <li>修改scrapbookq/scrapbookq.conf</li>
-        <li>在rdfspath值的末尾添加ScrapBook數據文件scrapbook.rdf所在路徑</li>
-        <li>大概這個樣子：rdfspath = /home/yourname/Downloads/scrapbookq/;/home/windowsD/Documents/firefox/ScrapBook/</li>
+        <li>在rdfpath值的末尾添加ScrapBook數據文件scrapbook.rdf所在路徑</li>
+        <li>大概這個樣子：rdfpath = /home/windowsD/Documents/firefox/ScrapBook/</li>
         <li>重新啟動firefox瀏覽器、如果原有ScrapBook數據比較多，第一次讀取數據會有點慢</li>
     </ol>
     <script type="text/javascript" src="initscrapbookqdir.js"></script>

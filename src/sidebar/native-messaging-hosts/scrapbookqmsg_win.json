@@ -1,7 +1,7 @@
 {
   "name": "scrapbookqmsg",
   "description": "ScrapBookQ host for native messaging",
-  "path": "/home/yourname/Downloads/scrapbookq/scrapbookqmsg",  
+  "path": "scrapbookqmsg.exe",  
   "type": "stdio",
   "allowed_extensions": [ "tahama@163.com" ]
 }

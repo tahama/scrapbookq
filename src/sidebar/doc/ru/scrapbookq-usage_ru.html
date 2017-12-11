@@ -18,11 +18,12 @@
     <ol>
         <li>
             <button id="initScrapbookQDirectory">инициализация</button>Нажмите кнопку инициализации, не забудьте открыть путь к каталогу загрузки</li>
-        <li>Выполните следующую команду на консоли (замените
+            <li>Пользователь Windows обнаружил каталоги scrapbookq в открытой папке загрузки, выполнение пакетных файлов init_scrapbookq.bat в scrapbookq каталогах</li>
+        <li>Пользователи Linux Выполните следующую команду на консоли (замените
             <span style="color:red">yourname/Downloads</span>открытым каталогом каталога загрузки):
             <br>
             <p>cd /home/
-                <span style="color:red">yourname/Downloads</span>/scrapbookq;chmod +x initscrapbookq.py;python3 initscrapbookq.py</p>
+                <span style="color:red">yourname/Downloads</span>/scrapbookq;chmod +x scrapbookqmsg;./scrapbookqmsg init</p>
         </li>
         <li>Перезапустить браузер Firefox</li>
     </ol>
@@ -31,8 +32,8 @@
         <li>Нажмите кнопку «Инициализировать»</li>
         <li>Переместить /home/yourname/Downloads/scrapbookq/native-messaging-hosts в ~/.mozilla/</li>
         <li>редактировать native-messaging-hosts/scrapbookqmsg.json，модификация"path"</li>
-        <li>редактировать ~/Downlaods/scrapbookq/scrapbookq.conf，модификацияrdfspath</li>
-        <li>chmod +x init.sh; sh init.sh</li>
+        <li>редактировать ~/Downlaods/scrapbookq/scrapbookq.conf，модификацияrdfpath</li>
+        <li>chmod +x scrapbookqmsg;./scrapbookqmsg</li>
     </ol>
     <h2>Подробные этапы установки</h2>
     <ol>
@@ -41,20 +42,12 @@
         <li>Откройте каталог scrapbookeq, переместите папку native-messaging-hosts в папку конфигурации firefox (native-messaging-hosts)Папка
             в папку конфигурации firefox(/home/yourname/.mozilla/)</li>
         <li>редактировать(native-messaging-hosts)Файл в папке(scrapbookqmsg.json)</li>
-        <li> Файлы в папке (scrapbookqmsg.json)внутри значени"path" для пути файла python папки scrapbookq</li>
-        <li>После завершения поправки об этом:("path": "/home/yourname/Downloads/scrapbookq/scrapbookqmsg.py")</li>
-        <li>Отредактируйте файл конфигурации scrapbookq scrapbookq.conf, значение rdfs будет изменено на путь каталога scrapbookq</li>
-        <li>После завершения пересмотра этого вида:：(rdfspath = /home/yourname/Downloads/scrapbookq/;)</li>
-        <li>Наконец, задайте исполняемые свойства локального файла программы:chmode +x scrapbookqmsg.py</li>
+        <li> Файлы в папке (scrapbookqmsg.json)внутри значени"path" для пути файла scrapbookqmsg папки scrapbookq</li>
+        <li>После завершения поправки об этом:("path": "/home/yourname/Downloads/scrapbookq/scrapbookqmsg")</li>
+        <li>Отредактируйте файл конфигурации scrapbookq scrapbookq.conf, значение rdfpath будет изменено на путь каталога ScrapBook</li>
+        <li>После завершения пересмотра этого вида:：(rdfpath = /home/windowsD/Documents/firefox/ScrapBook/)</li>
+        <li>Наконец, задайте исполняемые свойства локального файла программы:chmode +</li>
         <li> Измените файл сохранения и перезапустите браузер, он увидит каталог ScrapbookQ на боковой панели</li>
-
-
-        Измените (scrapbookqmsg.json) я «путь» Измените (scrapbookqmsg.json) внутри значения «путь» для пути файла python папки scrapbookq
-        («путь»: «/home/yourname/Downloads/scrapbookq/scrapbookqmsg.py») (rdfspath = / home / yourname / Downloads / scrapbookq
-        /;) chmode + x scrapbookqmsg.py
-
-
-
     </ol>
     <h2>После установки и настройки папки и файла</h2>
     <ul>
@@ -63,7 +56,7 @@
                 <li>/home/yourname/Downloads/scrapbookq/</li>
                 <li>/home/yourname/Downloads/scrapbookq/scrapbookq.conf</li>
                 <li>/home/yourname/Downloads/scrapbookq/scrapbookq.rdf</li>
-                <li>/home/yourname/Downloads/scrapbookq/scrapbookqmsg.py</li>
+                <li>/home/yourname/Downloads/scrapbook</li>
                 <li>/home/yourname/.mozilla/native-messaging-hosts/</li>
                 <li>/home/yourname/.mozilla/native-messaging-hosts/scrapbookqmsg.json</li>
             </ol>
@@ -72,27 +65,23 @@
         <ul>
             <li>/home/yourname/Downloads/scrapbookq/scrapbookq.conf
                 <br>
-                <textarea rows="7" cols="30">
-{
- "name": "scrapbookqmsg",
- "description": "ScrapBookQ host for native messaging",
- "path": "/home/yourname/Downloads/scrapbookq/scrapbookqmsg.py",  
- "type": "stdio",
- "allowed_extensions": [ "tahama@163.com" ]
-}
+                <textarea rows="3" cols="30">
+rdfpath=/home/windowsC/Documents/firefox/ScrapBook/
+rdfloaded=0
+serverport=33338
                 </textarea>
 
             </li>
             <li>/home/yourname/.mozilla/native-messaging-hosts/scrapbookqmsg.json
                 <br>
                 <textarea rows="7" cols="30">
-[rdfs]
-rdfscount = 1
-rdfspath = /home/yourname/Downloads/scrapbookq/;
-rdfloaded = 0
-[server]
-servertype = http
-serverport = 3338
+{
+  "name": "scrapbookqmsg",
+  "description": "ScrapBookQ host for native messaging",
+  "path": "/home/yourname/Downloads/scrapbookq/scrapbookqmsg",  
+  "type": "stdio",
+  "allowed_extensions": [ "tahama@163.com" ]
+}
                 </textarea>
             </li>
         </ul>
@@ -173,8 +162,8 @@ serverport = 3338
     <h1>Импорт данных ScrapBook</h1>
     <ol>
         <li>модификацияscrapbookq/scrapbookq.conf</li>
-        <li>Добавьте путь, в котором файл данных ScrapBook scrapbook.rdf находится в конце значения rdfspath</li>
-        <li>Вероятно, так:rdfspath = /home/yourname/Downloads/scrapbookq/;/home/windowsD/Documents/firefox/ScrapBook/</li>
+        <li>Добавьте путь, в котором файл данных ScrapBook scrapbook.rdf находится в конце значения rdfpath</li>
+        <li>Вероятно, так:rdfpath = /home/windowsD/Documents/firefox/ScrapBook/</li>
         <li>Перезапустите браузер firefox, если исходные данные ScrapBook больше, первые прочитанные данные будут немного медленными</li>
     </ol>
     <script type="text/javascript" src="initscrapbookqdir.js"></script>

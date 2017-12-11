@@ -99,7 +99,7 @@ var faviconfilename = null;
 function onSaveCurrentPage() {
 
   function onStartedDownload(id) {
-    console.log(`Started downloading: ${id}`);
+    // console.log(`Started downloading: ${id}`);
   }
 
   function onFailed(error) {
@@ -152,7 +152,7 @@ function onSaveCurrentPage() {
       pagefilename = "scrapbookq/data/" + folderid + "/";
       pagefilename += pageFiles[pagefilesidx].substr(index0 + 1, index1 - index0 - 1);
 
-      console.log(pageFiles[pagefilesidx] + "下载的文件名: " + pagefilesidx + " = " + pagefilename);
+      //console.log(pageFiles[pagefilesidx] + "下载的文件名: " + pagefilesidx + " = " + pagefilename);
       downloading = browser.downloads.download({ url: downloadUrl, filename: pagefilename, conflictAction: "overwrite" });
       downloading.then(onStartedDownload, onFailed);
     }
@@ -199,8 +199,8 @@ function handleMessage(request, sender, sendResponse) {
   }
   if (request.startserver != null) {
     setTimeout(function () {
-      port.postMessage("STARTERVER");
-      console.log("port.postMessage(\"STARTERVER\")");
+      port.postMessage("STARTSERVER");
+      console.log("port.postMessage(\"STARTSERVER\")");
     }, 2000);
   }
   if (request.pagecontent != null) {
@@ -225,17 +225,25 @@ function handleMessage(request, sender, sendResponse) {
   //初始化scrapbookq文件夹：把扩展目录里的文件下载到相应目录里
   if (request.extensionurl != null) {
     const sidebarurl = request.extensionurl.slice(0, request.extensionurl.indexOf("/doc/") + 1);
-    downloading = browser.downloads.download({ url: sidebarurl + "init.sh", filename: "scrapbookq/init.sh", conflictAction: "overwrite" });
-    downloading = browser.downloads.download({ url: sidebarurl + "initscrapbookq.py", filename: "scrapbookq/initscrapbookq.py", conflictAction: "overwrite" });
-    downloading = browser.downloads.download({ url: sidebarurl + "scrapbookqmsg.py", filename: "scrapbookq/scrapbookqmsg.py", conflictAction: "overwrite" });
+    downloading = browser.downloads.download({ url: sidebarurl + "scrapbookq-usage.html", filename: "scrapbookq/index.html", conflictAction: "overwrite" });
     //uniquify 防止覆盖原有数据，可惜firefox不支持prompt
     downloading = browser.downloads.download({ url: sidebarurl + "scrapbookq.rdf", filename: "scrapbookq/scrapbookq.rdf", conflictAction: "uniquify" });
-    downloading = browser.downloads.download({ url: sidebarurl + "scrapbookq.conf", filename: "scrapbookq/scrapbookq.conf", conflictAction: "overwrite" });
     downloading = browser.downloads.download({ url: sidebarurl + "icons/file0.png", filename: "scrapbookq/data/file0.png", conflictAction: "overwrite" });
-    downloading = browser.downloads.download({ url: sidebarurl + "native-messaging-hosts/scrapbookqmsg.json", filename: "scrapbookq/native-messaging-hosts/scrapbookqmsg.json", conflictAction: "overwrite" });
 
-    console.log("background.js download extension files: " + sidebarurl + " scrapbookqmsg.py, scrapbookq.rdf, scrapbookq.conf, native-messaging-hosts/scrapbookqmsg.json");
-
+    var platform = navigator.platform;
+    console.log(platform);
+    if (platform == "Win64" || platform == "Win32") {
+      downloading = browser.downloads.download({ url: sidebarurl + "scrapbookq_win.conf", filename: "scrapbookq/scrapbookq.conf", conflictAction: "overwrite" });
+      downloading = browser.downloads.download({ url: sidebarurl + "native-messaging-hosts/scrapbookqmsg_win.json", filename: "scrapbookq/scrapbookqmsg.json", conflictAction: "overwrite" });
+      downloading = browser.downloads.download({ url: sidebarurl + "scrapbookqmsg.exe", filename: "scrapbookq/scrapbookqmsg.exe", conflictAction: "overwrite" });
+      downloading = browser.downloads.download({ url: sidebarurl + "init_scrapbookq.bat", filename: "scrapbookq/init_scrapbookq.bat", conflictAction: "overwrite" });
+    }
+    else {
+      downloading = browser.downloads.download({ url: sidebarurl + "scrapbookq.conf", filename: "scrapbookq/scrapbookq.conf", conflictAction: "overwrite" });
+      downloading = browser.downloads.download({ url: sidebarurl + "native-messaging-hosts/scrapbookqmsg.json", filename: "scrapbookq/native-messaging-hosts/scrapbookqmsg.json", conflictAction: "overwrite" });
+      downloading = browser.downloads.download({ url: sidebarurl + "scrapbookqmsg", filename: "scrapbookq/scrapbookqmsg", conflictAction: "overwrite" });
+    }
+    console.log("background.js download extension files: " + sidebarurl + " scrapbookqmsg, scrapbookq.rdf, scrapbookq.conf, native-messaging-hosts/scrapbookqmsg.json");
   }
 }
 
@@ -304,16 +312,20 @@ listen for messages from the app.
 
 port.onMessage.addListener((response) => {
   console.log("background.js Received from APP: " + response.length + " = " + response);
-  //format: TEST:scrapbookq.rdf:scrapbookq.html:scrapbookq.rdf  TEST:1:1:0
-  if (response.indexOf("TEST") != -1) {
-    const servertest = response.split(":");
-    console.log("background.js sendMessage test" + servertest[1] + servertest[2] + servertest[3] + servertest[4]);
-    browser.runtime.sendMessage({ test: "TEST", sbqrdf: servertest[1], sbqhtml: servertest[2], sbrdf: servertest[3], serverstatus: servertest[4] });
-  }
-  //format: SERVERS:folders:ports:rdfloaded
-  if (response.indexOf("SERVERS") != -1) {
+
+  //{ Scrapbook string Rdfloaded string Serverport string Serverstate string }
+  if (response.Serverport != null) {
     console.log("background.js sendMessage servers");
-    browser.runtime.sendMessage({ servers: "SERVERS", folder: response.split(":")[1].toLowerCase(), port: response.split(":")[2], rdfloaded: response.split(":")[3] });
+    browser.runtime.sendMessage({ Scrapbook: response.Scrapbook, Rdfloaded: response.Rdfloaded, Serverport: response.Serverport, Serverstate: response.Serverstate });
+  }
+  else if (response.indexOf("TEST") != -1) {
+    const servertest = response.split(":");
+    console.log("background.js sendMessage test" + servertest[1]);
+    browser.runtime.sendMessage({ test: "TEST", serverstate: servertest[1] });
+  }
+  else if (response.indexOf("Undeleted:") != -1 && response.slice(response.indexOf("Undeleted:")).length != 11) {
+    console.log(response.slice(response.indexOf("Undeleted:")));
+    browser.runtime.sendMessage({ undelete: response.slice(response.indexOf("Undeleted:")) });
   }
 
   //processMsg(response);
@@ -433,8 +445,8 @@ browser.menus.onClicked.addListener((info, tab) => {
       console.log("Clicked the tools TestCase");
       break;
     case "StartServer":
-      port.postMessage("STARTERVER");
-      console.log("port.postMessage(\"STARTERVER\")");
+      port.postMessage("STARTSERVER");
+      console.log("port.postMessage(\"STARTSERVER\")");
       break;
     case "CloseServer":
       port.postMessage("CLOSESERVER");

@@ -84,6 +84,8 @@ browser.windows.getCurrent({ populate: true }).then((windowInfo) => {
 	updateContent();
 });
 
+var serverport = null;
+var scrapbook = null;
 var folderport = new Array();
 var scrapbookqhtmlok, scrapbookqrdfok, scrapbookrdfok, serverstatus, rdfloaded;
 
@@ -531,26 +533,19 @@ function handleMessageScrapq(request, sender, sendResponse) {
 		console.log("== scrpq.js Received: == " + request.NativeAppConnectError);
 		alert(request.NativeAppConnectError + "\n" + browser.i18n.getMessage("NativeAppConnectError"));
 	}
-	//browser.runtime.sendMessage({ servers: "SERVERS", folder: response.split(":")[1], port: response.split(":")[2], rdfloaded:response.split(":")[3] });
-	if (request.servers != null) {
+	//{ Scrapbook string Rdfloaded string Serverport string Serverstate string }
+	if (request.Serverport != null) {
 		document.getElementById("informationli").style.color = "black";
 		document.getElementById("nativeserver").setAttribute("checked", "checked");
-		console.log("folder: " + request.folder + " port: " + request.port + " rdfloaded: " + request.rdfloaded);
-		rdfloaded = (request.rdfloaded == "1");
-		for (let i = 0; i < request.folder.split(";").length - 1; i++) {
-			folderport[request.folder.split(";")[i]] = parseInt(request.port.split(";")[i], 0);
-		}
-		for (x in folderport) {
-			console.log("folderport[" + x + "] = " + folderport[x]);
-		}
-		initScrapbookqHeader();
-	}
-	//browser.runtime.sendMessage({ test: "TEST", sbqrdf: response[5], sbqhtml: response[7], sbrdf: response[9] });
-	if (request.test != null) {
-		document.getElementById("nativeapp").setAttribute("checked", "checked");
-		console.log("sbqrdf: " + request.sbqrdf + " sbqhtml: " + request.sbqhtml + " sbrdf: " + request.sbrdf);
-		if (request.sbqrdf == "1") {
+		console.log("ScrapBook: " + request.Scrapbook + " port: " + request.Serverport + " rdfloaded: " + request.Rdfloaded + " serverstate: " + request.Serverstate);
+		rdfloaded = (request.Rdfloaded == "1");
+		serverport = request.Serverport;
+		scrapbook = request.Scrapbook;
+		serverstatus = (request.Serverstate == "1");
+
+		if (true) {
 			scrapbookqrdfok = true;
+			folderport["scrapbookq"] = serverport + "/scrapbookq";
 			document.getElementById("scrapbookqrdf").setAttribute("checked", "true");
 		}
 		else {
@@ -558,20 +553,27 @@ function handleMessageScrapq(request, sender, sendResponse) {
 			document.getElementById("scrapbookqrdf").removeAttribute("checked");
 		}
 
-		scrapbookqhtmlok = (request.sbqhtml == "1");
+		scrapbookqhtmlok = true; //(request.sbqhtml == "1");
 
-		if (request.sbrdf == "1") {
+		if (request.Scrapbook == "1") {
 			scrapbookrdfok = true;
+			folderport["scrapbook"] = serverport + "/scrapbook";
 			document.getElementById("scrapbookrdf").setAttribute("checked", "true");
 		}
 		else {
 			scrapbookrdfok = false;
 			document.getElementById("scrapbookrdf").removeAttribute("checked");
 		}
-
-		serverstatus = (request.serverstatus == "1");
-
 		console.log("scrapbookqrdfok: " + scrapbookqrdfok + " scrapbookqhtmlok: " + scrapbookqhtmlok + " scrapbookrdfok: " + scrapbookrdfok + " serverstatus: " + serverstatus);
+		
+		initScrapbookqHeader();
+	}
+	//{ test: "TEST", serverstate: servertest[1] }
+	if (request.test != null) {
+		document.getElementById("nativeapp").setAttribute("checked", "checked");		
+		serverstatus = (request.serverstate == "1");
+		console.log("serverstatus: " + serverstatus);
+
 		if (serverstatus == false) {
 			document.getElementById("informationli").style.color = "blue";
 			browser.runtime.sendMessage({ startserver: "STARTSERVER" });
@@ -580,6 +582,9 @@ function handleMessageScrapq(request, sender, sendResponse) {
 			document.getElementById("informationli").style.color = "black";
 			initScrapbookqHeader();
 		}
+	}
+	if (request.undelete != null) {
+		alert("Some files deleted faild: " + request.undelete);
 	}
 
 	if (request.id != null) {
