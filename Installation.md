@@ -1,5 +1,7 @@
 # Installation
 
+## English
+
 Please indicate whether your operating system is Windows or Linux.
 If it is windows, the installation process is as follows:
 
@@ -12,6 +14,7 @@ If it is windows, the installation process is as follows:
 If it is Linux, I believe you will find the installation method in your own documentation.
 The official website's introduction limits the number of words, cannot elaborate the installation step.
 
+## 汉语
 请说明你的操作系统时Windows还是Linux.
 如果是windows，安装过程如下:
 
@@ -24,6 +27,7 @@ The official website's introduction limits the number of words, cannot elaborate
 如果是Linux,相信你会在自带的说明文档里找到安装方法的.
 官网的简介限制字数，不能详细说明安装步骤。
 
+## 繁体
 請說明你的作業系統時Windows還是Linux.
 如果是windows，安裝過程如下:
 
@@ -35,6 +39,8 @@ The official website's introduction limits the number of words, cannot elaborate
 
 如果是Linux,相信你會在自帶的說明文檔裡找到安裝方法的.
 官網的簡介限制字數，不能詳細說明安裝步驟。
+
+## インストール
 
 私はロシア語を理解していない、インストールガイドのロシア語版は、Bing の翻訳で使用されます。
 お使いのオペレーティングシステムがWindowsまたはLinuxかどうかを指定してください。
@@ -49,6 +55,8 @@ windows の場合、インストールプロセスは次のようになります
 Linux の場合、私はあなた自身のドキュメントにインストール方法を見つけると思います。
 公式ウェブサイトの導入は、単語の数を制限する、インストール手順を詳しく説明することはできません。
 
+## 설치
+
 나는 러시아어를 이해 하지 않는다, 설치 가이드의 러시아 버전은 빙 번역에서 사용 된다.
 운영 체제가 Windows 또는 Linux 인지를 표시 하십시오.
 windows 인 경우 설치 프로세스는 다음과 같습니다.
@@ -60,6 +68,8 @@ windows 인 경우 설치 프로세스는 다음과 같습니다.
 1. 파이어 폭스 브라우저를 다시 시작 합니다.
 
 그것이 리눅스 이라면 나는 당신이 당신의 자신의 문서화에 (서) 설치 방법을 찾을 것 이라고 믿는다. 공식적인 웹사이트의 소개는 낱말의 수를 제한 한다, 설치 단계를 정교 하 게 할 수 없다.
+
+## установки
 
 Я не понимаю русского, русский вариант руководства по установке используется в переводе Bing.
 Укажите, является ли операционная система Windows или Linux.
@@ -73,6 +83,8 @@ windows 인 경우 설치 프로세스는 다음과 같습니다.
 
 Если это Linux, то, по моему мнению, вы найдете метод установки в своей собственной документации. Введенное официальное веб-сайт ограничивает количество слов, не может разработать этап установки.
 
+## Installation
+
 Ich verstehe nicht Russisch, die russische Version des Installationshandbuchs wird in Bing Translation verwendet.
 Bitte geben Sie an, ob Ihr Betriebssystem Windows oder Linux ist.
 Wenn es Windows ist, ist der Installationsvorgang wie folgt:
@@ -84,6 +96,8 @@ Wenn es Windows ist, ist der Installationsvorgang wie folgt:
 1. Starten Sie Firefox Browser.
 
 Wenn es Linux ist, glaube ich, dass Sie die Installationsmethode in ihrer eigenen Dokumentation finden werden. Die offizielle Website-Einführung schränkt die Anzahl der Wörter, kann nicht erarbeiten die Installation Schritt.
+
+## installation
 
 Je ne comprends pas le russe, la version russe du Guide d'installation est utilisé dans la traduction Bing.
 Veuillez indiquer si votre système d'exploitation est Windows ou Linux.
