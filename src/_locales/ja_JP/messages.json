@@ -4,7 +4,7 @@
     "description": "内線番号."
   },
   "extensionDescription": {
-    "message": "Webページをローカルストレージにキャプチャし、ブラウザサイドバーでキャプチャされたページを管理します。ScrapBookドキュメントと互換性があり、古いScrapBookドキュメントをインポートできます。.",
+    "message": "Webページをローカルストレージにキャプチャし、ブラウザサイドバーでキャプチャされたページを管理します。ScrapBookドキュメントと互換性があり、古いScrapBookドキュメントをインポートできます。\nwindows の場合、インストールプロセスは次のようになります。\n1. このブラウザ拡張機能をインストールします。\n2. インストールが完了したら、クリックしてください  \"初期化 \" ボタン, 自動的に firefox のブラウザのダウンロードフォルダを開きます.\n3. 開いているダウンロードファイルに\"scrapbookq\"という名前のフォルダを見つけます。\n4. \"scrapbookq\" フォルダに\"init_scrapbookq.bat\"という名前のファイルを実行します。\n5. Firefox ブラウザを再始動しなさい。\nLinux の場合、私はあなた自身のドキュメントにインストール方法を見つけると思います。\n公式ウェブサイトの導入は、単語の数を制限する、インストール手順を詳しく説明することはできません。\nhttps://github.com/tahama/scrapbookq/issues",
     "description": "拡張機能の説明."
   },
   "CapturePage": {
@@ -81,5 +81,20 @@
   },
   "ConfirmReloadSidebar": {
 	  "message": "サイドバーをリロードする少し時間がかかる、辛抱強く待ってください。"
+  },
+  "menuSortByTitleAsc": {
+	  "message": "タイトルを昇順に並べ替える."
+  },
+  "menuSortByTitleDes": {
+	  "message": "タイトルを降順に並べ替える."
+  },
+  "menuSortByDateAsc": {
+	  "message": "昇順で日付順に並べ替える."
+  },
+  "menuSortByDateDes": {
+	  "message": "降順で日付順に並べ替える."
   }  
 }
+
+
+

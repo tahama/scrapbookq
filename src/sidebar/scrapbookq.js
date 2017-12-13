@@ -132,16 +132,6 @@ var xmlDoc;
 browser.runtime.onMessage.addListener(handleMessageScrapq);
 
 function registeLlistener() {
-	//<menuitem id="menuSortByTitle" label="SortByTitle" icon="icons/star0.png"></menuitem>
-	let tempItem = null;
-	if (document.getElementById("menuSortByTitle") == null) {
-		tempItem = document.createElement("menuitem");
-		tempItem.setAttribute("id", "menuSortByTitle");
-		tempItem.setAttribute("label", "SortByTitle");
-		tempItem.setAttribute("icon", "icons/star0.png");
-		document.getElementById("popup-menu").appendChild(tempItem);
-	}
-
 	var currentDrop = null;
 	var list = document.querySelector("div");
 	var menuPaste = document.getElementById("menuPaste");
@@ -152,7 +142,10 @@ function registeLlistener() {
 	var menuOpensourceurl = document.getElementById("opensourceurl");
 	var menuOpennewtab = document.getElementById("opennewtab");
 	var menuReload = document.getElementById("menuReload");
-	var menuSortByTitle = document.getElementById("menuSortByTitle");
+	var menuSortByTitleAsc = document.getElementById("menuSortByTitleAsc");
+	var menuSortByTitleDes = document.getElementById("menuSortByTitleDes");
+	var menuSortByDateAsc = document.getElementById("menuSortByDateAsc");
+	var menuSortByDateDes = document.getElementById("menuSortByDateDes");
 
 	//set menu label
 	menuPaste.setAttribute("label", browser.i18n.getMessage("Paste"));
@@ -163,6 +156,10 @@ function registeLlistener() {
 	menuOpensourceurl.setAttribute("label", browser.i18n.getMessage("OpenOriginURL"));
 	menuOpennewtab.setAttribute("label", browser.i18n.getMessage("OpenInNewTab"));
 	menuReload.setAttribute("label", browser.i18n.getMessage("ReloadSidebar"));
+	menuSortByTitleAsc.setAttribute("label", browser.i18n.getMessage("menuSortByTitleAsc"));
+	menuSortByTitleDes.setAttribute("label", browser.i18n.getMessage("menuSortByTitleDes"));
+	menuSortByDateAsc.setAttribute("label", browser.i18n.getMessage("menuSortByDateAsc"));
+	menuSortByDateDes.setAttribute("label", browser.i18n.getMessage("menuSortByDateDes"));
 	//addEventListener
 	menuPaste.addEventListener("click", onPasteDocument, false);
 	menuCut.addEventListener("click", onCutDocument, false);
@@ -177,7 +174,10 @@ function registeLlistener() {
 		}
 
 	}, false);
-	menuSortByTitle.addEventListener("click", onSortByTitle, false);
+	menuSortByTitleAsc.addEventListener("click", onSortByTitle, false);
+	menuSortByTitleDes.addEventListener("click", onSortByTitleDesc, false);
+	menuSortByDateAsc.addEventListener("click", onSortByDate, false);
+	menuSortByDateDes.addEventListener("click", onSortByDateDesc, false);
 
 	//把mousedown事件处理函数注册为toggleCss是为了在右键菜单点击事件处理前获取点击对象的数据到currentTarget
 	document.addEventListener("click", openScrapURL);
@@ -1313,7 +1313,7 @@ function onCreateFolder(event) {
 	}
 	else if (currentTarget.tagName == "SUMMARY") {
 		treenode.setAttribute("class", "tree-node");
-		treenode.setAttribute("isroot", "1");
+		treenode.setAttribute("isroot", "0");
 		currentTarget.appendChild(treenode);
 	}
 	//根据数据新建scrapNode对象，插入当前目标对象之后，如果当前目标对象时folder就插进去
@@ -1374,7 +1374,7 @@ var sortedNode = new Array();
 function onSortByTitle() {
 	if (currentTarget != null && currentTarget.getAttribute("nodetype") === "folder") {
 		//sortScrapNode(arrNodes, currentTarget.getAttribute("id"));
-		sortScrapNode(arrNodes, currentTarget.getAttribute("id"));
+		sortByTitleScrapNode(arrNodes, currentTarget.getAttribute("id"), false);
 		if (currentTarget.parentNode.tagName == "DETAILS") {
 			let childNodesCurrent = currentTarget.parentNode.childNodes;
 			let len = childNodesCurrent.length;
@@ -1385,7 +1385,38 @@ function onSortByTitle() {
 			childNodesCurrent = currentTarget.parentNode.childNodes;
 			len = childNodesCurrent.length;
 			for (let i = 1; i < len; i++) {
-				childNodesCurrent[i].setAttribute("class", "tree-leaf");
+				if (childNodesCurrent[i].getAttribute("nodetype") === "folder") {
+					childNodesCurrent[i].setAttribute("class", "tree-node");
+				}
+				else if (childNodesCurrent[i].getAttribute("nodetype") != "folder") {
+					childNodesCurrent[i].setAttribute("class", "tree-leaf");
+				}
+			}
+			//sortedNode.pop();
+		}
+	}
+}
+
+function onSortByTitleDesc() {
+	if (currentTarget != null && currentTarget.getAttribute("nodetype") === "folder") {
+		//sortScrapNode(arrNodes, currentTarget.getAttribute("id"));
+		sortByTitleScrapNode(arrNodes, currentTarget.getAttribute("id"), true);
+		if (currentTarget.parentNode.tagName == "DETAILS") {
+			let childNodesCurrent = currentTarget.parentNode.childNodes;
+			let len = childNodesCurrent.length;
+			for (let i = 1; i < len; i++) {
+				currentTarget.parentNode.removeChild(childNodesCurrent[1]);
+			}
+			displyScrap(sortedNode, currentTarget.parentNode);
+			childNodesCurrent = currentTarget.parentNode.childNodes;
+			len = childNodesCurrent.length;
+			for (let i = 1; i < len; i++) {
+				if (childNodesCurrent[i].getAttribute("nodetype") === "folder") {
+					childNodesCurrent[i].setAttribute("class", "tree-node");
+				}
+				else if (childNodesCurrent[i].getAttribute("nodetype") != "folder") {
+					childNodesCurrent[i].setAttribute("class", "tree-leaf");
+				}
 			}
 			//sortedNode.pop();
 		}
@@ -1393,15 +1424,15 @@ function onSortByTitle() {
 }
 
 //将目标id所在的scrapNode对象的子节点进行排序
-function sortScrapNode(scrapArray, currentId) {
+function sortByTitleScrapNode(scrapArray, currentId, desc) {
 	var subNode = null;
 	for (var i = 0; i < scrapArray.length; i++) {
 		if (scrapArray[i].id == currentId && scrapArray[i].type == "folder" && scrapArray[i].subNodes != null) {
-			scrapArray[i].subNodes = sortByTitle(scrapArray[i].subNodes);
+			scrapArray[i].subNodes = sortByTitle(scrapArray[i].subNodes, desc);
 			sortedNode = scrapArray[i].subNodes;
 		}
 		else if (scrapArray[i].type == "folder" && scrapArray[i].subNodes != null) {
-			sortScrapNode(scrapArray[i].subNodes, currentId);
+			sortByTitleScrapNode(scrapArray[i].subNodes, currentId);
 		}
 	}
 }
@@ -1415,12 +1446,85 @@ function sortByTitle(arr, desc) {
 		var oI = arr[i];
 		(props[i] = new String(oI.title))._obj = oI;
 	}
-	props.sort();
+
+	props.sort(function (a, b) {
+		return a.localeCompare(b);
+	});
 	for (i = 0; i < len; i++) {
 		ret[i] = props[i]._obj;
 	}
 	if (desc) ret.reverse();
 	return ret;
+}
+
+
+function onSortByDate() {
+	if (currentTarget != null && currentTarget.getAttribute("nodetype") === "folder") {
+		//sortScrapNode(arrNodes, currentTarget.getAttribute("id"));
+		sortByDateScrapNode(arrNodes, currentTarget.getAttribute("id"), false);
+		if (currentTarget.parentNode.tagName == "DETAILS") {
+			let childNodesCurrent = currentTarget.parentNode.childNodes;
+			let len = childNodesCurrent.length;
+			for (let i = 1; i < len; i++) {
+				currentTarget.parentNode.removeChild(childNodesCurrent[1]);
+			}
+			displyScrap(sortedNode, currentTarget.parentNode);
+			childNodesCurrent = currentTarget.parentNode.childNodes;
+			len = childNodesCurrent.length;
+			for (let i = 1; i < len; i++) {
+				if (childNodesCurrent[i].getAttribute("nodetype") === "folder") {
+					childNodesCurrent[i].setAttribute("class", "tree-node");
+				}
+				else if (childNodesCurrent[i].getAttribute("nodetype") != "folder") {
+					childNodesCurrent[i].setAttribute("class", "tree-leaf");
+				}
+			}
+			//sortedNode.pop();
+		}
+	}
+}
+
+
+function onSortByDateDesc() {
+	if (currentTarget != null && currentTarget.getAttribute("nodetype") === "folder") {
+		//sortScrapNode(arrNodes, currentTarget.getAttribute("id"));
+		sortByDateScrapNode(arrNodes, currentTarget.getAttribute("id"), true);
+		if (currentTarget.parentNode.tagName == "DETAILS") {
+			let childNodesCurrent = currentTarget.parentNode.childNodes;
+			let len = childNodesCurrent.length;
+			for (let i = 1; i < len; i++) {
+				currentTarget.parentNode.removeChild(childNodesCurrent[1]);
+			}
+			displyScrap(sortedNode, currentTarget.parentNode);
+			childNodesCurrent = currentTarget.parentNode.childNodes;
+			len = childNodesCurrent.length;
+			for (let i = 1; i < len; i++) {
+				if (childNodesCurrent[i].getAttribute("nodetype") === "folder") {
+					childNodesCurrent[i].setAttribute("class", "tree-node");
+				}
+				else if (childNodesCurrent[i].getAttribute("nodetype") != "folder") {
+					childNodesCurrent[i].setAttribute("class", "tree-leaf");
+				}
+			}
+			//sortedNode.pop();
+		}
+	}
+}
+
+//将目标id所在的scrapNode对象的子节点进行排序
+function sortByDateScrapNode(scrapArray, currentId, desc) {
+	var subNode = null;
+	for (var i = 0; i < scrapArray.length; i++) {
+		if (scrapArray[i].id == currentId && scrapArray[i].type == "folder" && scrapArray[i].subNodes != null) {
+			scrapArray[i].subNodes.sort(function (a, b){
+				return a.id - b.id;
+			});
+			if (desc) scrapArray[i].subNodes.reverse();
+		}
+		else if (scrapArray[i].type == "folder" && scrapArray[i].subNodes != null) {
+			sortByTitleScrapNode(scrapArray[i].subNodes, currentId);
+		}
+	}
 }
 
 function getNow() {

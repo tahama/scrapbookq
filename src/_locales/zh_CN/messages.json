@@ -4,7 +4,7 @@
     "description": "Name of the extension."
   },
   "extensionDescription": {
-    "message": "保存网页到本地存储，通过浏览器侧边栏里便捷地管理已保存的网页. 兼容ScrapBook档案文件，支持导入ScrapBook档案文件。",
+    "message": "保存网页到本地存储，通过浏览器侧边栏里便捷地管理已保存的网页. 兼容ScrapBook档案文件，支持导入ScrapBook档案文件。如果是windows，安装过程如下:\n1. 安装这个浏览器扩展.\n2. 装完成后会自动打开firefox浏览器下载文件夹.\n3. 在打开的下载文件里面找到一个名字为\"scrapbookq\"的文件夹.\n4. 执行\"scrapbookq\"文件夹里名叫\"init_scrapbookq.bat\"的文件.\n5. 重新启动firefox浏览器.\n如果是Linux,相信你会在自带的说明文档里找到安装方法的.\n官网的简介限制字数，不能详细说明安装步骤。\n如果遇到安装使用上的问题可以到:\n https://github.com/tahama/scrapbookq/issues 询问.",
     "description": "Description of the extension."
   },
   "CapturePage": {
@@ -81,5 +81,20 @@
   },
   "ConfirmReloadSidebar": {
 	  "message": "重新加载侧边栏需要花费一点时间，请耐心等待。"
+  },
+  "menuSortByTitleAsc": {
+	  "message": "按标题升序排列."
+  },
+  "menuSortByTitleDes": {
+	  "message": "按标题降序排列."
+  },
+  "menuSortByDateAsc": {
+	  "message": "按时间升序排列."
+  },
+  "menuSortByDateDes": {
+	  "message": "按时间降序排列."
   }
 }
+
+
+

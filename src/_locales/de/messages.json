@@ -4,7 +4,7 @@
     "description": "Name der Erweiterung."
   },
   "extensionDescription": {
-    "message": "Erfasst die Webseite in den lokalen Speicher und verwaltet die erfassten Seiten in der Browser-Seitenleiste Kompatibel mit ScrapBook-Dokumenten, unterstützt das Importieren alter ScrapBook-Dokumente.",
+    "message": "Erfasst die Webseite in den lokalen Speicher und verwaltet die erfassten Seiten in der Browser-Seitenleiste Kompatibel mit ScrapBook-Dokumenten, unterstützt das Importieren alter ScrapBook-Dokumente.\nWenn es Windows ist, ist der Installationsvorgang wie folgt:\n1. installieren Sie diese Browser-Erweiterung.\n2. nach der Installation abgeschlossen ist klicken Sie auf  \"Initialize \"-Taste, öffnet sich automatisch Firefox-Browser-Download-Ordner.\n3. suchen Sie einen Ordner mit dem Namen \"scrapbookq\" in der geöffneten Download-Datei.\n4. führen Sie die Datei mit dem Namen \"init_scrapbookq.bat\" im Ordner \"scrapbookq\" aus.\n5. Starten Sie Firefox Browser.\nWenn es Linux ist, glaube ich, dass Sie die Installationsmethode in ihrer eigenen Dokumentation finden werden. Die offizielle Website-Einführung schränkt die Anzahl der Wörter, kann nicht erarbeiten die Installation Schritt.\nhttps://github.com/tahama/scrapbookq/issues",
     "description": "Description of the extension."
   },
   "CapturePage": {
@@ -81,5 +81,20 @@
   },
   "ConfirmReloadSidebar": {
 	  "message": "Reload Sidebar dauert ein wenig Zeit, warten Sie bitte geduldig."
+  },
+  "menuSortByTitleAsc": {
+	  "message": "Sortieren nach Titel in aufsteigender Reihenfolge."
+  },
+  "menuSortByTitleDes": {
+	  "message": "Sortieren nach Titel in absteigender Reihenfolge."
+  },
+  "menuSortByDateAsc": {
+	  "message": "Sortieren nach Datum in aufsteigender Reihenfolge."
+  },
+  "menuSortByDateDes": {
+	  "message": "Sortieren nach Datum in absteigender Reihenfolge."
   }  
 }
+
+
+

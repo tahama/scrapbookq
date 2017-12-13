@@ -2,7 +2,7 @@
 
 <head>
   <meta charset=utf8>
- <link type="text/css" rel="stylesheet" href="scrapbookq.css">   
+  <link type="text/css" rel="stylesheet" href="scrapbookq.css">
 </head>
 
 <body>
@@ -35,16 +35,21 @@
   <menu type="context" id="popup-menu">
     <menuitem id="opennewtab" label="OpenInNewTab" icon="icons/file0.png"></menuitem>
     <menuitem id="opensourceurl" label="OpenOriginURL" icon="icons/file1.png"></menuitem>
-    <menuitem id="menuCreate" label="NewDirectory" icon="icons/folder0.png"></menuitem>
     <menuitem id="menuDetail" label="Property" icon="icons/star0.png"></menuitem>
-    <menuitem id="menuCut" label="Cut" icon="icons/delete.png"></menuitem>
-    <menuitem id="menuPaste" label="Paste" icon="icons/file1.png"></menuitem>
-    <menuitem id="menuDelete" label="Delete" icon="icons/delete.png"></menuitem>
-    <menuitem id="menuReload" label="Reload" icon="icons/loading.gif"></menuitem>
-    <menuitem id="menuSortByTitle" label="SortByTitle" icon="icons/star0.png"></menuitem>
+    <menuitem id="menuReload" label="Reload" icon="icons/loading.gif"></menuitem>↓↑
+    <menu label="Modify" icon="icons/modify.png">
+      <menuitem id="menuCreate" label="NewDirectory" icon="icons/folder0.png"></menuitem>
+      <menuitem id="menuCut" label="Cut" icon="icons/delete.png"></menuitem>
+      <menuitem id="menuPaste" label="Paste" icon="icons/file1.png"></menuitem>
+      <menuitem id="menuDelete" label="Delete" icon="icons/delete.png"></menuitem>
+      <menuitem id="menuSortByTitleAsc" label="Sort" icon="icons/folder0-asc-A.png"></menuitem>
+      <menuitem id="menuSortByTitleDes" label="Sort" icon="icons/folder0-desc-A.png"></menuitem>
+      <menuitem id="menuSortByDateAsc" label="Sort" icon="icons/folder0-asc-clock.png"></menuitem>
+      <menuitem id="menuSortByDateDes" label="Sort" icon="icons/folder0-desc-clock.png"></menuitem>
+    </menu>
   </menu>
-  
-  
+
+
   <script type="text/javascript" src="scrapbookq.js"></script>
 
 </body>
