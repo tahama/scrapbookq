@@ -1,6 +1,5 @@
 
 
-I do not understand Russian, the Russian version of the installation Guide is used in Bing translation.
 Please indicate whether your operating system is Windows or Linux.
 If it is windows, the installation process is as follows:
 1. Install this browser extension.
