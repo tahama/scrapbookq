@@ -2,6 +2,7 @@
 
 Please indicate whether your operating system is Windows or Linux.
 If it is windows, the installation process is as follows:
+
 1. Install this browser extension.
 2. After the installation is complete click  "Initialize " button, will automatically open firefox browser download folder.
 3. Find a folder with a name of "scrapbookq" in the open download file.
@@ -12,6 +13,7 @@ The official website's introduction limits the number of words, cannot elaborate
 
 请说明你的操作系统时Windows还是Linux.
 如果是windows，安装过程如下:
+
 1.安装这个浏览器扩展.
 2.安装完成后会自动打开firefox浏览器下载文件夹.
 3.在打开的下载文件里面找到一个名字为"scrapbookq"的文件夹.
@@ -22,6 +24,7 @@ The official website's introduction limits the number of words, cannot elaborate
 
 請說明你的作業系統時Windows還是Linux.
 如果是windows，安裝過程如下:
+
 1.安裝這個瀏覽器延伸.
 2.安裝完成後點擊"初始化"按鈕，會自動打開firefox瀏覽器下載資料夾.
 3.在打開的下載檔案裡面找到一個名字為"scrapbookq"的資料夾.
@@ -33,6 +36,7 @@ The official website's introduction limits the number of words, cannot elaborate
 私はロシア語を理解していない、インストールガイドのロシア語版は、Bing の翻訳で使用されます。
 お使いのオペレーティングシステムがWindowsまたはLinuxかどうかを指定してください。
 windows の場合、インストールプロセスは次のようになります。
+
 1. このブラウザ拡張機能をインストールします。
 2. インストールが完了したら、クリックしてください  "初期化 " ボタン, 自動的に firefox のブラウザのダウンロードフォルダを開きます.
 3. 開いているダウンロードファイルに"scrapbookq"という名前のフォルダを見つけます。
@@ -44,6 +48,7 @@ Linux の場合、私はあなた自身のドキュメントにインストー�
 나는 러시아어를 이해 하지 않는다, 설치 가이드의 러시아 버전은 빙 번역에서 사용 된다.
 운영 체제가 Windows 또는 Linux 인지를 표시 하십시오.
 windows 인 경우 설치 프로세스는 다음과 같습니다.
+
 1 .이 브라우저 소프트웨어 확장 설치 합니다.
 2. 설치가 완료 되 면 클릭  "초기화 " 버튼, 자동으로 firefox 브라우저 다운로드 폴더를 엽니다.
 3. 열려 있는 다운로드 파일에 (서) "scrapbookq"의 이름을가지고 폴더를 찾아라.
@@ -54,6 +59,7 @@ windows 인 경우 설치 프로세스는 다음과 같습니다.
 Я не понимаю русского, русский вариант руководства по установке используется в переводе Bing.
 Укажите, является ли операционная система Windows или Linux.
 Если это Windows, процесс установки выглядит следующим образом:
+
 1. Установите это расширение браузера.
 2. После завершения установки нажмите кнопку  "инициализировать ", чтобы автоматически открыть папку загрузки браузера Firefox.
 3. Найдите папку с именем "scrapbookq" в открытом файле загрузки.
@@ -64,6 +70,7 @@ windows 인 경우 설치 프로세스는 다음과 같습니다.
 Ich verstehe nicht Russisch, die russische Version des Installationshandbuchs wird in Bing Translation verwendet.
 Bitte geben Sie an, ob Ihr Betriebssystem Windows oder Linux ist.
 Wenn es Windows ist, ist der Installationsvorgang wie folgt:
+
 1. installieren Sie diese Browser-Erweiterung.
 2. nach der Installation abgeschlossen ist klicken Sie auf  "Initialize "-Taste, öffnet sich automatisch Firefox-Browser-Download-Ordner.
 3. suchen Sie einen Ordner mit dem Namen "scrapbookq" in der geöffneten Download-Datei.
@@ -74,6 +81,7 @@ Wenn es Linux ist, glaube ich, dass Sie die Installationsmethode in ihrer eigene
 Je ne comprends pas le russe, la version russe du Guide d'installation est utilisé dans la traduction Bing.
 Veuillez indiquer si votre système d'exploitation est Windows ou Linux.
 S'il s'agit de Windows, le processus d'installation est le suivant:
+
 1. Installez cette extension de navigateur.
 2. une fois l'installation terminée, cliquez sur le bouton  "Initialize ", ouvrira automatiquement le dossier de téléchargement du navigateur Firefox.
 3. trouver un dossier avec un nom de "scrapbookq" dans le fichier de téléchargement ouvert.
