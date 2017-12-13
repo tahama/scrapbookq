@@ -132,6 +132,16 @@ var xmlDoc;
 browser.runtime.onMessage.addListener(handleMessageScrapq);
 
 function registeLlistener() {
+	//<menuitem id="menuSortByTitle" label="SortByTitle" icon="icons/star0.png"></menuitem>
+	let tempItem = null;
+	if (document.getElementById("menuSortByTitle") == null) {
+		tempItem = document.createElement("menuitem");
+		tempItem.setAttribute("id", "menuSortByTitle");
+		tempItem.setAttribute("label", "SortByTitle");
+		tempItem.setAttribute("icon", "icons/star0.png");
+		document.getElementById("popup-menu").appendChild(tempItem);
+	}
+
 	var currentDrop = null;
 	var list = document.querySelector("div");
 	var menuPaste = document.getElementById("menuPaste");
@@ -142,6 +152,8 @@ function registeLlistener() {
 	var menuOpensourceurl = document.getElementById("opensourceurl");
 	var menuOpennewtab = document.getElementById("opennewtab");
 	var menuReload = document.getElementById("menuReload");
+	var menuSortByTitle = document.getElementById("menuSortByTitle");
+
 	//set menu label
 	menuPaste.setAttribute("label", browser.i18n.getMessage("Paste"));
 	menuCut.setAttribute("label", browser.i18n.getMessage("Cut"));
@@ -159,12 +171,14 @@ function registeLlistener() {
 	menuDetail.addEventListener("click", onDocDetail, false);
 	menuOpensourceurl.addEventListener("click", openSourceURL, false);
 	menuOpennewtab.addEventListener("click", openScrapURLNewTab, false);
-	menuReload.addEventListener("click", function () { 
+	menuReload.addEventListener("click", function () {
 		if (confirm(browser.i18n.getMessage("ConfirmReloadSidebar")) === true) {
 			window.location.reload();
 		}
-		 
+
 	}, false);
+	menuSortByTitle.addEventListener("click", onSortByTitle, false);
+
 	//把mousedown事件处理函数注册为toggleCss是为了在右键菜单点击事件处理前获取点击对象的数据到currentTarget
 	document.addEventListener("click", openScrapURL);
 	document.addEventListener("mouseup", onMouseUp);
@@ -410,7 +424,7 @@ function cutScrapNode(scrapArray, currentId) {
 //获取所有的leap的id和foldername
 function getAllScrapNode(scrapArray) {
 	//如果是leap，获取数据，返回
-	if (scrapArray.type == "") {
+	if (scrapArray != null && scrapArray.type == "") {
 		delArrayIdFolder.push(scrapArray.foldername + "/" + scrapArray.id);
 	}
 	else if (scrapArray.type == "folder" && scrapArray.subNodes != null) {
@@ -487,6 +501,10 @@ function saveScrapbookqData() {
 		var treeli = null;
 		var treeleaf = null;
 		for (var i = 0; i < currentNode.length; i++) {
+			if (currentNode[i] == null) {
+				currentNode.splice(i);
+				continue;
+			}
 			//不保存scrapbookq说明文件到rdf
 			if (currentNode[i].id == "scrapbookq") {
 				continue;
@@ -565,12 +583,13 @@ function handleMessageScrapq(request, sender, sendResponse) {
 			document.getElementById("scrapbookrdf").removeAttribute("checked");
 		}
 		console.log("scrapbookqrdfok: " + scrapbookqrdfok + " scrapbookqhtmlok: " + scrapbookqhtmlok + " scrapbookrdfok: " + scrapbookrdfok + " serverstatus: " + serverstatus);
-		
-		initScrapbookqHeader();
+		if (serverstatus == true) {
+			initScrapbookqHeader();
+		}
 	}
 	//{ test: "TEST", serverstate: servertest[1] }
 	if (request.test != null) {
-		document.getElementById("nativeapp").setAttribute("checked", "checked");		
+		document.getElementById("nativeapp").setAttribute("checked", "checked");
 		serverstatus = (request.serverstate == "1");
 		console.log("serverstatus: " + serverstatus);
 
@@ -1348,6 +1367,60 @@ function onDeleteDocument(event) {
 	//当前对象被删除，重新分配当前对象
 	currentTarget = document.getElementById("scrapbookq");
 	browser.runtime.sendMessage({ delete: stemp });
+}
+
+
+var sortedNode = new Array();
+function onSortByTitle() {
+	if (currentTarget != null && currentTarget.getAttribute("nodetype") === "folder") {
+		//sortScrapNode(arrNodes, currentTarget.getAttribute("id"));
+		sortScrapNode(arrNodes, currentTarget.getAttribute("id"));
+		if (currentTarget.parentNode.tagName == "DETAILS") {
+			let childNodesCurrent = currentTarget.parentNode.childNodes;
+			let len = childNodesCurrent.length;
+			for (let i = 1; i < len; i++) {
+				currentTarget.parentNode.removeChild(childNodesCurrent[1]);
+			}
+			displyScrap(sortedNode, currentTarget.parentNode);
+			childNodesCurrent = currentTarget.parentNode.childNodes;
+			len = childNodesCurrent.length;
+			for (let i = 1; i < len; i++) {
+				childNodesCurrent[i].setAttribute("class", "tree-leaf");
+			}
+			//sortedNode.pop();
+		}
+	}
+}
+
+//将目标id所在的scrapNode对象的子节点进行排序
+function sortScrapNode(scrapArray, currentId) {
+	var subNode = null;
+	for (var i = 0; i < scrapArray.length; i++) {
+		if (scrapArray[i].id == currentId && scrapArray[i].type == "folder" && scrapArray[i].subNodes != null) {
+			scrapArray[i].subNodes = sortByTitle(scrapArray[i].subNodes);
+			sortedNode = scrapArray[i].subNodes;
+		}
+		else if (scrapArray[i].type == "folder" && scrapArray[i].subNodes != null) {
+			sortScrapNode(scrapArray[i].subNodes, currentId);
+		}
+	}
+}
+
+function sortByTitle(arr, desc) {
+	var props = [];
+	var ret = [];
+	i = 0;
+	len = arr.length
+	for (; i < len; i++) {
+		var oI = arr[i];
+		(props[i] = new String(oI.title))._obj = oI;
+	}
+	props.sort();
+	for (i = 0; i < len; i++) {
+		ret[i] = props[i]._obj;
+	}
+	if (desc) ret.reverse();
+	return ret;
 }
 
 function getNow() {
