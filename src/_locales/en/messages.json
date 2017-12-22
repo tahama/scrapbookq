@@ -17,16 +17,16 @@
     "message": "Toggle Sidebar"
   },
   "SaveData": {
-    "message": "Save Data"
+    "message": "Save Data 💾"
   }, 
    "SaveDataModified": {
-    "message": "*Save Data"
+    "message": "*Save Data 💾"
   }, 
   "LoadDataUp": {
-    "message": "Information ∧"
+    "message": "Information 🔼"
   }, 
   "LoadDataDown": {
-    "message": "Information ∨"
+    "message": "Information 🔽"
   },          
    "OpenInNewTab": {
     "message": "Open In New Tab"
@@ -86,15 +86,21 @@
 	  "message": "Reloading sidebar takes a little time, please wait patiently."
   },
   "menuSortByTitleAsc": {
-	  "message": "Sort by title in ascending order."
+	  "message": "Sort by title in ascending order"
   },
   "menuSortByTitleDes": {
-	  "message": "Sort by title in descending order."
+	  "message": "Sort by title in descending order"
   },
   "menuSortByDateAsc": {
-	  "message": "Sort by date in ascending order."
+	  "message": "Sort by date in ascending order"
   },
   "menuSortByDateDes": {
-	  "message": "Sort by date in descending order."
+	  "message": "Sort by date in descending order"
+  },
+  "menuRebuildSidebar": {
+	  "message": "Rebuild"
+  },
+  "menuModify": {
+	  "message": "📋 Modify"
   }
 }

@@ -17,16 +17,16 @@
     "message": "Basculer la barre latérale"
   },
   "SaveData": {
-    "message": "Enregistrer des données"
+    "message": "Enregistrer des données 💾"
   }, 
    "SaveDataModified": {
-    "message": "*Enregistrer des données"
+    "message": "*Enregistrer des données 💾"
   }, 
   "LoadDataUp": {
-    "message": "Information ∧"
+    "message": "Information 🔼"
   }, 
   "LoadDataDown": {
-    "message": "Information ∨"
+    "message": "Information 🔽"
   },          
    "OpenInNewTab": {
     "message": "Ouvrir dans un nouvel onglet"
@@ -86,16 +86,22 @@
 	  "message": "Rechargement Sidebar prend un peu de temps, s'il vous plaît attendre patiemment."
   },
   "menuSortByTitleAsc": {
-	  "message": "Trier par titre en ordre croissant."
+	  "message": "Trier par titre en ordre croissant"
   },
   "menuSortByTitleDes": {
-	  "message": "Trier par titre en ordre décroissant."
+	  "message": "Trier par titre en ordre décroissant"
   },
   "menuSortByDateAsc": {
-	  "message": "Trier par date dans l'ordre croissant."
+	  "message": "Trier par date dans l'ordre croissant"
   },
   "menuSortByDateDes": {
-	  "message": "Trier par date dans l'ordre décroissant."
+	  "message": "Trier par date dans l'ordre décroissant"
+  },
+  "menuRebuildSidebar": {
+	  "message": "Reconstruire"
+  },
+  "menuModify": {
+	  "message": "📋 modifier"
   } 
 }
 

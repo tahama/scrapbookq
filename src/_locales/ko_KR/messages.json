@@ -17,16 +17,16 @@
     "message": "사이드 바 전환"
   },
   "SaveData": {
-    "message": "데이터 저장"
+    "message": "데이터 저장 💾"
   }, 
    "SaveDataModified": {
-    "message": "*데이터 저장"
+    "message": "*데이터 저장 💾"
   }, 
   "LoadDataUp": {
-    "message": "정보 ∧"
+    "message": "정보 🔼"
   }, 
   "LoadDataDown": {
-    "message": "정보 ∨"
+    "message": "정보 🔽"
   },          
    "OpenInNewTab": {
     "message": "새 탭에서 열기"
@@ -86,16 +86,22 @@
 	  "message": "사이드바를 다시 로드 하는 시간이 좀 걸립니다 인내심을 기다려주십시오。"
   },
   "menuSortByTitleAsc": {
-	  "message": "오름차순으로 제목별 정렬."
+	  "message": "오름차순으로 제목별 정렬"
   },
   "menuSortByTitleDes": {
-	  "message": "내림차순으로 제목별 정렬."
+	  "message": "내림차순으로 제목별 정렬"
   },
   "menuSortByDateAsc": {
-	  "message": "날짜별로 오름차순 정렬."
+	  "message": "날짜별로 오름차순 정렬"
   },
   "menuSortByDateDes": {
-	  "message": "내림차순으로 날짜별 정렬."
+	  "message": "내림차순으로 날짜별 정렬"
+  },
+  "menuRebuildSidebar": {
+	  "message": "다시 "
+  },
+  "menuModify": {
+	  "message": "📋 수정"
   } 
 }
 

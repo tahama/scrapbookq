@@ -13,10 +13,10 @@
     <h2>Automatic Installation</h2>
     <ol>
         <li>
-            <button id="initScrapbookQDirectory" style="color:red;">InitScrapbookQ</button>Click the button，remember the opened directory path</li>
-            <li>Windows user finds scrapbookq directory in open download directory, executes init_scrapbookq.bat batch file in scrapbookq directory</li>
+            <button id="initScrapbookQDirectory" style="color:red;">InitScrapbookQ</button>Click the "initialization" button to automatically open the download directory where scrapbookq is located</li>
+            <li>The windows user finds the "scrapbookq" directory in the open download directory and executes the "init_scrapbookq.bat" batch file in the "scrapbookq" directory</li>
         <li>Linux user execute the following command at console(Replace
-            <span style="color:red">yourname/Downloads</span>with the opened directory path)：
+            <span style="color:red">yourname/Downloads</span>with the open directory path)：
             <br>
             <p>cd /home/
                 <span style="color:red">yourname/Downloads</span>/scrapbookq;chmod +x scrapbookqmsg;./scrapbookqmsg init</p>
@@ -26,22 +26,22 @@
    
     <h1>ScrapbookQ Manual</h1>
     <ol>
-        <li>After Installlation, you can find the ScrapbookQ icon
-            <img src="../../icons/main.png" /> at firefox toolbar.
+        <li>After the installation, the ScrapbookQ icon button 
+            <img src="../../icons/main.png" /> is added to the Firefox toolbar.
         </li>
-        <li>Left click on ScrapbookQ toolbar icon
-            <img src="../../icons/main.png" />will open sidebar which containing ScrapbookQ</li>
-        <li>Click on the top of sidebar and select ScrapbookQ item when ScrapbookQ disappeared.</li>
-        <li>First time install ScrapbookQ will init scrapbookq folder:
-            <button>Initialization</button>
+        <li>Click the toolbar ScrapbookQ icon button 
+            <img src="../../icons/main.png" />will open the ScrapbookQ Manual page in the Firefox browser</li>
+        <li>If there is no ScrapbookQ directory in the browser side sidebar, please select ScrapbookQ in the top drop-down list of the browser side sidebar.</li>
+        <li>After the new installation of the ScrapbookQ plug-in, you need to initialize the ScrapbookQ folder and files throuth
+            <button>InitScrapbookQ</button>
         </li>
-        <li>Initialization will crate a folder named scrapbookq in browser default download dir, and create some files.</li>
-        <li>Through right click menu on ScrapbookQ in sidebar, you can manage saved web pages.</li>
+        <li>After click the button, the scrapbook folder, the necessary configuration files and the native application will be created in the default download directory of the Firefox browser.</li>
+        <li>Through right click menu of ScrapbookQ in sidebar, you can manage saved web pages.</li>
         <li>ScrapbookQ right click menu items:
             <ul>
                 <li>CapturePage: capture current web page and save it to ScrapbookQ</li>
                 <li>ToggleSidebar: open/close browser sidebar</li>
-                <li>OpenDownloadDir: open brower defautl download folder which also containing scrapbookq folder</li>
+                <li>OpenDownloadDir: Open the browser's default download directory, in which the scrapbookq directory stored.</li>
             </ul>
         </li>
 
@@ -60,7 +60,7 @@
                 <tr>
                     <td>
                         <img src="../../icons/file1.png" />Open origin URL</td>
-                    <td>Open clicked ScrapbookQ page's link in current Tab</td>
+                    <td>Open clicked ScrapbookQ page's source link in current Tab</td>
                 </tr>
                 <tr>
                     <td>
@@ -80,24 +80,24 @@
                 <tr>
                     <td>
                         <img src="../../icons/file1.png" />Paste</td>
-                    <td>Insert cut ScrapbookQ page or directory before/into clicked ScrapbookQ page/directory</td>
+                    <td>Paste the cut file link or folder to the front of the click target. If the target is a directory, it is inserted into the directory. </td>
                 </tr>
                 <tr>
                     <td>
                         <img src="../../icons/delete.png" />Delete</td>
-                    <td>Delete clicked ScrapbookQ page or directory and all files in it</td>
+                    <td>Delete the click target, if the target is a directory, and delete all the files in the directory.</td>
                 </tr>
             </table>
         </li>
-        <li>You can active this manual through left click on ScrapbookQ toolbar icon.
-            <img src="../../icons/main.png" /> , or active ScrapbookQ menu by write click.</li>
+        <li>You can click the ScrapbookQ toolbar icon button <img src="../../icons/main.png" />  to open this manual page.
+           </li>
     </ol>
-    <h1>Import ScrapBook Data</h1>
+    <h1>Importing ScrapBook data</h1>
     <ol>
         <li>Modify scrapbookq\scrapbookq.conf</li>
-        <li>add real path of ScrapBook\scrapbook.rdf at the end of rdfpath</li>
+        <li>Add the full path of the RDF to the rdfpath</li>
         <li>Looks like: rdfpath=D:\\Document\\ScrapBook\\</li>
-        <li>Restart firefox. The first time import ScrapBook rdf file may be slow if the rdf file is big</li>
+        <li>If the scrapbook.rdf file is large, it will take a long time to import the ScrapBook data for the first time. Please be patient.</li>
     </ol>
     <script type="text/javascript" src="initscrapbookqdir.js"></script>
 </body>

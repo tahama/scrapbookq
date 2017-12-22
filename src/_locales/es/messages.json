@@ -17,16 +17,16 @@
     "message": "Alternar Barra lateral"
   },
   "SaveData": {
-    "message": "Guardar Datos"
+    "message": "Guardar Datos 💾"
   }, 
    "SaveDataModified": {
-    "message": "*Guardar Datos"
+    "message": "*Guardar Datos 💾"
   }, 
   "LoadDataUp": {
-    "message": "Información ∧"
+    "message": "Información 🔼"
   }, 
   "LoadDataDown": {
-    "message": "Información ∨"
+    "message": "Información 🔽"
   },          
    "OpenInNewTab": {
     "message": "Abrir en Nueva Pestaña"
@@ -86,15 +86,21 @@
 	  "message": "Recargar la barra lateral lleva algo de tiempo, por favor, espere pacientemente."
   },
   "menuSortByTitleAsc": {
-	  "message": "Ordenar por título en orden ascendente."
+	  "message": "Ordenar por título en orden ascendente"
   },
   "menuSortByTitleDes": {
-	  "message": "Ordenar por título en orden descendente."
+	  "message": "Ordenar por título en orden descendente"
   },
   "menuSortByDateAsc": {
-	  "message": "Ordenar por fecha en orden ascendente."
+	  "message": "Ordenar por fecha en orden ascendente"
   },
   "menuSortByDateDes": {
-	  "message": "Ordenar por fecha en orden descendente."
+	  "message": "Ordenar por fecha en orden descendente"
+  },
+  "menuRebuildSidebar": {
+	  "message": "Reconstruir"
+  },
+  "menuModify": {
+	  "message": "📋  Modificar "
   }
 }

@@ -17,16 +17,16 @@
     "message": "切換側邊欄"
   },
    "SaveData": {
-    "message": "保存數據"
+    "message": "保存數據 💾"
   }, 
    "SaveDataModified": {
-    "message": "*保存數據"
+    "message": "*保存數據 💾"
   },   
   "LoadDataUp": {
-    "message": "狀態信息 ∧"
+    "message": "狀態信息 🔼"
   }, 
   "LoadDataDown": {
-    "message": "狀態信息 ∨"
+    "message": "狀態信息 🔽"
   },    
    "OpenInNewTab": {
     "message": "在新標簽頁打開"
@@ -86,16 +86,22 @@
 	  "message": "重新載入側邊欄需要花費一點時間，請耐心等待。"
   },
   "menuSortByTitleAsc": {
-	  "message": "按標題昇冪排列."
+	  "message": "按標題昇冪排列"
   },
   "menuSortByTitleDes": {
-	  "message": "按標題降冪排列."
+	  "message": "按標題降冪排列"
   },
   "menuSortByDateAsc": {
-	  "message": "按時間昇冪排列."
+	  "message": "按時間昇冪排列"
   },
   "menuSortByDateDes": {
-	  "message": "按時間降冪排列."
+	  "message": "按時間降冪排列"
+  },
+  "menuRebuildSidebar": {
+	  "message": "重建"
+  },
+  "menuModify": {
+	  "message": "📋 修改"
   }
 }
 

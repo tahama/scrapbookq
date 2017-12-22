@@ -1,18 +1,19 @@
 .sul {
   list-style-type: none;
   border: solid 1px transparent;
-  padding: 0px;
-  width: 150;
+  padding: 0px  5px 0px 5px;
+  width: auto;
 }
 
 .sli {
   border: solid 1px;
-  width: 130px;
+  width: auto;
 }
 
 .liMenu {
   border: outset 1px;
-  width: 130px;
+  padding: 0px  5px 0px 5px;
+  width: auto;
   background: #D8D8D8;
   border-radius: 4px;
   text-align: center;
@@ -21,7 +22,8 @@
 
 .liMenuOver {
   border: outset 1px;
-  width: 130px;
+  padding: 0px  10px 0px 10px;
+  width: auto;
   background: #E8E8E8;
   border-radius: 4px;
   text-align: center;
@@ -30,7 +32,8 @@
 
 .liMenuPress {
   border: outset 1px;
-  width: 130px;
+  padding: 0px  0px 0px 0px;  
+  width: auto;
   background: #B8B8B8;
   border-radius: 4px;
   text-align: center;
@@ -39,7 +42,7 @@
 
 .liMouseOver {
   border: solid 1px;
-  width: 130px;
+  width: auto;
   background: #3399cc;
 }
 

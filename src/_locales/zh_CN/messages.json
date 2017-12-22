@@ -17,16 +17,16 @@
     "message": "切换侧边栏"
   },
    "SaveData": {
-    "message": "保存数据"
+    "message": "保存数据 💾"
   }, 
    "SaveDataModified": {
-    "message": "*保存数据"
+    "message": "*保存数据 💾"
   },   
   "LoadDataUp": {
-    "message": "状态信息 ∧"
+    "message": "状态信息 🔼"
   }, 
   "LoadDataDown": {
-    "message": "状态信息 ∨"
+    "message": "状态信息 🔽"
   },    
    "OpenInNewTab": {
     "message": "在新标签页打开"
@@ -86,16 +86,22 @@
 	  "message": "重新加载侧边栏需要花费一点时间，请耐心等待。"
   },
   "menuSortByTitleAsc": {
-	  "message": "按标题升序排列."
+	  "message": "按标题升序排列"
   },
   "menuSortByTitleDes": {
-	  "message": "按标题降序排列."
+	  "message": "按标题降序排列"
   },
   "menuSortByDateAsc": {
-	  "message": "按时间升序排列."
+	  "message": "按时间升序排列"
   },
   "menuSortByDateDes": {
-	  "message": "按时间降序排列."
+	  "message": "按时间降序排列"
+  },
+  "menuRebuildSidebar": {
+	  "message": "重建"
+  },
+  "menuModify": {
+	  "message": "📋 修改"
   }
 }
 

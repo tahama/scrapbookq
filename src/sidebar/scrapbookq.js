@@ -161,6 +161,7 @@ function registeLlistener() {
 	var menuSortByDateAsc = document.getElementById("menuSortByDateAsc");
 	var menuSortByDateDes = document.getElementById("menuSortByDateDes");
 	var menuRebuildSidebar = document.getElementById("menuRebuildSidebar");
+	var menuModify = document.getElementById("menuModify");
 
 	//set menu label
 	menuPaste.setAttribute("label", browser.i18n.getMessage("Paste"));
@@ -175,7 +176,8 @@ function registeLlistener() {
 	menuSortByTitleDes.setAttribute("label", browser.i18n.getMessage("menuSortByTitleDes"));
 	menuSortByDateAsc.setAttribute("label", browser.i18n.getMessage("menuSortByDateAsc"));
 	menuSortByDateDes.setAttribute("label", browser.i18n.getMessage("menuSortByDateDes"));
-	//menuRebuildSidebar.setAttribute("label", browser.i18n.getMessage("menuRebuildSidebar"));
+	menuRebuildSidebar.setAttribute("label", browser.i18n.getMessage("menuRebuildSidebar"));
+	menuModify.setAttribute("label", browser.i18n.getMessage("menuModify"));
 	//addEventListener
 	menuPaste.addEventListener("click", onPasteDocument, false);
 	menuCut.addEventListener("click", onCutDocument, false);

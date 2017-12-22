@@ -17,16 +17,16 @@
     "message": "Toggle Seitenleiste"
   },
   "SaveData": {
-    "message": "Daten speichern"
+    "message": "Daten speichern 💾"
   }, 
    "SaveDataModified": {
-    "message": "*Daten speichern"
+    "message": "*Daten speichern 💾"
   }, 
   "LoadDataUp": {
-    "message": "Informationen ∧"
+    "message": "Informationen 🔼"
   }, 
   "LoadDataDown": {
-    "message": "Informationen ∨"
+    "message": "Informationen 🔽"
   },          
    "OpenInNewTab": {
     "message": "In neuem Tab öffnen"
@@ -86,16 +86,22 @@
 	  "message": "Reload Sidebar dauert ein wenig Zeit, warten Sie bitte geduldig."
   },
   "menuSortByTitleAsc": {
-	  "message": "Sortieren nach Titel in aufsteigender Reihenfolge."
+	  "message": "Sortieren nach Titel in aufsteigender Reihenfolge"
   },
   "menuSortByTitleDes": {
-	  "message": "Sortieren nach Titel in absteigender Reihenfolge."
+	  "message": "Sortieren nach Titel in absteigender Reihenfolge"
   },
   "menuSortByDateAsc": {
-	  "message": "Sortieren nach Datum in aufsteigender Reihenfolge."
+	  "message": "Sortieren nach Datum in aufsteigender Reihenfolge"
   },
   "menuSortByDateDes": {
-	  "message": "Sortieren nach Datum in absteigender Reihenfolge."
+	  "message": "Sortieren nach Datum in absteigender Reihenfolge"
+  },
+  "menuRebuildSidebar": {
+	  "message": "Wiederaufbau"
+  },
+  "menuModify": {
+	  "message": "📋 ändern"
   }  
 }
 
