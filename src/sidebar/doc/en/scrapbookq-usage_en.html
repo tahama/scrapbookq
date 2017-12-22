@@ -10,17 +10,10 @@
     Welcome to ScrapbookQ.<br>
     <a href="https://github.com/tahama/scrapbookq">web site on github</a><br>
     <a href="https://addons.mozilla.org/firefox/addon/scrapbookq">web site on Mozilla</a><br>
-    
-    <br> Install ScrapbookQ is very easy，the most simple automatic installation needs just one click and one bash shell command.
-    <br> For those computer experts, they can install ScrapbookQ by hand according to install guide.
-    <br> In following process we assume：
-    <br> User's home directory is (/home/yourname)，brower's default download directory is (/home/yourname/Downloads).
-    <br> Remind to modify directory path according to real path.
-    <br>
     <h2>Automatic Installation</h2>
     <ol>
         <li>
-            <button id="initScrapbookQDirectory">InitScrapbookQ</button>Click the button，remember the opened directory path</li>
+            <button id="initScrapbookQDirectory" style="color:red;">InitScrapbookQ</button>Click the button，remember the opened directory path</li>
             <li>Windows user finds scrapbookq directory in open download directory, executes init_scrapbookq.bat batch file in scrapbookq directory</li>
         <li>Linux user execute the following command at console(Replace
             <span style="color:red">yourname/Downloads</span>with the opened directory path)：
@@ -30,64 +23,7 @@
         </li>
         <li>Restart firefox</li>
     </ol>
-    <h2>Brief installation Steps</h2>
-    <ol>
-        <li>Click Init button</li>
-        <li>Move /home/yourname/Downloads/scrapbookq/native-messaging-hosts To ~/.mozilla/</li>
-        <li>Edit native-messaging-hosts/scrapbookqmsg.json，Modify "path"</li>
-        <li>Edit ~/Downlaods/scrapbookq/scrapbookq.conf，Modify rdfpath</li>
-        <li>Execute chmod +x scrapbookqmsg;./scrapbookqmsg</li>
-    </ol>
-    <h2>Detailed installation Steps</h2>
-    <ol>
-        <li>Install ScrapbookQ, if you read this manual this means ScrapbookQ has been installed</li>
-        <li>Click Init button to create ScrapbookQ directory and files (/home/yourname/Downloads/scrapbookq)</li>
-        <li>Open scrapbookeq folder，Move (native-messaging-hosts) folder to firefox config dir(/home/yourname/.mozilla/)</li>
-        <li>Edit (native-messaging-hosts/scrapbookqmsg.json)</li>
-        <li>Modify "path" to real path of scrapbookq/scrapbookqmsg</li>
-        <li>After modified it, looks like: ("path": "/home/yourname/Downloads/scrapbook/scrapbookqmsg")</li>
-        <li>Edit scrapbookq/scrapbookq.conf, Modify rdfpath to real path of ScrapBook folder</li>
-        <li>After modified it, looks like: (rdfpath = /home/windowsD/Documents/firefox/ScrapBook/)</li>
-        <li>Change native app permission：chmode +</li>
-        <li>Restart firefox, open sidebar, toggle ScrapbookQ</li>
-    </ol>
-    <h2>Directoris and files after Installation</h2>
-    <ul>
-        <li>Directoris and files
-            <ol>
-                <li>/home/yourname/Downloads/scrapbookq/</li>
-                <li>/home/yourname/Downloads/scrapbookq/scrapbookq.conf</li>
-                <li>/home/yourname/Downloads/scrapbookq/scrapbookq.rdf</li>
-                <li>/home/yourname/Downloads/scrapbook</li>
-                <li>/home/yourname/.mozilla/native-messaging-hosts/</li>
-                <li>/home/yourname/.mozilla/native-messaging-hosts/scrapbookqmsg.json</li>
-            </ol>
-        </li>
-        <li>Configuration file</li>
-        <ul>
-            <li>/home/yourname/Downloads/scrapbookq/scrapbookq.conf
-                <br>
-                <textarea rows="3" cols="30">
-rdfpath=/home/windowsC/Documents/firefox/ScrapBook/
-rdfloaded=0
-serverport=33338
-                    </textarea>
-
-            </li>
-            <li>/home/yourname/.mozilla/native-messaging-hosts/scrapbookqmsg.json
-                <br>
-                <textarea rows="7" cols="30">
-{
-  "name": "scrapbookqmsg",
-  "description": "ScrapBookQ host for native messaging",
-  "path": "/home/yourname/Downloads/scrapbookq/scrapbookqmsg",  
-  "type": "stdio",
-  "allowed_extensions": [ "tahama@163.com" ]
-}
-                    </textarea>
-            </li>
-        </ul>
-    </ul>
+   
     <h1>ScrapbookQ Manual</h1>
     <ol>
         <li>After Installlation, you can find the ScrapbookQ icon
@@ -158,9 +94,9 @@ serverport=33338
     </ol>
     <h1>Import ScrapBook Data</h1>
     <ol>
-        <li>Modify scrapbookq/scrapbookq.conf</li>
-        <li>add real path of ScrapBook/scrapbook.rdf at the end of rdfpath</li>
-        <li>Looks like: rdfpath = /home/windowsD/Documents/firefox/ScrapBook/</li>
+        <li>Modify scrapbookq\scrapbookq.conf</li>
+        <li>add real path of ScrapBook\scrapbook.rdf at the end of rdfpath</li>
+        <li>Looks like: rdfpath=D:\\Document\\ScrapBook\\</li>
         <li>Restart firefox. The first time import ScrapBook rdf file may be slow if the rdf file is big</li>
     </ol>
     <script type="text/javascript" src="initscrapbookqdir.js"></script>

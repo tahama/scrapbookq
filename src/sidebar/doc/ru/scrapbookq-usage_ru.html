@@ -10,17 +10,17 @@
     Добро пожаловать в ScrapbookQ<br>
     <a href="https://github.com/tahama/scrapbookq">web site on github</a><br>
     <a href="https://addons.mozilla.org/firefox/addon/scrapbookq">web site on Mozilla</a><br>
-    <br> Процесс установки очень прост, простейшей автоматической установке нужно только нажать кнопку, выполнить команду
-    <br> Для компьютерных экспертов следуйте инструкциям, которые необходимо выбрать для установки вручную.
-    <br> Следующие шаги предполагают:
-    <br> Домашний каталог пользователя (/home/yourname)，каталог загрузки браузера по умолчанию(/home/yourname/Downloads)
-    <br> Просьба внести соответствующие изменения в соответствии с фактической ситуацией
-    <br>
     <h2>Автоматизация шагов установки</h2>
     <ol>
         <li>
-            <button id="initScrapbookQDirectory">инициализация</button>Нажмите кнопку инициализации, не забудьте открыть путь к каталогу загрузки</li>
+            <button id="initScrapbookQDirectory" style="color:red;">инициализация</button>Нажмите кнопку инициализации, не забудьте открыть путь к каталогу загрузки</li>
             <li>Пользователь Windows обнаружил каталоги scrapbookq в открытой папке загрузки, выполнение пакетных файлов init_scrapbookq.bat в scrapbookq каталогах</li>
+            <li>монтаж:
+1. установить scrapbookq.это позволит добавить кнопку на панели инструментов значки Firefox.
+2. нажмите кнопку панели инструментов scrapbookq значок.это откроет scrapbookq руководство пользователя.
+3. нажмите кнопку "initscrapbookq" в scrapbookq руководство пользователя.это позволит создать scrapbookq папку и некоторые файлы.
+4. найти и открыть "scrapbookq" папке, затем выполнить "init_scrapbookq. bar" файл, который находится в "scrapbookq".
+5. перезапустить Firefox. </li>
         <li>Пользователи Linux Выполните следующую команду на консоли (замените
             <span style="color:red">yourname/Downloads</span>открытым каталогом каталога загрузки):
             <br>
@@ -29,65 +29,7 @@
         </li>
         <li>Перезапустить браузер Firefox</li>
     </ol>
-    <h2>Простая процедура установки</h2>
-    <ol>
-        <li>Нажмите кнопку «Инициализировать»</li>
-        <li>Переместить /home/yourname/Downloads/scrapbookq/native-messaging-hosts в ~/.mozilla/</li>
-        <li>редактировать native-messaging-hosts/scrapbookqmsg.json，модификация"path"</li>
-        <li>редактировать ~/Downlaods/scrapbookq/scrapbookq.conf，модификацияrdfpath</li>
-        <li>chmod +x scrapbookqmsg;./scrapbookqmsg</li>
-    </ol>
-    <h2>Подробные этапы установки</h2>
-    <ol>
-        <li>Установите плагины ScrapbookQ, вы можете видеть, что этот документ показывает, что начальная установка завершена</li>
-        <li>Нажмите кнопку, чтобы инициализировать папку ScrapbookQ и файлы(/home/yourname/Downloads/scrapbookq)</li>
-        <li>Откройте каталог scrapbookeq, переместите папку native-messaging-hosts в папку конфигурации firefox (native-messaging-hosts)Папка
-            в папку конфигурации firefox(/home/yourname/.mozilla/)</li>
-        <li>редактировать(native-messaging-hosts)Файл в папке(scrapbookqmsg.json)</li>
-        <li> Файлы в папке (scrapbookqmsg.json)внутри значени"path" для пути файла scrapbookqmsg папки scrapbookq</li>
-        <li>После завершения поправки об этом:("path": "/home/yourname/Downloads/scrapbookq/scrapbookqmsg")</li>
-        <li>Отредактируйте файл конфигурации scrapbookq scrapbookq.conf, значение rdfpath будет изменено на путь каталога ScrapBook</li>
-        <li>После завершения пересмотра этого вида:：(rdfpath = /home/windowsD/Documents/firefox/ScrapBook/)</li>
-        <li>Наконец, задайте исполняемые свойства локального файла программы:chmode +</li>
-        <li> Измените файл сохранения и перезапустите браузер, он увидит каталог ScrapbookQ на боковой панели</li>
-    </ol>
-    <h2>После установки и настройки папки и файла</h2>
-    <ul>
-        <li>Папки и документы
-            <ol>
-                <li>/home/yourname/Downloads/scrapbookq/</li>
-                <li>/home/yourname/Downloads/scrapbookq/scrapbookq.conf</li>
-                <li>/home/yourname/Downloads/scrapbookq/scrapbookq.rdf</li>
-                <li>/home/yourname/Downloads/scrapbook</li>
-                <li>/home/yourname/.mozilla/native-messaging-hosts/</li>
-                <li>/home/yourname/.mozilla/native-messaging-hosts/scrapbookqmsg.json</li>
-            </ol>
-        </li>
-        <li>профили</li>
-        <ul>
-            <li>/home/yourname/Downloads/scrapbookq/scrapbookq.conf
-                <br>
-                <textarea rows="3" cols="30">
-rdfpath=/home/windowsC/Documents/firefox/ScrapBook/
-rdfloaded=0
-serverport=33338
-                </textarea>
-
-            </li>
-            <li>/home/yourname/.mozilla/native-messaging-hosts/scrapbookqmsg.json
-                <br>
-                <textarea rows="7" cols="30">
-{
-  "name": "scrapbookqmsg",
-  "description": "ScrapBookQ host for native messaging",
-  "path": "/home/yourname/Downloads/scrapbookq/scrapbookqmsg",  
-  "type": "stdio",
-  "allowed_extensions": [ "tahama@163.com" ]
-}
-                </textarea>
-            </li>
-        </ul>
-    </ul>
+    
     <h1>Инструкции ScrapbookQ для использования</h1>
     <ol>
         <li>После установки плагина ScrapbookQ значок значка ScrapbookQ добавляется на панель инструментов браузера
@@ -163,9 +105,9 @@ serverport=33338
     </ol>
     <h1>Импорт данных ScrapBook</h1>
     <ol>
-        <li>модификацияscrapbookq/scrapbookq.conf</li>
+        <li>модификацияscrapbookq\scrapbookq.conf</li>
         <li>Добавьте путь, в котором файл данных ScrapBook scrapbook.rdf находится в конце значения rdfpath</li>
-        <li>Вероятно, так:rdfpath = /home/windowsD/Documents/firefox/ScrapBook/</li>
+        <li>Вероятно, так:rdfpath=D:\\Document\\ScrapBook\\</li>
         <li>Перезапустите браузер firefox, если исходные данные ScrapBook больше, первые прочитанные данные будут немного медленными</li>
     </ol>
     <script type="text/javascript" src="initscrapbookqdir.js"></script>

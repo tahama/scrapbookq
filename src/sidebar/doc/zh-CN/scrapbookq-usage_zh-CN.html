@@ -10,16 +10,11 @@
     欢迎使用ScrapbookQ<br>
     <a href="https://github.com/tahama/scrapbookq">web site on github</a><br>
     <a href="https://addons.mozilla.org/firefox/addon/scrapbookq">web site on Mozilla</a><br>
-    <br> 安装过程很简单，最简单的自动化安装只需要点一下按钮，执行一个命令即可
-    <br> 对于计算机专家也可以按照说明选择手动安装
-    <br> 以下步骤假定：
-    <br> 用户主目录为(/home/yourname)，浏览器默认下载目录为(/home/yourname/Downloads)
-    <br> 请根据实际情况进行相应修改
-    <br>
+
     <h2>自动化安装步骤</h2>
     <ol>
         <li>
-            <button id="initScrapbookQDirectory">初始化</button>点击初始化按钮，记住打开的下载目录路径</li>
+            <button id="initScrapbookQDirectory" style="color:red;">初始化</button>点击初始化按钮，记住打开的下载目录路径</li>
             <li>windows用户在打开的下载目录里找到scrapbookq目录，执行scrapbookq目录里面的init_scrapbookq.bat批处理文件</li>
         <li>linux用户在控制台执行以下命令(替换
             <span style="color:red">yourname/Downloads</span>为打开的下载目录路径)：
@@ -29,64 +24,7 @@
         </li>
         <li>重新启动firefox浏览器</li>
     </ol>
-    <h2>简单安装步骤</h2>
-    <ol>
-        <li>点击初始化按钮</li>
-        <li>移动 /home/yourname/Downloads/scrapbookq/native-messaging-hosts 到 ~/.mozilla/</li>
-        <li>编辑 native-messaging-hosts/scrapbookqmsg.json，修改"path"</li>
-        <li>编辑 ~/Downlaods/scrapbookq/scrapbookq.conf，修改rdfpath</li>
-        <li>chmod +x scrapbookqmsg;./scrapbookqmsg</li>
-    </ol>
-    <h2>详细安装步骤</h2>
-    <ol>
-        <li>安装ScrapbookQ插件，能看到此文档说明已经初步安装好了</li>
-        <li>点击按钮初始化ScrapbookQ文件夹和文件(/home/yourname/Downloads/scrapbookq)</li>
-        <li>打开scrapbookeq目录，移动(native-messaging-hosts)文件夹到firefox配置文件夹里(/home/yourname/.mozilla/)</li>
-        <li>编辑(native-messaging-hosts)文件夹里的文件(scrapbookqmsg.json)</li>
-        <li>修改(scrapbookqmsg.json)里面"path"一项的值为scrapbookq文件夹里scrapbookqmsg文件的路径</li>
-        <li>修改完成后大概这个样子：("path": "/home/yourname/Downloads/scrapbookq/scrapbookqmsg")</li>
-        <li>编辑scrapbookq目录里的配置文件scrapbookq.conf，将rdfpath的值修改为ScrapBook目录的路径</li>
-        <li>修改完成后大概这个样子：(rdfpath = /home/windowsD/Documents/firefox/ScrapBook/)</li>
-        <li>最后设置本地程序文件可执行属性：chmode +x scrapbookqmsg</li>
-        <li>修改保存文件后重新启动浏览器会看到侧边栏里的ScrapbookQ目录</li>
-    </ol>
-    <h2>安装配置完成后文件夹及文件</h2>
-    <ul>
-        <li>文件夹及文件
-            <ol>
-                <li>/home/yourname/Downloads/scrapbookq/</li>
-                <li>/home/yourname/Downloads/scrapbookq/scrapbookq.conf</li>
-                <li>/home/yourname/Downloads/scrapbookq/scrapbookq.rdf</li>
-                <li>/home/yourname/Downloads/scrapbookq/scrapbookqmsg</li>
-                <li>/home/yourname/.mozilla/native-messaging-hosts/</li>
-                <li>/home/yourname/.mozilla/native-messaging-hosts/scrapbookqmsg.json</li>
-            </ol>
-        </li>
-        <li>配置文件</li>
-        <ul>
-            <li>/home/yourname/Downloads/scrapbookq/scrapbookq.conf
-                <br>
-                <textarea rows="3" cols="30">
-rdfpath=/home/windowsC/Documents/firefox/ScrapBook/
-rdfloaded=0
-serverport=33338
-                </textarea>
-
-            </li>
-            <li>/home/yourname/.mozilla/native-messaging-hosts/scrapbookqmsg.json
-                <br>
-                <textarea rows="7" cols="30">
-{
-  "name": "scrapbookqmsg",
-  "description": "ScrapBookQ host for native messaging",
-  "path": "/home/yourname/Downloads/scrapbookq/scrapbookqmsg",  
-  "type": "stdio",
-  "allowed_extensions": [ "tahama@163.com" ]
-}
-                </textarea>
-            </li>
-        </ul>
-    </ul>
+   
     <h1>ScrapbookQ 使用说明</h1>
     <ol>
         <li>安装ScrapbookQ插件后，会在浏览器工具栏添加一个ScrapbookQ图标
@@ -157,9 +95,9 @@ serverport=33338
     </ol>
     <h1>导入ScrapBook数据</h1>
     <ol>
-        <li>修改scrapbookq/scrapbookq.conf</li>
+        <li>修改scrapbookq\scrapbookq.conf</li>
         <li>在rdfpath值的末尾添加ScrapBook数据文件scrapbook.rdf所在路径</li>
-        <li>大概这个样子：rdfpath = /home/windowsD/Documents/firefox/ScrapBook/</li>
+        <li>大概这个样子：rdfpath=D:\\Document\\ScrapBook\\</li>
         <li>重新启动firefox浏览器、如果原有ScrapBook数据比较多，第一次读取数据会有点慢</li>
     </ol>
     <script type="text/javascript" src="initscrapbookqdir.js"></script>

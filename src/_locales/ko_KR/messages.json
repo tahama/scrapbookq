@@ -4,7 +4,7 @@
     "description": "확장 프로그램 이름."
   },
   "extensionDescription": {
-    "message": "웹 페이지를 로컬 저장소로 캡처하고 브라우저 사이드 바에서 캡쳐 된 페이지를 관리합니다. 스크랩북 문서와 호환되며 오래된 스크랩북 문서 가져 오기 지원.\nwindows 인 경우 설치 프로세스는 다음과 같습니다.\n1. 이 브라우저 소프트웨어 확장 설치 합니다.\n2. 설치가 완료 되 면 클릭  \"초기화 \" 버튼, 자동으로 firefox 브라우저 다운로드 폴더를 엽니다.\n3. 열려 있는 다운로드 파일에 (서) \"scrapbookq\"의 이름을가지고 폴더를 찾아라.\n4. \"scrapbookq\" 폴더에서 \"init_scrapbookq.bat\" 이라는 파일을 실행 합니다.\n5. 파이어 폭스 브라우저를 다시 시작 합니다.\n그것이 리눅스 이라면 나는 당신이 당신의 자신의 문서화에 (서) 설치 방법을 찾을 것 이라고 믿는다. 공식적인 웹사이트의 소개는 낱말의 수를 제한 한다, 설치 단계를 정교 하 게 할 수 없다.\nhttps://github.com/tahama/scrapbookq/issues",
+    "message": "웹 페이지를 로컬 저장소로 캡처하고 브라우저 사이드 바에서 캡쳐 된 페이지를 관리합니다. 스크랩북 문서와 호환되며 오래된 스크랩북 문서 가져 오기 지원.\nwindows 인 경우 설치 프로세스는 다음과 같습니다.\n1. 이 브라우저 소프트웨어 확장 설치 합니다.\n2. 설치가 완료 되 면 클릭  \"초기화 \" 버튼, 자동으로 firefox 브라우저 다운로드 폴더를 엽니다.\n3. 열려 있는 다운로드 파일에 (서) \"scrapbookq\"의 이름을가지고 폴더를 찾아라.\n4. \"scrapbookq\" 폴더에서 \"init_scrapbookq.bat\" 이라는 파일을 실행 합니다.\n5. 파이어 폭스 브라우저를 다시 시작 합니다.\n그것이 리눅스 이라면 나는 당신이 당신의 자신의 문서화에 (서) 설치 방법을 찾을 것 이라고 믿는다. 공식적인 웹사이트의 소개는 낱말의 수를 제한 한다, 설치 단계를 정교 하 게 할 수 없다.\nhttps://github.com/tahama/scrapbookq/issues\n가져오기 ScrapBook 파일을 수정 해야 합니다 scrapbookq.conf 파일 및 구성 rdfpath 제대로. ScrapBook 폴더에 대 한 경로를 할당 해야 합니다 rdfpath, 사용자가 \\ \\\\로 교체 해야 하 고, 경로의 끝도 \\\\ 필요 합니다. 예를 들어, d:\\ScrapBook로 설정 해야 합니다 rdfpath = d:\\\\ScrapBook\\\\ \nScrapBook 폴더 scrapbook.rdf 파일이 있어야 합니다.",
     "description": "Description of the extension."
   },
   "CapturePage": {
@@ -73,6 +73,9 @@
   "NativeAppConnectError": {
     "message": "결 로컬 프로그램이 실패 했습니다, 구성 파일을 확인 하십시오: ~./mozilla/native-messaging-hosts/scrapbookqmsg.json, 로컬 프로그램의 실제 경로로 \"path\" 를 올바르게 구성."
   },
+  "NativeAppConnectErrorWin": {
+    "message": "연결 로컬 프로그램 실패, 배치 파일을 실행 하십시오 \"scrapbookq\\init_scrapbookq.bat\" scritbookq 디렉토리에"
+  }, 
   "Loading": {
 	  "message": "로드..."
   },

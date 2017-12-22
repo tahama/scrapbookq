@@ -4,7 +4,7 @@
     "description": "内線番号."
   },
   "extensionDescription": {
-    "message": "Webページをローカルストレージにキャプチャし、ブラウザサイドバーでキャプチャされたページを管理します。ScrapBookドキュメントと互換性があり、古いScrapBookドキュメントをインポートできます。\nwindows の場合、インストールプロセスは次のようになります。\n1. このブラウザ拡張機能をインストールします。\n2. インストールが完了したら、クリックしてください  \"初期化 \" ボタン, 自動的に firefox のブラウザのダウンロードフォルダを開きます.\n3. 開いているダウンロードファイルに\"scrapbookq\"という名前のフォルダを見つけます。\n4. \"scrapbookq\" フォルダに\"init_scrapbookq.bat\"という名前のファイルを実行します。\n5. Firefox ブラウザを再始動しなさい。\nLinux の場合、私はあなた自身のドキュメントにインストール方法を見つけると思います。\n公式ウェブサイトの導入は、単語の数を制限する、インストール手順を詳しく説明することはできません。\nhttps://github.com/tahama/scrapbookq/issues",
+    "message": "Webページをローカルストレージにキャプチャし、ブラウザサイドバーでキャプチャされたページを管理します。ScrapBookドキュメントと互換性があり、古いScrapBookドキュメントをインポートできます。\nwindows の場合、インストールプロセスは次のようになります。\n1. このブラウザ拡張機能をインストールします。\n2. インストールが完了したら、クリックしてください  \"初期化 \" ボタン, 自動的に firefox のブラウザのダウンロードフォルダを開きます.\n3. 開いているダウンロードファイルに\"scrapbookq\"という名前のフォルダを見つけます。\n4. \"scrapbookq\" フォルダに\"init_scrapbookq.bat\"という名前のファイルを実行します。\n5. Firefox ブラウザを再始動しなさい。\nLinux の場合、私はあなた自身のドキュメントにインストール方法を見つけると思います。\n公式ウェブサイトの導入は、単語の数を制限する、インストール手順を詳しく説明することはできません。\nhttps://github.com/tahama/scrapbookq/issues\nScrapBook ファイルをインポートするには、scrapbookq.conf ファイルを修正し、rdfpath を正しく設定する必要があります。ScrapBook フォルダへのパスは rdfpath に割り当てる必要があります、ユーザーは \\ \\\\ と置き換える必要があり、パスの末尾にも \\\\ が必要です。たとえば、d:\\ScrapBook を rdfpath=d:\\\\ScrapBook\\\\ に設定する必要があります。\nScrapBook フォルダには scrapbook.rdf ファイルが必要です。",
     "description": "拡張機能の説明."
   },
   "CapturePage": {
@@ -72,7 +72,10 @@
   }, 
   "NativeAppConnectError": {
     "message": "接続ローカルプログラムが失敗しました、構成ファイル : ~./mozilla/native-messaging-hosts/scrapbookqmsg.json  を確認してください, ローカルプログラムの真のパスとして \"path\" を正しく設定する."
-  },
+  },  
+  "NativeAppConnectErrorWin": {
+    "message": "接続ローカルプログラムが失敗しました、バッチファイル \"scrapbookq\\init_scrapbookq.bat\" を scrapbookq ディレクトリに実行してください"
+  }, 
   "Loading": {
 	  "message": "読み込み..."
   },

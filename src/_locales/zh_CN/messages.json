@@ -4,7 +4,7 @@
     "description": "Name of the extension."
   },
   "extensionDescription": {
-    "message": "保存网页到本地存储，通过浏览器侧边栏里便捷地管理已保存的网页. 兼容ScrapBook档案文件，支持导入ScrapBook档案文件。如果是windows，安装过程如下:\n1. 安装这个浏览器扩展.\n2. 装完成后会自动打开firefox浏览器下载文件夹.\n3. 在打开的下载文件里面找到一个名字为\"scrapbookq\"的文件夹.\n4. 执行\"scrapbookq\"文件夹里名叫\"init_scrapbookq.bat\"的文件.\n5. 重新启动firefox浏览器.\n如果是Linux,相信你会在自带的说明文档里找到安装方法的.\n官网的简介限制字数，不能详细说明安装步骤。\n如果遇到安装使用上的问题可以到:\n https://github.com/tahama/scrapbookq/issues 询问.",
+    "message": "保存网页到本地存储，通过浏览器侧边栏里便捷地管理已保存的网页. 兼容ScrapBook档案文件，支持导入ScrapBook档案文件。如果是windows，安装过程如下:\n1. 安装这个浏览器扩展.\n2. 装完成后会自动打开firefox浏览器下载文件夹.\n3. 在打开的下载文件里面找到一个名字为\"scrapbookq\"的文件夹.\n4. 执行\"scrapbookq\"文件夹里名叫\"init_scrapbookq.bat\"的文件.\n5. 重新启动firefox浏览器.\n如果是Linux,相信你会在自带的说明文档里找到安装方法的.\n官网的简介限制字数，不能详细说明安装步骤。\n如果遇到安装使用上的问题可以到:\n https://github.com/tahama/scrapbookq/issues 询问.\n导入ScrapBook文件需要修改scrapbookq.conf文件, 正确配置rdfpath. 应该把ScrapBook文件夹的路径分配给rdfpath, Windows用户需要把\\替换为\\\\, 并且路径末尾也需要\\\\. 比如D:\\ScrapBook应该设置为rdfpath=D:\\\\ScrapBook\\\\ \nScrapBook 文件夹应该有 scrapbook.rdf 文件。",
     "description": "Description of the extension."
   },
   "CapturePage": {
@@ -72,7 +72,10 @@
   }, 
   "NativeAppConnectError": {
     "message": "连接本地程序失败, 请检查配置文件: ~./mozilla/native-messaging-hosts/scrapbookqmsg.json, 正确配置 \"path\"为本地程序的真实路径"
-  },
+  },    
+  "NativeAppConnectErrorWin": {
+    "message": "连接本地程序失败, 请执行scrapbookq目录里的批处理文件 \"scrapbookq\\init_scrapbookq.bat\"."
+  },  
   "Loading": {
 	  "message": "加载中..."
   },

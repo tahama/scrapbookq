@@ -7,7 +7,7 @@ function storApp() {
 	//scrapContainer.setAttribute("contenteditable", false);
 	browser.tabs.query({ windowId: myWindowId, active: true }).then((tabs) => {
 		let contentToStore = {};
-		let sbqApp = new ScrapBookQApp(arrNodes, document.body.innerHTML, folderport, scrapbookqhtmlok, scrapbookqrdfok, scrapbookrdfok, rdfloaded);
+		let sbqApp = new ScrapBookQApp(arrNodes, document.body.innerHTML, folderport, scrapbookqhtmlok, scrapbookqrdfok, scrapbookrdfok, rdfloaded, downloadjs);
 
 		let removeScrapbookq = browser.storage.local.remove("ScrapbookQApp");
 		removeScrapbookq.then(onRemoved, onError);
@@ -24,6 +24,19 @@ function storApp() {
 		//var clearStorage = browser.storage.local.clear();
 		//clearStorage.then(onCleared, onError);
 	});
+}
+
+function removeStorApp() {
+	let removeScrapbookq = browser.storage.local.remove("ScrapbookQApp");
+	removeScrapbookq.then(onRemoved, onError);
+
+	function onRemoved() {
+		//console.log("storApp OK");
+	}
+
+	function onError(e) {
+		console.log(e);
+	}
 }
 
 /*
@@ -59,9 +72,10 @@ function updateContent() {
 				scrapbookqrdfok = sbqApp.scrapbookqrdfok;
 				scrapbookrdfok = sbqApp.scrapbookrdfok;
 				rdfloaded = sbqApp.rdfloaded;
+				downloadjs = sbqApp.downloadjs;
 			};
-			browser.runtime.sendMessage({ testserver: "TestServer" });
 		});
+	browser.runtime.sendMessage({ testserver: "TestServer" });
 }
 
 /*
@@ -87,7 +101,7 @@ browser.windows.getCurrent({ populate: true }).then((windowInfo) => {
 var serverport = null;
 var scrapbook = null;
 var folderport = new Array();
-var scrapbookqhtmlok, scrapbookqrdfok, scrapbookrdfok, serverstatus, rdfloaded;
+var scrapbookqhtmlok, scrapbookqrdfok, scrapbookrdfok, serverstatus, rdfloaded, downloadjs;
 
 var currentTarget = null;
 //var scrapContainer = document.querySelector(".scrap-container");
@@ -146,6 +160,7 @@ function registeLlistener() {
 	var menuSortByTitleDes = document.getElementById("menuSortByTitleDes");
 	var menuSortByDateAsc = document.getElementById("menuSortByDateAsc");
 	var menuSortByDateDes = document.getElementById("menuSortByDateDes");
+	var menuRebuildSidebar = document.getElementById("menuRebuildSidebar");
 
 	//set menu label
 	menuPaste.setAttribute("label", browser.i18n.getMessage("Paste"));
@@ -160,6 +175,7 @@ function registeLlistener() {
 	menuSortByTitleDes.setAttribute("label", browser.i18n.getMessage("menuSortByTitleDes"));
 	menuSortByDateAsc.setAttribute("label", browser.i18n.getMessage("menuSortByDateAsc"));
 	menuSortByDateDes.setAttribute("label", browser.i18n.getMessage("menuSortByDateDes"));
+	//menuRebuildSidebar.setAttribute("label", browser.i18n.getMessage("menuRebuildSidebar"));
 	//addEventListener
 	menuPaste.addEventListener("click", onPasteDocument, false);
 	menuCut.addEventListener("click", onCutDocument, false);
@@ -169,15 +185,13 @@ function registeLlistener() {
 	menuOpensourceurl.addEventListener("click", openSourceURL, false);
 	menuOpennewtab.addEventListener("click", openScrapURLNewTab, false);
 	menuReload.addEventListener("click", function () {
-		if (confirm(browser.i18n.getMessage("ConfirmReloadSidebar")) === true) {
-			window.location.reload();
-		}
-
+		window.location.reload();
 	}, false);
 	menuSortByTitleAsc.addEventListener("click", onSortByTitle, false);
 	menuSortByTitleDes.addEventListener("click", onSortByTitleDesc, false);
 	menuSortByDateAsc.addEventListener("click", onSortByDate, false);
 	menuSortByDateDes.addEventListener("click", onSortByDateDesc, false);
+	menuRebuildSidebar.addEventListener("click", onRebuildSidebar, false);
 
 	//把mousedown事件处理函数注册为toggleCss是为了在右键菜单点击事件处理前获取点击对象的数据到currentTarget
 	document.addEventListener("click", openScrapURL);
@@ -198,6 +212,8 @@ function initScrapbookqHeader() {
 	var scrapbookli = document.getElementById("scrapbookli");
 	var nativeappli = document.getElementById("nativeappli");
 	var nativeserverli = document.getElementById("nativeserverli");
+	var downloadjsli = document.getElementById("downloadjsli");
+	//var downloadjsinput = document.getElementById("downloadjs");
 	var mylibutton = document.getElementById("mylisavedata");
 	var scrapbookqrdf = document.getElementById("scrapbookqrdf");
 	var scrapbookrdf = document.getElementById("scrapbookrdf");
@@ -205,7 +221,10 @@ function initScrapbookqHeader() {
 	informationli.addEventListener("click", change, true);
 	scrapbookqli.addEventListener("mouseover", onOver, true);
 	scrapbookli.addEventListener("mouseover", onOver, true);
-	mylibutton.addEventListener("mouseover", function () { mylibutton.className = "liMenuOver" }, true);
+	nativeappli.addEventListener("mouseover", onOver, true);
+	nativeserverli.addEventListener("mouseover", onOver, true);
+	downloadjsli.addEventListener("mouseover", onOver, true);
+	mylibutton.addEventListener("mouseover", onOver, true);//function () { mylibutton.className = "liMenuOver" }, true);
 	mylibutton.addEventListener("mouseout", function () { mylibutton.className = "liMenu" }, true);
 	mylibutton.addEventListener("mousedown", function () { mylibutton.className = "liMenuPress" }, true);
 	mylibutton.addEventListener("click", function () { mylibutton.className = "liMenu"; saveScrapbookqData(); }, true);
@@ -215,6 +234,7 @@ function initScrapbookqHeader() {
 	document.getElementById("scrapbookrdf").setAttribute("disabled", "disabled");
 	document.getElementById("nativeapp").setAttribute("disabled", "disabled");
 	document.getElementById("nativeserver").setAttribute("disabled", "disabled");
+	document.getElementById("downloadjs").setAttribute("disabled", "disabled");
 	//scrapbookqrdf.addEventListener("change", function () { if (scrapbookqrdf.checked) loadRDFDoc("scrapbookq") }, true);
 	//scrapbookrdf.addEventListener("change", function () { if (scrapbookrdf.checked) loadRDFDoc("scrapbook") }, true);
 
@@ -255,11 +275,6 @@ function initScrapbookqHeader() {
 			initScrap(arrNodes, xmlDoc);
 			displyScrap(arrNodes, scrapContainer);
 		}
-		if (scrapbookqhtmlok == true && 1 > 2) {
-			loadXMLDoc("http://localhost:" + folderport.scrapbookq + "/scrapbookq.html");
-			//scrapContainer.innerHTML = xmlhttp.responseText;
-			displyScrap(arrNodes, scrapContainer);
-		}
 		if (scrapbookrdfok == true) {
 			//加载新数据、更新输出、保存数据、更新状态、传输状态
 			loadXMLDoc("http://localhost:" + folderport.scrapbook + "/scrapbook.rdf");
@@ -272,11 +287,21 @@ function initScrapbookqHeader() {
 				browser.runtime.sendMessage({ rdfloaded: "1" });
 			}
 		}
+		if (scrapbookqhtmlok == true && 1 > 2) {
+			loadXMLDoc("http://localhost:" + folderport.scrapbookq + "/scrapbookq.html");
+			//scrapContainer.innerHTML = xmlhttp.responseText;
+			displyScrap(arrNodes, scrapContainer);
+		}
 	}
 
 	function onOver(event) {
+		//console.log("On: " + event.target.id);
 		switch (event.target.id) {
+			case "mylisavedata":
+				document.getElementById("mylisavedata").className = "liMenuOver";
+				break;
 			case "informationli":
+				document.getElementById("informationli").className = "liMenuOver";
 				break;
 			case "scrapbookqli":
 				document.getElementById("scrapbookqli").className = "liMouseOver";
@@ -296,6 +321,12 @@ function initScrapbookqHeader() {
 			case "nativeapp":
 				document.getElementById("nativeappli").className = "liMouseOver";
 				break;
+			case "downloadjsli":
+				document.getElementById("downloadjsli").className = "liMouseOver";
+				break;
+			case "downloadjs":
+				document.getElementById("downloadjsli").className = "liMouseOver";
+				break;
 			case "nativeserverli":
 				document.getElementById("nativeserverli").className = "liMouseOver";
 				break;
@@ -308,6 +339,13 @@ function initScrapbookqHeader() {
 	}
 
 	function onOut(event) {
+		//console.log("Out: " + event.target.id);
+		event = event || window.event;
+		if (event.relatedTarget == null || event.relatedTarget.id == "") {
+			hideli();
+			return;
+		}
+		//console.log("Out: " + event.target.id + " related: " + event.relatedTarget + " related.id: " + event.relatedTarget.id);
 		switch (event.target.id) {
 			case "myul":
 				hideli();
@@ -326,6 +364,9 @@ function initScrapbookqHeader() {
 			case "nativeserverli":
 				document.getElementById(event.target.id).className = "li";
 				break;
+			case "downloadjsli":
+				document.getElementById(event.target.id).className = "li";
+				break;
 			default:
 				break;
 		}
@@ -336,6 +377,7 @@ function initScrapbookqHeader() {
 		document.getElementById("scrapbookqli").className = "liHide";
 		document.getElementById("scrapbookli").className = "liHide";
 		document.getElementById("nativeappli").className = "liHide";
+		document.getElementById("downloadjsli").className = "liHide";
 		document.getElementById("nativeserverli").className = "liHide";
 
 	}
@@ -351,6 +393,7 @@ function initScrapbookqHeader() {
 				document.getElementById("scrapbookqli").className = "liShow";
 				document.getElementById("scrapbookli").className = "liShow";
 				document.getElementById("nativeappli").className = "liShow";
+				document.getElementById("downloadjsli").className = "liShow";
 				document.getElementById("nativeserverli").className = "liShow";
 				nextState = 0;
 				break;
@@ -359,6 +402,7 @@ function initScrapbookqHeader() {
 				document.getElementById("scrapbookqli").className = "liHide";
 				document.getElementById("scrapbookli").className = "liHide";
 				document.getElementById("nativeappli").className = "liHide";
+				document.getElementById("downloadjsli").className = "liHide";
 				document.getElementById("nativeserverli").className = "liHide";
 				nextState = 1;
 				break;
@@ -546,20 +590,40 @@ function saveScrapbookqData() {
 
 //folderport["scrapbookq"]=1234
 function handleMessageScrapq(request, sender, sendResponse) {
-	console.log("== scrpq.js Received: == " + request);
+	console.log("== scrpq.js Received: == ");
+	if (request.downloadok != null) {
+		console.log("scrapbookq.js Received: (\"DOWNLOADOK:" + request.downloadok + "\");");
+	}
+	//console.log(request);
 	if (request.NativeAppConnectError != null) {
 		console.log("== scrpq.js Received: == " + request.NativeAppConnectError);
-		alert(request.NativeAppConnectError + "\n" + browser.i18n.getMessage("NativeAppConnectError"));
+		var platform = navigator.platform;
+		if (platform == "Win64" || platform == "Win32") {
+			alert(request.NativeAppConnectError + "\n" + browser.i18n.getMessage("NativeAppConnectErrorWin"));
+			browser.downloads.showDefaultFolder();
+		}
+		else {
+			alert(request.NativeAppConnectError + "\n" + browser.i18n.getMessage("NativeAppConnectError"));
+			browser.downloads.showDefaultFolder();
+		}
 	}
 	//{ Scrapbook string Rdfloaded string Serverport string Serverstate string }
 	if (request.Serverport != null) {
 		document.getElementById("informationli").style.color = "black";
 		document.getElementById("nativeserver").setAttribute("checked", "checked");
-		console.log("ScrapBook: " + request.Scrapbook + " port: " + request.Serverport + " rdfloaded: " + request.Rdfloaded + " serverstate: " + request.Serverstate);
+		console.log("ScrapBook: " + request.Scrapbook + " port: " + request.Serverport + " rdfloaded: " + request.Rdfloaded + " downloadjs: " + request.Downloadjs + " serverstate: " + request.Serverstate);
 		rdfloaded = (request.Rdfloaded == "1");
+		downloadjs = (request.Downloadjs == "1");
 		serverport = request.Serverport;
 		scrapbook = request.Scrapbook;
 		serverstatus = (request.Serverstate == "1");
+		if (downloadjs == true) {
+			document.getElementById("downloadjs").setAttribute("checked", "true");
+		}
+		else {
+			document.getElementById("downloadjs").removeAttribute("checked");
+		}
+
 
 		if (true) {
 			scrapbookqrdfok = true;
@@ -591,7 +655,7 @@ function handleMessageScrapq(request, sender, sendResponse) {
 	if (request.test != null) {
 		document.getElementById("nativeapp").setAttribute("checked", "checked");
 		serverstatus = (request.serverstate == "1");
-		console.log("serverstatus: " + serverstatus);
+		console.log("serverstatus: " + serverstatus + " downloadjs: " + downloadjs);
 
 		if (serverstatus == false) {
 			document.getElementById("informationli").style.color = "blue";
@@ -606,8 +670,11 @@ function handleMessageScrapq(request, sender, sendResponse) {
 		alert("Some files deleted faild: " + request.undelete);
 	}
 
-	if (request.id != null) {
+	if (request.id != null && request.title != null && request.url != null) {
 		console.log("Message from the background: " + request.id);
+		if (currentTarget == null) {
+			currentTarget = document.getElementById("scrapbookq");
+		}
 		//新建page页面
 		var newLi = null;
 		//新建page页面的icon
@@ -635,9 +702,7 @@ function handleMessageScrapq(request, sender, sendResponse) {
 		newURL.appendChild(document.createTextNode(request.title));
 		newLi.appendChild(newURL);
 		if (newLi != null) {
-			if (currentTarget == null) {
-				currentTarget = document.getElementById("scrapbookq");
-			}
+			//console.log("currentTarget.id = " + currentTarget.id + " tagName: " + currentTarget.tagName + " parentNode.tagName: " + currentTarget.parentNode.tagName);
 			//如果当前对象为页面文件，则向父节点<li>的父节点添加，并且修改父节点的isroot和class为当前对象的父节点一样
 			if (currentTarget.tagName === "A") {
 				//console.log("currentDrop.parentNode.getAttribute(isroot)", currentDrop.parentNode.getAttribute("isroot"));
@@ -655,6 +720,7 @@ function handleMessageScrapq(request, sender, sendResponse) {
 			}
 			//没有选中任何对象，直接插入到最后
 			else if (currentTarget.id == "scrapbookq") {
+				console.log("currentTarget.id = " + currentTarget.id + " tagName: " + currentTarget.tagName + " parentNode.tagName: " + currentTarget.parentNode.tagName);
 				newLi.setAttribute("isroot", "0");
 				newLi.setAttribute("class", "tree-root");
 				//currentTarget.insertBefore(newLi, currentTarget.childNodes[1]);
@@ -1209,7 +1275,7 @@ function getScrapNodes(RDFResource, arrNodes) {
 }
 
 /*保存sidebar的arr和html以及几个必须状态值到local storage*/
-function ScrapBookQApp(arrayNodes, sidebarhtml, folderport, scrapbookqhtmlok, scrapbookqrdfok, scrapbookrdfok, rdfloaded) {
+function ScrapBookQApp(arrayNodes, sidebarhtml, folderport, scrapbookqhtmlok, scrapbookqrdfok, scrapbookrdfok, rdfloaded, downloadjs) {
 	this.arrayNodes = arrayNodes;
 	this.sidebarhtml = sidebarhtml;
 	this.folderport = folderport;
@@ -1217,6 +1283,7 @@ function ScrapBookQApp(arrayNodes, sidebarhtml, folderport, scrapbookqhtmlok, sc
 	this.scrapbookqrdfok = scrapbookqrdfok;
 	this.scrapbookrdfok = scrapbookrdfok;
 	this.rdfloaded = rdfloaded;
+	this.downloadjs = downloadjs;
 }
 function scrapNode(about, id, type, title, chars, icon, source, comment, subNodes, foldername) {
 	this.about = about;
@@ -1516,7 +1583,7 @@ function sortByDateScrapNode(scrapArray, currentId, desc) {
 	var subNode = null;
 	for (var i = 0; i < scrapArray.length; i++) {
 		if (scrapArray[i].id == currentId && scrapArray[i].type == "folder" && scrapArray[i].subNodes != null) {
-			scrapArray[i].subNodes.sort(function (a, b){
+			scrapArray[i].subNodes.sort(function (a, b) {
 				return a.id - b.id;
 			});
 			if (desc) scrapArray[i].subNodes.reverse();
@@ -1524,6 +1591,21 @@ function sortByDateScrapNode(scrapArray, currentId, desc) {
 		else if (scrapArray[i].type == "folder" && scrapArray[i].subNodes != null) {
 			sortByTitleScrapNode(scrapArray[i].subNodes, currentId);
 		}
+	}
+}
+
+function onRebuildSidebar(event) {
+	if (confirm(browser.i18n.getMessage("ConfirmReloadSidebar")) === true) {
+		removeStorApp();
+		window.location.reload();
+		/*
+		browser.runtime.sendMessage({ testserver: "TestServer" });
+		setTimeout(function () {
+			browser.runtime.sendMessage({ startserver: "STARTSERVER" });
+		  }, 2000);
+		  initScrapbookqHeader();
+		  window.location.reload();
+		  */
 	}
 }
 

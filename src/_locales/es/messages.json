@@ -1,0 +1,100 @@
+﻿{
+  "extensionName": {
+    "message": "ScrapbookQ",
+    "description": "Nombre de la Extensión."
+  },
+  "extensionDescription": {
+    "message": "Captura la página web en una ubicación local y administra las páginas capturadas en la barra lateral del navegador. Es Compatible con los documentos ScrapBook, admitiendo los documentos antiguos de ScrapBook.\nSi es en windows, el proceso de instalación es como sigue:\n1. Instale esta extensión del navegador.\n2. Después de terminar la instalación haga clic en el botón\"Initialize \" Eso abrirá automáticamente la carpeta de Descargas de Firefox.\n3. Find a folder with a name of \"scrapbookq\" en la carpeta abierta de Descargas.\n4. Ejecute el archivo llamado \"init_scrapbookq.bat\" situado en la carpeta \"scrapbookq\".\n5. Reinicie el navegador Firefox.\nSi es en Linux, Creo que Ud. encontrará el método de instalación en su propia documentación.\nLa introducción del sitio oficial limita el número de palabras, no se pueden ofrecer los pasos detallados de la instalación.\nhttps://github.com/tahama/scrapbookq/issues/\n\nimporting ScrapBook archivos requiere modificar scrapbookq.conf archivo y configurar rdfpath correctamente.La ruta a la carpeta debe ser asignado a rdfpath ScrapBook, el usuario de Windows debe sustituir \\ con \\\\, y el final de la ruta también tiene \\\\.Por ejemplo, D:\\ScrapBook tendria que ser puesto a rdfpath = D:\\\\ScrapBook\\\\.Carpeta de archivo debe tener scrapbook.rdf ScrapBook.\nTraductor: Valentín",
+    "description": "Description of the extension."
+  },
+  "CapturePage": {
+    "message": "Capturar Página"
+  },
+  "OpenDownloadDir": {
+    "message": "Abrir carpeta de Descargas"
+  },
+   "ToggleSidebar": {
+    "message": "Alternar Barra lateral"
+  },
+  "SaveData": {
+    "message": "Guardar Datos"
+  }, 
+   "SaveDataModified": {
+    "message": "*Guardar Datos"
+  }, 
+  "LoadDataUp": {
+    "message": "Información ∧"
+  }, 
+  "LoadDataDown": {
+    "message": "Información ∨"
+  },          
+   "OpenInNewTab": {
+    "message": "Abrir en Nueva Pestaña"
+  },  
+   "OpenOriginURL": {
+    "message": "Abrir URL de Origen"
+  },  
+  "Property": {
+    "message": "Propiedades"
+  },    
+  "Cut": {
+    "message": "Cortar"
+  },  
+   "Paste": {
+    "message": "Pegar"
+  },  
+   "Delete": {
+    "message": "Eliminar"
+  },  
+   "NewDirectory": {
+    "message": "Nueva Carpeta"
+  },
+   "ConfirmDeleteDirectory": {
+    "message": "Esto es una Carpeta, ¿Eliminarla y todos los archivos en la Carpeta?"
+  },
+  "ConfirmInitDirectory": {
+    "message": "Esto re-escribirá el archivo config de ScrapbookQ si Ud. ha instalado ScrapbookQ anteriormente. ¿Está seguro de cambiar la carpeta de inicio de ScrapbookQ？"
+  },  
+  "StartServer": {
+    "message": "Iniciar Servidor"
+  },  
+   "CloseServer": {
+    "message": "Cerrar Servidor"
+  },  
+   "InitDownloadDirectory": {
+    "message": "Initializar Carpeta de Descargas"
+  },
+   "TestCase": {
+    "message": "Modo de Prueba"
+  },
+   "ManualTitle": {
+    "message": "Manual de ScrapbookQ."
+  }, 
+  "NativeAppConnectError": {
+    "message": "Ha fallado la conexión al programa local, por favor revise el archivo de configuración ~./mozilla/native-messaging-hosts/scrapbookqmsg.json,  Configure Correctamente \"path\" la ruta local al programa."
+  },
+    "NativeAppConnectErrorWin": {
+    "message": "Conexión programa local no, por favor, ejecutar un archivo por lotes \"scrapbookq\\init_scrapbookq.bat\" en scrapbookq directorio."
+  },
+  "Loading": {
+	  "message": "Cargando..."
+  },
+  "ReloadSidebar": {
+	  "message": "Recargar Barra Lateral"
+  },
+  "ConfirmReloadSidebar": {
+	  "message": "Recargar la barra lateral lleva algo de tiempo, por favor, espere pacientemente."
+  },
+  "menuSortByTitleAsc": {
+	  "message": "Ordenar por título en orden ascendente."
+  },
+  "menuSortByTitleDes": {
+	  "message": "Ordenar por título en orden descendente."
+  },
+  "menuSortByDateAsc": {
+	  "message": "Ordenar por fecha en orden ascendente."
+  },
+  "menuSortByDateDes": {
+	  "message": "Ordenar por fecha en orden descendente."
+  }
+}

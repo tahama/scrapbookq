@@ -1,7 +1,7 @@
 var port = browser.runtime.connectNative("scrapbookqmsg");
 var msgContents = new Array();
 msgContents[0] = 0;
-
+var downloadjs = "0";
 /*
 Open a new tab, and load "my-page.html" into it.
 */
@@ -36,6 +36,11 @@ function openMyPage() {
       break;
     case "ru-RU":
       manualurl = "sidebar/doc/ru/scrapbookq-usage_ru.html";
+      break;
+    case "es":
+      manualurl = "sidebar/doc/es/scrapbookq-usage_es.html";
+    case "es-ES":
+      manualurl = "sidebar/doc/es/scrapbookq-usage_es.html";
       break;
     default:
       manualurl = "sidebar/doc/en/scrapbookq-usage_en.html";
@@ -94,29 +99,21 @@ var pagefilesidx = null;
 var pagefilename = null;
 var pageHtml = null;
 var pageFiles = null;
+var jsfiles = null;
 var faviconfilename = null;
+var downloadids = new Array();
 
 function onSaveCurrentPage() {
 
   function onStartedDownload(id) {
-    // console.log(`Started downloading: ${id}`);
+    console.log(`Started downloading: ${id}`);
   }
 
   function onFailed(error) {
     console.log(`Download failed: ${error}`);
   }
 
-  //pageHtml = request.pagecontent; pageFiles = request.pagefiles;
-  var file = new File([pageHtml], "index.html", {
-    type: "text/html",
-  });
-
-
-  downloadUrl = window.URL.createObjectURL(file);
   folderid = getNow();
-  downloading = browser.downloads.download({ url: downloadUrl, filename: "scrapbookq/data/" + folderid + "/index.html", conflictAction: "overwrite" });
-  downloading.then(onStartedDownload, onFailed);
-
   //有些页面html搜索不到favicon，所以在background.js里添加下载链接
   //browser.tabs.query({ currentWindow: true, active: true }).then(function (tabs) {
   if (currentTab.favIconUrl != null) {
@@ -130,8 +127,7 @@ function onSaveCurrentPage() {
     pagefilename = "scrapbookq/data/" + folderid + "/";
     faviconfilename = downloadUrl.substr(index0 + 1, index1 - index0 - 1);
     pagefilename += faviconfilename;
-
-    console.log(downloadUrl + " 下载的文件名: " + pagefilename);
+    //console.log(downloadUrl + " 下载的文件名: " + pagefilename);  
     downloading = browser.downloads.download({ url: downloadUrl, filename: pagefilename, conflictAction: "overwrite" });
     downloading.then(onStartedDownload, onFailed);
     pageFiles.push(currentTab.favIconUrl);
@@ -142,7 +138,7 @@ function onSaveCurrentPage() {
   for (pagefilesidx = 0; pagefilesidx < pageFiles.length; pagefilesidx++) {
     downloadUrl = pageFiles[pagefilesidx];
     //抛弃内嵌的base64编码的图片
-    if (downloadUrl.slice(0, 10) != "data:image") {
+    if (downloadUrl != null && downloadUrl.length > 0 && downloadUrl.slice(0, 10) != "data:image") {
       //去掉文件名前后的/和?等内容
       var index0 = pageFiles[pagefilesidx].lastIndexOf("/");
       var index1 = pageFiles[pagefilesidx].search(/[?]/g);
@@ -158,10 +154,55 @@ function onSaveCurrentPage() {
     }
   }
   //downloading.then(onStartedDownload, onFailed);
-  console.log("currentTab.url: " + currentTab.url + " title: " + currentTab.title + " favicon: " + currentTab.favIconUrl + " id: " + folderid);
+  //pageHtml = request.pagecontent; pageFiles = request.pagefiles;
+  var file = new File([pageHtml], "index.html", {
+    type: "text/html",
+  });
+
+  downloadUrl = window.URL.createObjectURL(file);
+  downloading = browser.downloads.download({ url: downloadUrl, filename: "scrapbookq/data/" + folderid + "/index.html", conflictAction: "overwrite" });
+  downloading.then(onStartedDownload, onFailed);
+
+  //console.log("currentTab.url: " + currentTab.url + " title: " + currentTab.title + " favicon: " + currentTab.favIconUrl + " id: " + folderid);
   browser.runtime.sendMessage({ id: folderid, title: currentTab.title, url: currentTab.url, favicon: faviconfilename });
   browser.tabs.executeScript({ code: "window.location.reload();" });
 }
+
+
+function handleChanged(delta) {
+  if (delta.state && delta.state.current === "complete") {
+    console.log(`Download ${delta.id} has completed. length: ${downloadids.length}`);
+    for (let i = 0; i < downloadids.length; i++) {
+      if (downloadids[i].id === delta.id) {
+        downloadids.splice(i, 1);
+        console.log(delta.id + " ****** downloadids.length: " + downloadids.length);
+        if (downloadids.length == 0) {
+          port.postMessage("DOWNLOADOK:" + folderid);
+          console.log("background.js port.postMessage(\"DOWNLOADOK:" + folderid + "\");");
+          browser.runtime.sendMessage({ downloadok: folderid });
+          console.log("background.js browser.runtime.sendMessage({ downloadok:" + folderid + "});");
+        }
+        break;
+      }
+    }
+  }
+}
+
+browser.downloads.onChanged.addListener(handleChanged);
+
+function handleCreated(item) {
+  console.log("id: " + item.id + " url: " + item.url + " exists:" + item.exists);
+  if (item.url.slice(0, 18) != "blob:moz-extension") {
+    for (let i = 0; i < downloadids.length; i++) {
+      if (downloadids[i].url == item.url) {
+        return;
+      }
+    }
+    downloadids.push({ id: item.id, url: item.url });
+  }
+}
+
+browser.downloads.onCreated.addListener(handleCreated);
 
 //folderid就是id
 var folderid = null;
@@ -207,6 +248,13 @@ function handleMessage(request, sender, sendResponse) {
     console.log("Message from the content script: " + request.pagefiles[0]);
     pageHtml = request.pagecontent;
     pageFiles = request.pagefiles;
+    jsfiles = request.jsfiles;
+    if (downloadjs == "1") {
+      for (let i = 0; i < jsfiles.length; i++) {
+        pageFiles.push(jsfiles[i]);
+      }
+    }
+    //console.log(pageFiles);
     onSaveCurrentPage();
     //browser.tabs.query({ currentWindow: true, active: true }).then(sendMessageToTabs);
   }
@@ -315,8 +363,9 @@ port.onMessage.addListener((response) => {
 
   //{ Scrapbook string Rdfloaded string Serverport string Serverstate string }
   if (response.Serverport != null) {
-    console.log("background.js sendMessage servers");
-    browser.runtime.sendMessage({ Scrapbook: response.Scrapbook, Rdfloaded: response.Rdfloaded, Serverport: response.Serverport, Serverstate: response.Serverstate });
+    console.log("background.js sendMessage servers: Downloadjs = " + response.Downloadjs);
+    downloadjs = response.Downloadjs;
+    browser.runtime.sendMessage({ Scrapbook: response.Scrapbook, Rdfloaded: response.Rdfloaded, Downloadjs: response.Downloadjs, Serverport: response.Serverport, Serverstate: response.Serverstate });
   }
   else if (response.indexOf("TEST") != -1) {
     const servertest = response.split(":");
@@ -462,3 +511,53 @@ browser.menus.onClicked.addListener((info, tab) => {
       break;
   }
 });
+
+
+
+
+function loadXMLDoc(dname) {
+  xmlhttp = null;
+  if (window.XMLHttpRequest) {
+    xmlhttp = new XMLHttpRequest();
+  }
+  xmlhttp.onload = onloadXML;
+  xmlhttp.onerror = onerrorXML;
+  xmlhttp.onreadystatechange = stateChange;
+  if (xmlhttp != null) {
+    xmlhttp.open("GET", dname, false);
+    //xmlhttp.setRequestHeader("Content-Type", "text/xml");
+
+    //rdf文件server不能正确返回content type，需要进行重写
+    if (dname.indexOf(".rdf") != -1) {
+      xmlhttp.overrideMimeType("text/xml");
+    }
+    xmlhttp.send(null);
+    //return xmlhttp.responseXML;
+  }
+  else {
+    alert("Your browser does not support XMLHTTP.");
+  }
+
+
+  function onloadXML() {
+    console.log("load XML Doc " + dname + " loading...");
+  }
+
+  function onerrorXML() {
+    console.log("load XML Doc :" + dname + " error!");
+  }
+
+  function stateChange() {
+    //4 = "loaded"
+    if (xmlhttp.readyState == 4) {
+      //200 = OK
+      if (xmlhttp.status == 200) {
+        // ...our code here...
+        console.log("load XML Doc: " + dname + " Success: 200");
+      }
+      else {
+        alert("Problem retrieving XML data: " + dname + " : " + xmlhttp.status);
+      }
+    }
+  }
+}

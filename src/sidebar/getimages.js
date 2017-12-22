@@ -1,30 +1,13 @@
 var imgs;
 var label = null;
 var imagesURL = new Array();
-/*
-label = document.createElement("lable");
-label.innerText = "URL: " + document.URL;
-document.body.appendChild(label);
-
-label = document.createElement("br");
-document.body.appendChild(label);
-
-label = document.createElement("lable");
-label.innerText = "Images: ";
-document.body.appendChild(label);
-
-label = document.createElement("lable");
-label.innerText = document.images.length;
-document.body.appendChild(label);
-
-label = document.createElement("br");
-document.body.appendChild(label);
-*/
+var jsURL = new Array ();
 
 for (imgs = 0; imgs < document.images.length; imgs++) {
     let imgurl = null;
     imgurl = document.images[imgs].src;
-    if (imgurl.indexOf("://") != -1) {
+    if (imgurl != null && imgurl.length != 0 && imgurl.indexOf("://") != -1) {
+		//console.log("ImageURL: " + imgurl + " length: " + imgurl.length);
         imagesURL.push(imgurl);
         //去掉文件名前后的/和?等内容
         let index0 = document.images[imgs].src.lastIndexOf("/");
@@ -36,74 +19,75 @@ for (imgs = 0; imgs < document.images.length; imgs++) {
         str0 = document.images[imgs].src.substr(index0 + 1, index1 - index0 - 1);
         document.images[imgs].src = str0;
     }
-    /*
-    var i = document.images[imgs].src.search(/[?]/g);
-    var len = document.images[imgs].src.lenght;
-    if (i > 0) {
-        len = i;
-    }
-    label = document.createElement("lable");
-    label.innerText = document.images[imgs].src.substr(0, len);
-    document.body.appendChild(label);
-    label = document.createElement("br");
-    document.body.appendChild(label);
-    */
 }
-
 
 var links = document.getElementsByTagName("link");
 var lnks;
 for (lnks = 0; lnks < links.length; lnks++) {
     let imgurl = null;
-    if (links[lnks].getAttribute("href") != null && (links[lnks].getAttribute("rel") == "stylesheet" || links[lnks].getAttribute("rel") == "shortcut icon")) {
-        //href以/开头就是从域名根目录算起
-        if (links[lnks].getAttribute("href")[0] == "/") {
-            imgurl = document.URL.slice(0, document.URL.indexOf("/")) + "//" + document.domain + links[lnks].getAttribute("href");
-        }
-        else {
-            imgurl = document.URL + links[lnks].getAttribute("href");
-        }
-        if (imgurl.indexOf("://") != -1) {
-            imagesURL.push(imgurl);
-        }
-
+    if (links[lnks].href != null && (links[lnks].rel == "stylesheet" || links[lnks].rel == "shortcut icon")) {
+        imagesURL.push(links[lnks].href);
         //去掉文件名前后的/和?等内容
-        let index0 = links[lnks].getAttribute("href").lastIndexOf("/");
-        let index1 = links[lnks].getAttribute("href").search(/[?]/g);
+        let index0 = links[lnks].href.lastIndexOf("/");
+        let index1 = links[lnks].href.search(/[?]/g);
         let str0 = null;
-        if (index1 < 0) {
-            index1 = links[lnks].getAttribute("href").length;
+        if (index1 == -1) {
+            index1 = links[lnks].href.length;
         }
-        str0 = links[lnks].getAttribute("href").substr(index0 + 1, index1 - index0 - 1);
-        links[lnks].setAttribute("href", str0);
-        /*
-         var linkindex = links[lnks].getAttribute("href").search(/[?]/g);
-         var linklen = links[lnks].getAttribute("href").lenght;
-         if (linkindex > 0) {
-             linklen = linkindex;
-         }
-         label = document.createElement("lable");
-         label.innerText = links[lnks].getAttribute("href").substr(0, linklen);
-         document.body.appendChild(label);
-         label = document.createElement("br");
-         document.body.appendChild(label);
-         */
+        str0 = links[lnks].href.substr(index0 + 1, index1 - index0 - 1);
+        links[lnks].href = str0;
     }
 }
-/*
-label = document.createElement("lable");
-label.innerText = document.URL;
-document.body.appendChild(label);
-label = document.createElement("br");
-document.body.appendChild(label);
-*/
 
 var pagehtml = document.getElementsByTagName("html")[0].innerHTML;
-browser.runtime.sendMessage({ pagecontent: pagehtml, pagefiles: imagesURL });
+var scriptsurl = new Array();
+var scripts = document.getElementsByTagName("script");
+for (let i = 0; i < scripts.length; i++) {
+    if (scripts[i].src != null && scripts[i].src.length > 0) {
+        if (scripts[i].src.indexOf("://") == -1) {
+            //href以/开头就是从域名根目录算起
+            if (scripts[i].src[0] == "/") {
+                jsURL.push(document.URL.slice(0, document.URL.indexOf("/")) + "//" + document.domain + scripts[i].src);
+            }
+            else {
+                jsURL.push(document.URL + scripts[i].src);
+            }
+        }
+        else {
+            jsURL.push(scripts[i].src);
+        }
+        let scriptidx = scripts[i].src.lastIndexOf("/");
+        if (scriptidx != -1) {
+            scriptsurl[scripts[i].src] = scripts[i].src.slice(scriptidx + 1);
+            //console.log(document.scripts[i].src.slice(idx + 1));
+        }
+        else {
+            scriptsurl[scripts[i].src] = scripts[i].src;
+            //console.log(document.scripts[i].src);
+        }
+    }
+}
+
+var regexp = null;
+var rep = null;
+var newHtml = null;
+for (x in scriptsurl) {
+    regexp = new RegExp("(src=.*" + scriptsurl[x].replace(/\?/g, ".") + ")", "gi");
+    newHtml = pagehtml.replace(regexp, "src=\"" + scriptsurl[x]);
+    pagehtml = newHtml;
+}
+
+var urlprefix = document.URL.slice(0, document.URL.indexOf("/")) + "//" + document.domain;
+regexp = new RegExp("(href=\"/" + ")", "gi");
+newHtml = pagehtml.replace(regexp, "href=\"" + urlprefix + "/");
+pagehtml = newHtml;
+
+browser.runtime.sendMessage({ pagecontent: pagehtml, pagefiles: imagesURL, jsfiles: jsURL });
 //window.location.reload();
 
 function handleMessageContent(request, sender, sendResponse) {
     console.log("== getimages.js Received Message from the background ==");
     console.log("==id: " + request.id + " icon:" + request.favicon);
 }
+
 //browser.runtime.onMessage.addListener(handleMessageContent);

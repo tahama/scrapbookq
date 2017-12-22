@@ -6,6 +6,21 @@ ScrapbookQ = ScrapBook for Quantum
 
 Windows and Linux support.
 
+## Installation
+
+1. Install ScrapBook. This will add a icon button at firefox toolbar.
+1. click scrapbookq toolbar icon button. This will open scrapbookq manual page.
+1. click "initScrapbookq" button in scrapbookq manual page.  This will create scrapbookq folder and some files.
+1. find and open "scrapbookq" folder, then execute "init_scrapbookq.bat" file which is in "scrapbookq" folder
+1. restart firefox.
+
+## Import old ScrapBook scrapbook.rdf data
+
+1. Find and open "scrapbookq" folder, then edit scrapbookq.conf
+1. Set rdfpath to the path of scrapbook.rdf, which is mostly at "ScrapBook" folder.
+1. for example, scrapbook.rdf path is D:\123\ScrapBook\scrapbook.rdf 
+1. looks like: rdfpath=D:\\123\\ScrapBook\\
+    
 ## Funtions
 
 1. Compatible with old ScrapBook extension

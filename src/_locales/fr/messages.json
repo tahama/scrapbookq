@@ -4,7 +4,7 @@
     "description": "Name of the extension."
   },
   "extensionDescription": {
-    "message": "Capture la page Web dans le stockage local et gère les pages capturées dans la barre latérale du navigateur. Compatible avec les documents ScrapBook, prenant en charge l'importation de vieux documents ScrapBook.\nS'il s'agit de Windows, le processus d'installation est le suivant:\n1. Installez cette extension de navigateur.\n2. une fois l'installation terminée, cliquez sur le bouton  \"Initialize \", ouvrira automatiquement le dossier de téléchargement du navigateur Firefox.\n3. trouver un dossier avec un nom de \"scrapbookq\" dans le fichier de téléchargement ouvert.\n4. Exécutez le fichier nommé \"init_scrapbookq.bat\" dans le dossier \"scrapbookq\".\n5. Redémarrer Firefox browser.\nSi c'est Linux, je crois que vous trouverez la méthode d'installation dans votre propre documentation. L'introduction du site officiel limite le nombre de mots, ne peut pas élaborer l'étape d'installation.\nhttps://github.com/tahama/scrapbookq/issues",
+    "message": "Capture la page Web dans le stockage local et gère les pages capturées dans la barre latérale du navigateur. Compatible avec les documents ScrapBook, prenant en charge l'importation de vieux documents ScrapBook.\nS'il s'agit de Windows, le processus d'installation est le suivant:\n1. Installez cette extension de navigateur.\n2. une fois l'installation terminée, cliquez sur le bouton  \"Initialize \", ouvrira automatiquement le dossier de téléchargement du navigateur Firefox.\n3. trouver un dossier avec un nom de \"scrapbookq\" dans le fichier de téléchargement ouvert.\n4. Exécutez le fichier nommé \"init_scrapbookq.bat\" dans le dossier \"scrapbookq\".\n5. Redémarrer Firefox browser.\nSi c'est Linux, je crois que vous trouverez la méthode d'installation dans votre propre documentation. L'introduction du site officiel limite le nombre de mots, ne peut pas élaborer l'étape d'installation.\nhttps://github.com/tahama/scrapbookq/issues\nL'importation de fichiers ScrapBook nécessite de modifier scrapbookq.conf le fichier et de configurer rdfpath correctement. Le chemin d'accès au dossier ScrapBook doit être assigné à rdfpath, l'utilisateur doit remplacer \\ par \\\\, et la fin du chemin d'accès doit également \\\\. Par exemple, d:\\ScrapBook devrait être fixé à rdfpath = d:\\\\ScrapBook\\\\ \nScrapBook dossier doit avoir scrapbook.rdf fichier.",
     "description": "Description of the extension."
   },
   "CapturePage": {
@@ -72,6 +72,9 @@
   }, 
   "NativeAppConnectError": {
     "message": "Le programme local de connexion a échoué, veuillez vérifier le fichier de configuration: ~./mozilla/native-messaging-hosts/scrapbookqmsg.json, Configurer correctement  \"path\" xxxx comme chemin d'accès réel pour les programmes locaux."
+  },
+  "NativeAppConnectErrorWin": {
+    "message": "Échec du programme local de connexion, veuillez exécuter le fichier batch \"scrapbookq\\init_scrapbookq.bat\" dans le répertoire scrapbookq."
   },
   "Loading": {
 	  "message": "chargement..."

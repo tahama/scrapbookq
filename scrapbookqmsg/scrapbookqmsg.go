@@ -50,9 +50,10 @@ func main() {
         WriteTimeout:   10 * time.Second,
         MaxHeaderBytes: 1 << 20,
 	}	
-	m := Message{"0", "0", "0", "0"}
+	m := Message{"0", "0", "0", "0", "0"}
 	m.Rdfloaded = config["rdfloaded"].(string)
 	m.Serverport = config["serverport"].(string) 	
+	m.Downloadjs = config["downloadjs"].(string) 
 	if IsDir(scrapbookdir) {
 		http.Handle("/scrapbook/", http.StripPrefix("/scrapbook/", http.FileServer(http.Dir(scrapbookdir))))
 		m.Scrapbook = "1"
@@ -82,6 +83,11 @@ func main() {
 	var msg []byte
 	for {
 	msg = getMsg()
+
+		if string(msg[0:11]) == "DOWNLOADOK:" {
+			sendMsgString(fmt.Sprintf("DOWNLOADOK:%s", string(msg[11:])))
+		}
+		
 		if string(msg) == "TESTSERVER" {
 			//"TEST:0" 
 			sendMsgString(fmt.Sprintf("TEST:%s", serverState))
@@ -89,14 +95,14 @@ func main() {
 		
 		if string(msg) == "STARTSERVER" {
 			if serverState == "0" {
-			go func() {
-				s.ListenAndServe()
-			}()
-			serverState = "1"
-			sendMsgString(fmt.Sprintf("STARTSERVER OK:%s", serverState))
+				go func() {
+					err = s.ListenAndServe()					
+				}()
+				serverState = "1"
 			}
 			m.Serverstate = serverState
 			b, _ := json.Marshal(m)//将json对象序列化为byte[]
+			time.Sleep(time.Duration(2)*time.Second)
 			sendMsgBytes(b)
 		}
 		
@@ -128,7 +134,8 @@ type Message struct {
     Scrapbook string
 	Rdfloaded string
 	Serverport string
-    Serverstate string
+	Serverstate string
+	Downloadjs string
 }
 
 
@@ -390,7 +397,7 @@ case line[0] == '[' && line[len(line)-1] == ']':
 section := strings.TrimSpace(line[1 : len(line)-1])
 fmt.Println(section)
 default:
-//dnusername = xiaowei 这种的可以匹配存储
+//downloadjs=1 这种的可以匹配存储
 i := strings.IndexAny(line, "=")
 per[strings.TrimSpace(line[0:i])] = strings.TrimSpace(line[i+1:])
 

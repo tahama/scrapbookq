@@ -2,17 +2,17 @@
   list-style-type: none;
   border: solid 1px transparent;
   padding: 0px;
-  width: 130;
+  width: 150;
 }
 
 .sli {
   border: solid 1px;
-  width: 120px;
+  width: 130px;
 }
 
 .liMenu {
   border: outset 1px;
-  width: 120px;
+  width: 130px;
   background: #D8D8D8;
   border-radius: 4px;
   text-align: center;
@@ -21,7 +21,7 @@
 
 .liMenuOver {
   border: outset 1px;
-  width: 120px;
+  width: 130px;
   background: #E8E8E8;
   border-radius: 4px;
   text-align: center;
@@ -30,7 +30,7 @@
 
 .liMenuPress {
   border: outset 1px;
-  width: 120px;
+  width: 130px;
   background: #B8B8B8;
   border-radius: 4px;
   text-align: center;
@@ -39,7 +39,7 @@
 
 .liMouseOver {
   border: solid 1px;
-  width: 120px;
+  width: 130px;
   background: #3399cc;
 }
 

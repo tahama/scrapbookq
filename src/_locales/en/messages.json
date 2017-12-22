@@ -4,7 +4,7 @@
     "description": "Name of the extension."
   },
   "extensionDescription": {
-    "message": "Captures the web page into local storage and manages captured pages in the browser sidebar. Compatible with ScrapBook documents, supporting import old ScrapBook documents.\nIf it is windows, the installation process is as follows:\n1. Install this browser extension.\n2. After the installation is complete click  \"Initialize \" button, will automatically open firefox browser download folder.\n3. Find a folder with a name of \"scrapbookq\" in the open download file.\n4. Execute the file named \"init_scrapbookq.bat\" in the \"scrapbookq\" folder.\n5. Restart Firefox browser.\nIf it is Linux, I believe you will find the installation method in your own documentation.\nThe official website's introduction limits the number of words, cannot elaborate the installation step.\nhttps://github.com/tahama/scrapbookq/issues/",
+    "message": "Captures the web page into local storage and manages captured pages in the browser sidebar. Compatible with ScrapBook documents, supporting import old ScrapBook documents.\nIf it is windows, the installation process is as follows:\n1. Install this browser extension.\n2. After the installation is complete click  \"Initialize \" button, will automatically open firefox browser download folder.\n3. Find a folder with a name of \"scrapbookq\" in the open download file.\n4. Execute the file named \"init_scrapbookq.bat\" in the \"scrapbookq\" folder.\n5. Restart Firefox browser.\nIf it is Linux, I believe you will find the installation method in your own documentation.\nThe official website's introduction limits the number of words, cannot elaborate the installation step.\nhttps://github.com/tahama/scrapbookq/issues/\nImporting ScrapBook files requires modifying scrapbookq.conf file and configuring rdfpath properly. The path to the ScrapBook folder should be assigned to rdfpath, the Windows user needs to replace \\ with \\\\, and the end of the path also needs \\\\. For example, D:\\ScrapBook should be set to rdfpath = D:\\\\ScrapBook\\\\ . ScrapBook folder should have scrapbook.rdf file.",
     "description": "Description of the extension."
   },
   "CapturePage": {
@@ -72,6 +72,9 @@
   }, 
   "NativeAppConnectError": {
     "message": "Connection local program failed, please check the configuration file ~./mozilla/native-messaging-hosts/scrapbookqmsg.json, Correctly configure \"path\" as the true path for local programs."
+  },
+    "NativeAppConnectErrorWin": {
+    "message": "Connection local program failed, please execute batch file \"scrapbookq\\init_scrapbookq.bat\" in scrapbookq directory."
   },
   "Loading": {
 	  "message": "Loading..."

@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "__MSG_extensionName__",
   "description": "__MSG_extensionDescription__",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "author": "Joey Liu",
    "default_locale": "en",
    
@@ -12,6 +12,7 @@
       "strict_min_version": "57.0"
     }
   },
+    "homepage_url": "https://github.com/tahama/scrapbookq",
   "icons": {
     "32": "icons/main_32.png",
     "24": "icons/main_24.png",
