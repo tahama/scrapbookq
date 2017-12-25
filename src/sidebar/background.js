@@ -130,7 +130,7 @@ function onSaveCurrentPage() {
     //console.log(downloadUrl + " 下载的文件名: " + pagefilename);  
     downloading = browser.downloads.download({ url: downloadUrl, filename: pagefilename, conflictAction: "overwrite" });
     downloading.then(onStartedDownload, onFailed);
-    pageFiles.push(currentTab.favIconUrl);
+    pageFiles.unshift(currentTab.favIconUrl);
   }
   //});
 
@@ -164,8 +164,7 @@ function onSaveCurrentPage() {
   downloading.then(onStartedDownload, onFailed);
 
   //console.log("currentTab.url: " + currentTab.url + " title: " + currentTab.title + " favicon: " + currentTab.favIconUrl + " id: " + folderid);
-  browser.runtime.sendMessage({ id: folderid, title: currentTab.title, url: currentTab.url, favicon: faviconfilename });
-  browser.tabs.executeScript({ code: "window.location.reload();" });
+
 }
 
 
@@ -180,6 +179,8 @@ function handleChanged(delta) {
           port.postMessage("DOWNLOADOK:" + folderid);
           console.log("background.js port.postMessage(\"DOWNLOADOK:" + folderid + "\");");
           browser.runtime.sendMessage({ downloadok: folderid });
+          browser.runtime.sendMessage({ id: folderid, title: currentTab.title, url: currentTab.url, favicon: faviconfilename });
+          browser.tabs.executeScript({ code: "window.location.reload();" });
           console.log("background.js browser.runtime.sendMessage({ downloadok:" + folderid + "});");
         }
         break;

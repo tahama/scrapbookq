@@ -1,37 +1,63 @@
 //文件超出300行了，需要分割了
 var scrapContainer = document.querySelector(".scrap-container");
 
+var serverport = null;
+var scrapbook = null;
+var folderport = new Array();
+var scrapbookqhtmlok, scrapbookqrdfok, scrapbookrdfok, serverstatus, rdfloaded, downloadjs;
+
+var currentTarget = null;
+//var scrapContainer = document.querySelector(".scrap-container");
+var docDetailContainer = document.querySelector(".docDetail-Container");
+var arrNodes = null;
+
+//标记第一次进入递归，tree-root不缩进，第二次及以后则为tree-node和tree-leaf则缩进,后来发现和class功能重合了，
+
+//class=tree-root/tree-leaf vs isroot=0/1
+var isroot = 0;
+//剪切下来的html对象,要插入到html容器内
+var delNode = null;
+//剪切下来的scrapNode对象,要插入到数组里
+var delArrayNode = null;
+//保存删除文件列表：foldername/id
+var delArrayIdFolder = new Array();
+//用来显示属性的table
+var docDetailTable = null;
+//标识导入的scrapbook目录和新建的scrapbookq目录
+var foldername = null;
+//标识属性页面是否已经被打开
+var detailOpened = false;
+
 var myWindowId;
 
-function storApp() {
+function storeApp() {
 	//scrapContainer.setAttribute("contenteditable", false);
 	browser.tabs.query({ windowId: myWindowId, active: true }).then((tabs) => {
 		let contentToStore = {};
-		let sbqApp = new ScrapBookQApp(arrNodes, document.body.innerHTML, folderport, scrapbookqhtmlok, scrapbookqrdfok, scrapbookrdfok, rdfloaded, downloadjs);
-
-		let removeScrapbookq = browser.storage.local.remove("ScrapbookQApp");
-		removeScrapbookq.then(onRemoved, onError);
+		let sbqApp = new ScrapBookQApp(arrNodes, scrapContainer.innerHTML, folderport, scrapbookqhtmlok, scrapbookqrdfok, scrapbookrdfok, rdfloaded, downloadjs);
+		//let removeScrapbookq = browser.storage.local.remove("ScrapbookQApp");
+		//removeScrapbookq.then(onRemoved, onError);
 		contentToStore["ScrapbookQApp"] = sbqApp;
 		browser.storage.local.set(contentToStore);
 
 		function onRemoved() {
-			//console.log("storApp OK");
+			console.log("Remove storeApp OK");
 		}
 
 		function onError(e) {
-			console.log(e);
+			console.log("Remove storeApp Error: " + e);
 		}
 		//var clearStorage = browser.storage.local.clear();
 		//clearStorage.then(onCleared, onError);
 	});
 }
 
-function removeStorApp() {
+function removeStoreApp() {
 	let removeScrapbookq = browser.storage.local.remove("ScrapbookQApp");
 	removeScrapbookq.then(onRemoved, onError);
 
 	function onRemoved() {
-		//console.log("storApp OK");
+		//console.log("storeApp OK");
 	}
 
 	function onError(e) {
@@ -65,8 +91,8 @@ function updateContent() {
 		.then((storedInfo) => {
 			if (storedInfo[Object.keys(storedInfo)[0]] != null) {
 				let sbqApp = storedInfo[Object.keys(storedInfo)[0]];
-				arrNodes = sbqApp.arrayNodes;
-				document.body.innerHTML = sbqApp.sidebarhtml;
+				arrNodes = sbqApp.arrayNodes;				
+				scrapContainer.innerHTML = sbqApp.sidebarhtml;				
 				folderport = sbqApp.folderport;
 				scrapbookqhtmlok = sbqApp.scrapbookqhtmlok;
 				scrapbookqrdfok = sbqApp.scrapbookqrdfok;
@@ -98,32 +124,6 @@ browser.windows.getCurrent({ populate: true }).then((windowInfo) => {
 	updateContent();
 });
 
-var serverport = null;
-var scrapbook = null;
-var folderport = new Array();
-var scrapbookqhtmlok, scrapbookqrdfok, scrapbookrdfok, serverstatus, rdfloaded, downloadjs;
-
-var currentTarget = null;
-//var scrapContainer = document.querySelector(".scrap-container");
-var docDetailContainer = document.querySelector(".docDetail-Container");
-var arrNodes = null;
-
-//标记第一次进入递归，tree-root不缩进，第二次及以后则为tree-node和tree-leaf则缩进,后来发现和class功能重合了，
-
-//class=tree-root/tree-leaf vs isroot=0/1
-var isroot = 0;
-//剪切下来的html对象,要插入到html容器内
-var delNode = null;
-//剪切下来的scrapNode对象,要插入到数组里
-var delArrayNode = null;
-//保存删除文件列表：foldername/id
-var delArrayIdFolder = new Array();
-//用来显示属性的table
-var docDetailTable = null;
-//标识导入的scrapbook目录和新建的scrapbookq目录
-var foldername = null;
-//标识属性页面是否已经被打开
-var detailOpened = false;
 //错误代码
 var LoadXMLState = function () {
 	this.xmlfilename = null;
@@ -265,7 +265,7 @@ function initScrapbookqHeader() {
 	document.getElementById("informationli").innerText = browser.i18n.getMessage("LoadDataDown");
 
 	//在完全载入rdf并生成html后在保存入storage
-	window.addEventListener("mouseout", storApp);
+	window.addEventListener("mouseout", storeApp);
 
 	//folderport.scrapbookq = 3338 folderport.ScrapBook = 3339
 	function loadRDFDoc(rdfname) {
@@ -613,6 +613,18 @@ function handleMessageScrapq(request, sender, sendResponse) {
 	if (request.Serverport != null) {
 		document.getElementById("informationli").style.color = "black";
 		document.getElementById("nativeserver").setAttribute("checked", "checked");
+
+		browser.tabs.query({ windowId: myWindowId, active: true })
+		.then((tabs) => {
+			return browser.storage.local.get("ScrapbookQApp");
+		})
+		.then((storedInfo) => {
+			if (storedInfo[Object.keys(storedInfo)[0]] != null) {
+				let sbqApp = storedInfo[Object.keys(storedInfo)[0]];
+				scrapContainer.innerHTML = sbqApp.sidebarhtml;				
+			};
+		});
+
 		console.log("ScrapBook: " + request.Scrapbook + " port: " + request.Serverport + " rdfloaded: " + request.Rdfloaded + " downloadjs: " + request.Downloadjs + " serverstate: " + request.Serverstate);
 		rdfloaded = (request.Rdfloaded == "1");
 		downloadjs = (request.Downloadjs == "1");
@@ -650,7 +662,8 @@ function handleMessageScrapq(request, sender, sendResponse) {
 		}
 		console.log("scrapbookqrdfok: " + scrapbookqrdfok + " scrapbookqhtmlok: " + scrapbookqhtmlok + " scrapbookrdfok: " + scrapbookrdfok + " serverstatus: " + serverstatus);
 		if (serverstatus == true) {
-			initScrapbookqHeader();
+			setTimeout(initScrapbookqHeader, 2000);
+			//initScrapbookqHeader();
 		}
 	}
 	//{ test: "TEST", serverstate: servertest[1] }
@@ -705,8 +718,17 @@ function handleMessageScrapq(request, sender, sendResponse) {
 		newLi.appendChild(newURL);
 		if (newLi != null) {
 			//console.log("currentTarget.id = " + currentTarget.id + " tagName: " + currentTarget.tagName + " parentNode.tagName: " + currentTarget.parentNode.tagName);
+			//没有选中任何对象，直接插入到最后
+			if (currentTarget.id == "scrapbookq") {
+				console.log("currentTarget.id = " + currentTarget.id + " tagName: " + currentTarget.tagName + " parentNode.tagName: " + currentTarget.parentNode.tagName);
+				newLi.setAttribute("isroot", "0");
+				newLi.setAttribute("class", "tree-root");
+				//currentTarget.insertBefore(newLi, currentTarget.childNodes[1]);
+				currentTarget.parentNode.parentNode.appendChild(newLi);
+				newLi = null;
+			}
 			//如果当前对象为页面文件，则向父节点<li>的父节点添加，并且修改父节点的isroot和class为当前对象的父节点一样
-			if (currentTarget.tagName === "A") {
+			else if (currentTarget.tagName === "A") {
 				//console.log("currentDrop.parentNode.getAttribute(isroot)", currentDrop.parentNode.getAttribute("isroot"));
 				newLi.setAttribute("isroot", currentTarget.parentNode.getAttribute("isroot"));
 				newLi.setAttribute("class", currentTarget.parentNode.getAttribute("class"));
@@ -719,16 +741,7 @@ function handleMessageScrapq(request, sender, sendResponse) {
 				newLi.setAttribute("class", "tree-leaf");
 				currentTarget.parentNode.appendChild(newLi);
 				newLi = null;
-			}
-			//没有选中任何对象，直接插入到最后
-			else if (currentTarget.id == "scrapbookq") {
-				console.log("currentTarget.id = " + currentTarget.id + " tagName: " + currentTarget.tagName + " parentNode.tagName: " + currentTarget.parentNode.tagName);
-				newLi.setAttribute("isroot", "0");
-				newLi.setAttribute("class", "tree-root");
-				//currentTarget.insertBefore(newLi, currentTarget.childNodes[1]);
-				currentTarget.appendChild(newLi);
-				newLi = null;
-			}
+			}			
 		}
 		//根据数据新建scrapNode对象，插入当前目标对象之后，如果当前目标对象时folder就插进去
 
@@ -1598,7 +1611,7 @@ function sortByDateScrapNode(scrapArray, currentId, desc) {
 
 function onRebuildSidebar(event) {
 	if (confirm(browser.i18n.getMessage("ConfirmReloadSidebar")) === true) {
-		removeStorApp();
+		removeStoreApp();
 		window.location.reload();
 		/*
 		browser.runtime.sendMessage({ testserver: "TestServer" });
