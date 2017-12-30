@@ -40,6 +40,9 @@ Windows and Linux support.
 
 ## Change Log.en
 
+1. 0.1.6.1 Fix bug: rebuild and delete ScrapbookQ may clear sidebar, icon display has improved, capture page has improved too.add ConfirmRebuildSidebar message.
+1. 0.1.6 Fix bug:css href error, update message on windows, update es, ru translation, add downloadjs option
+1. 0.1.5 Add sort function
 * 0.1.4 Add supprot to windows. Rewrite native App，windows users only need to click mouse twice after install this extension.
 * 0.1.3 Save sidebar data in local storage，accelorate sidebar loading speed，add sidebar reload menu，modify rdfloaded function
 * 0.1.2 fix bug:list checkbox state wrong, now manual onle open at first time after installation or enconter an error.
@@ -48,6 +51,9 @@ Windows and Linux support.
 
 ## 特性
 
+1. 0.1.6.1版改进图标显示、改进页面格式、修复bug：rebuild + 删除 ScrapbookQ后sidebar空白、添加ConfirmRebuildSidebar翻译
+1. 0.1.6版修复下载css文件href错误问题，更新windows平台的消息，添加es、ru用户翻译文件，添加下载javascript选项及功能
+1. 0.1.5版增加排序功能
 1. 0.1.4版支持 windows 和 linux
 1. 兼容原ScrapBook文档格式
 1. 支持导入原ScrapBook文档(scrapbookq.conf里添加原ScrapBook文档路径)
