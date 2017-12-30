@@ -1,15 +1,18 @@
 package main
-import "fmt"
-import "os"
-import "strings"
-import "io/ioutil"
-import "encoding/json"
-//import "log"
-import "io"
-import "bufio"
-import "net/http"
-import "time"
-//import "strconv"
+import (
+	"fmt"
+	"os"
+	"strings"
+	"io/ioutil"
+	"encoding/json"
+//	"log"
+	"io"
+	"bufio"
+	"net/http"
+	"time"
+//	"strconv"
+	"regexp"
+)
 
 var config map[string]interface{}
 func main() {
@@ -85,7 +88,9 @@ func main() {
 	msg = getMsg()
 
 		if string(msg[0:11]) == "DOWNLOADOK:" {
-			sendMsgString(fmt.Sprintf("DOWNLOADOK:%s", string(msg[11:])))
+			time.Sleep(time.Duration(2)*time.Second)
+			rmurlmsg := RmURL(string(msg[11:]))
+			sendMsgString(fmt.Sprintf("DOWNLOADOK: %s errorMsg: %s", string(msg[11:]), rmurlmsg))
 		}
 		
 		if string(msg) == "TESTSERVER" {
@@ -447,4 +452,89 @@ func deleteFiles (files string) (string, string){
         }
 	}
 	return deletedFiles, undeletedFiles
+}
+
+func RmURL(files string) (errstring string){
+	var indexfilepath string
+	//var errstring string
+	currentwd, err := os.Getwd()
+	if err != nil {
+		errstring =  err.Error()
+		return
+    }
+    pathSep := '/'
+	if os.IsPathSeparator('\\') {
+		//ostype = "windows"
+		pathSep = '\\'
+	}
+    cwd := fmt.Sprintf("%s%c", currentwd, pathSep)
+	//rdfpath := "/home/Doc/Documents/firefox/ScrapBook/"
+	rdfpath := config["rdfpath"].(string)
+	x := strings.Split(files, "/")
+
+    if x[0] == "scrapbookq" {
+        indexfilepath = fmt.Sprintf("%s%s%c%s%c%s",cwd, "data", pathSep, x[1], pathSep, "index.html")
+    }
+    if x[0] == "scrapbook" {
+        indexfilepath = fmt.Sprintf("%s%s%c%s%c%s", rdfpath, "data", pathSep, x[1], pathSep, "index.html")
+    }
+    indexfileTarget, _ := PathExists(indexfilepath)
+    if indexfileTarget == false {
+		errstring = fmt.Sprintf("%s index.html does not exit.", indexfilepath) 
+		return
+    } else {
+		fis, err := os.Open(indexfilepath)
+		if err != nil {
+			//errMsg := fmt.Errorf("%v", err)
+			errstring = fmt.Sprintf("Open file error: %s", indexfilepath) 
+			return
+		}
+		time.Sleep(time.Duration(5)*time.Second)
+		buff, _ := ioutil.ReadAll(fis)
+		html := string(buff)		
+		var myExpLTGTOneLine = regexp.MustCompile(`(?i)(?P<first><[^<>]*)\n(?P<second>[^<>]*>)`)
+		//ltgts := myExpLTGTOneLine.FindAllStringSubmatch(html, -1)
+		html = myExpLTGTOneLine.ReplaceAllString(html, "$first$second")
+	
+		if config["downloadjs"].(string) == "1" {
+			var myExpJSsrc = regexp.MustCompile(`(?i)<script(?P<first>.*?)src=[\"\']{1}[^\"\']*/(?P<second>[^\"\'\?]*?)(\?.*?)*[\"\']{1}(?P<third>.*?)>`)
+			//jss := myExpJSsrc.FindAllStringSubmatch(html, -1)
+			html = myExpJSsrc.ReplaceAllString(html, "<scrapbookqscript$first src=\"" + "$second" + "\"$third>")
+		}
+		
+
+		var myExpCSSsrc = regexp.MustCompile(`(?i)<link(?P<first>.*?rel=[\"\']{1}stylesheet\".*?)href=[\"\']{1}[^\"\']*/(?P<second>[^\"\'\?]*?)(\?.*?)*[\"\']{1}(?P<third>.*?)>`)
+		//if !myExpCSSsrc.MatchString(html) {
+		var myExpCSSsrc2 = regexp.MustCompile(`(?i)<link(?P<first>.*?)href=[\"\']{1}[^\"\']*/(?P<second>[^\"\'\?]*?)(\?.*?)*[\"\']{1}(?P<third>.*?rel=[\"\']{1}stylesheet\".*?)/{0,1}>`)
+		//}
+		//csss := myExpCSSsrc.FindAllStringSubmatch(html, -1)
+		html = myExpCSSsrc.ReplaceAllString(html, "<scrapbookqlink$first href=\"" + "$second" + "\"$third>")
+		html = myExpCSSsrc2.ReplaceAllString(html, "<scrapbookqlink$first href=\"" + "$second" + "\"$third>")
+	
+		var myExpICONsrc = regexp.MustCompile(`(?i)(?P<first><link.*?rel=[\"\']{1}shortcut icon\".*?)href=[\"\']{1}[^\"\']*/(?P<second>[^\"\'\?]*?)(\?.*?)*[\"\']{1}(?P<third>.*?)>`)
+		if !myExpICONsrc.MatchString(html) {
+			myExpICONsrc = regexp.MustCompile(`(?i)(?P<first><link.*?)href=[\"\']{1}[^\"\']*/(?P<second>[^\"\'\?]*?)(\?.*?)*[\"\']{1}(?P<third>.*?rel=[\"\']{1}shortcut icon\".*?)/{0,1}>`)
+		}
+		//favicons := myExpICONsrc.FindAllStringSubmatch(html, -1)
+		html = myExpICONsrc.ReplaceAllString(html, "$first href=\"" + "$second" + "\"$third>")
+		
+		var myExpIMGsrc = regexp.MustCompile(`(?i)<img(?P<first>.*?)src=[\"\']{1}[^\"\']*/(?P<second>[^\"\'\?]*?)(\?.*?)*[\"\']{1}(?P<third>.*?)>`)
+		//imgs := myExpIMGsrc.FindAllStringSubmatch(html, -1)
+		html = myExpIMGsrc.ReplaceAllString(html, "<scrapbookqimg$first src=\"" + "$second" + "\"$third>")
+	
+		var myExpLTScrapbookq = regexp.MustCompile(`<scrapbookq`)
+		//ltscrapbookq := myExpLTScrapbookq.FindAllStringSubmatch(html, -1)
+		html = myExpLTScrapbookq.ReplaceAllString(html, "<")
+		fis.Close()
+
+		fis, err = os.OpenFile(indexfilepath, os.O_WRONLY|os.O_TRUNC, 0600)
+		defer fis.Close()
+		if err != nil {
+			errstring = fmt.Sprintf("Open index.html error: %s", indexfilepath)
+			return
+		}
+		fis.WriteString(html)
+		errstring = fmt.Sprintf("RmURL index.html OK: %s", indexfilepath)
+		return
+	}	
 }

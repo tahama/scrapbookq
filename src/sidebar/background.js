@@ -2,6 +2,23 @@ var port = browser.runtime.connectNative("scrapbookqmsg");
 var msgContents = new Array();
 msgContents[0] = 0;
 var downloadjs = "0";
+var downloadlist = new Array();
+
+var platform = "linux";
+console.log(platform);
+if (navigator.platform == "Win64" || navigator.platform == "Win32") {
+  platform = "windows";
+}
+
+function downloaditem(downloadidlist, favicon, folderid, folderpath, title, url, htmlok) {
+  this.favicon = favicon;
+  this.downloadidlist = downloadidlist;
+  this.folderid = folderid;
+  this.folderpath = folderpath;
+  this.title = title;
+  this.url = url;
+  this.htmlok = htmlok;
+}
 /*
 Open a new tab, and load "my-page.html" into it.
 */
@@ -103,6 +120,8 @@ var jsfiles = null;
 var faviconfilename = null;
 var downloadids = new Array();
 
+
+
 function onSaveCurrentPage() {
 
   function onStartedDownload(id) {
@@ -114,6 +133,9 @@ function onSaveCurrentPage() {
   }
 
   folderid = getNow();
+  //现在改为直接下载源index.html
+  downloading = browser.downloads.download({ url: currentTab.url, filename: "scrapbookq/data/" + folderid + "/index.html", conflictAction: "overwrite" });
+  downloading.then(onStartedDownload, onFailed);
   //有些页面html搜索不到favicon，所以在background.js里添加下载链接
   //browser.tabs.query({ currentWindow: true, active: true }).then(function (tabs) {
   if (currentTab.favIconUrl != null) {
@@ -130,10 +152,34 @@ function onSaveCurrentPage() {
     //console.log(downloadUrl + " 下载的文件名: " + pagefilename);  
     downloading = browser.downloads.download({ url: downloadUrl, filename: pagefilename, conflictAction: "overwrite" });
     downloading.then(onStartedDownload, onFailed);
-    pageFiles.unshift(currentTab.favIconUrl);
+    //pageFiles.unshift(currentTab.favIconUrl);
+    // browser.runtime.sendMessage({ id: folderid, title: currentTab.title, url: currentTab.url, favicon: faviconfilename });
+    
   }
-  //});
-
+  //});  
+  var arrnull = new Array();
+  pageFiles.sort();
+  //console.log(pageFiles);
+  for (let i = 0; i < pageFiles.length; i++) {
+    if (pageFiles[i] == null) {
+      continue;
+    }
+    for (let j = i + 1; j < pageFiles.length; j++) {
+      if (pageFiles[i] == pageFiles[j]) {
+        pageFiles[j] = null;
+        arrnull.push(j);
+      }
+    }
+  }
+  arrnull.reverse();
+  for (let i = 0; i < arrnull.length; i++) {
+    pageFiles.splice(arrnull[i], 1);
+  }
+  //console.log(pageFiles);
+  var folderpath = "scrapbookq/data/";
+  var downloadidlist = new Array();
+  var downloaditemobj = new downloaditem(downloadidlist, faviconfilename, folderid, folderpath, currentTab.title, currentTab.url, false);
+  downloadlist.push(downloaditemobj);
 
   for (pagefilesidx = 0; pagefilesidx < pageFiles.length; pagefilesidx++) {
     downloadUrl = pageFiles[pagefilesidx];
@@ -155,6 +201,7 @@ function onSaveCurrentPage() {
   }
   //downloading.then(onStartedDownload, onFailed);
   //pageHtml = request.pagecontent; pageFiles = request.pagefiles;
+  /*
   var file = new File([pageHtml], "index.html", {
     type: "text/html",
   });
@@ -162,48 +209,69 @@ function onSaveCurrentPage() {
   downloadUrl = window.URL.createObjectURL(file);
   downloading = browser.downloads.download({ url: downloadUrl, filename: "scrapbookq/data/" + folderid + "/index.html", conflictAction: "overwrite" });
   downloading.then(onStartedDownload, onFailed);
-
   //console.log("currentTab.url: " + currentTab.url + " title: " + currentTab.title + " favicon: " + currentTab.favIconUrl + " id: " + folderid);
-
+  */
 }
 
+function handleCreated(item) {
+  //要处理不同平台的路径分隔符
+  let itemfolderid = null;
+  if (platform == "windows") {
+    itemfolderid = item.filename.split("\\").reverse()[1];
+  }
+  else {
+    itemfolderid = item.filename.split("/").reverse()[1]
+  }
+
+  console.log("id: " + item.id + " url: " + item.url + " exists:" + item.exists);
+  if (item.url.slice(0, 18) != "blob:moz-extension") {
+    for (let i = 0; i < downloadlist.length; i++) {
+      //只处理自己生成的下载项目：folderid
+      if (itemfolderid == downloadlist[i].folderid) {
+        for (let j = 0; j < downloadlist[i].downloadidlist.length; j++) {
+          if (item.id == downloadlist[i].downloadidlist[j]) {
+            return;
+          }
+        }
+        downloadlist[i].downloadidlist.push(item.id);
+        if (item.filename.indexOf("index.html") != -1) {
+          downloadlist[i].htmlok = true;
+        }     
+        return;
+      }
+    }
+  }
+}
+
+browser.downloads.onCreated.addListener(handleCreated);
 
 function handleChanged(delta) {
   if (delta.state && delta.state.current === "complete") {
-    console.log(`Download ${delta.id} has completed. length: ${downloadids.length}`);
-    for (let i = 0; i < downloadids.length; i++) {
-      if (downloadids[i].id === delta.id) {
-        downloadids.splice(i, 1);
-        console.log(delta.id + " ****** downloadids.length: " + downloadids.length);
-        if (downloadids.length == 0) {
-          port.postMessage("DOWNLOADOK:" + folderid);
-          console.log("background.js port.postMessage(\"DOWNLOADOK:" + folderid + "\");");
-          browser.runtime.sendMessage({ downloadok: folderid });
-          browser.runtime.sendMessage({ id: folderid, title: currentTab.title, url: currentTab.url, favicon: faviconfilename });
-          browser.tabs.executeScript({ code: "window.location.reload();" });
-          console.log("background.js browser.runtime.sendMessage({ downloadok:" + folderid + "});");
+    //console.log(`Download ${delta.id} has completed. length: ${downloadids.length}`);
+    for (let i = 0; i < downloadlist.length; i++) {
+      for (let j = 0; j < downloadlist[i].downloadidlist.length; j++) {
+        if (downloadlist[i].downloadidlist[j] === delta.id) {
+          downloadlist[i].downloadidlist.splice(j, 1);
+          console.log(delta.id + " ****** downloadids.length: " + downloadlist[i].downloadidlist.length);
+          //index.html 下载完成后就发消息
+          if (downloadlist[i].htmlok == true) {
+            port.postMessage("DOWNLOADOK:" + "scrapbookq/" + downloadlist[i].folderid);
+            console.log("background.js port.postMessage(\"DOWNLOADOK:" + "scrapbookq/" + downloadlist[i].folderid + "\");");
+            browser.runtime.sendMessage({ downloadok: downloadlist[i].folderid });
+            //function downloaditem(downloadidlist, favicon, folderid, folderpath, title, url)
+            browser.runtime.sendMessage({ id: downloadlist[i].folderid, title: downloadlist[i].title, url: downloadlist[i].url, favicon: downloadlist[i].favicon });
+            //browser.tabs.executeScript({ code: "window.location.reload();" });
+            console.log("background.js browser.runtime.sendMessage({ downloadok:" + downloadlist[i].folderid + "});");
+            downloadlist.splice(i, 1);
+          }
+          break;
         }
-        break;
       }
     }
   }
 }
 
 browser.downloads.onChanged.addListener(handleChanged);
-
-function handleCreated(item) {
-  console.log("id: " + item.id + " url: " + item.url + " exists:" + item.exists);
-  if (item.url.slice(0, 18) != "blob:moz-extension") {
-    for (let i = 0; i < downloadids.length; i++) {
-      if (downloadids[i].url == item.url) {
-        return;
-      }
-    }
-    downloadids.push({ id: item.id, url: item.url });
-  }
-}
-
-browser.downloads.onCreated.addListener(handleCreated);
 
 //folderid就是id
 var folderid = null;

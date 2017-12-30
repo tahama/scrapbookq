@@ -102,6 +102,9 @@
   },
   "menuModify": {
 	  "message": "📋 修改"
+  },
+  "ConfirmRebuildSidebar": {
+	  "message": "重建侧边栏需要一点时间，请耐心等待，稍后重新启动Firefox。"
   }
 }
 

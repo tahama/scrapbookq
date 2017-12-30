@@ -50,6 +50,17 @@ function storeApp() {
 		//var clearStorage = browser.storage.local.clear();
 		//clearStorage.then(onCleared, onError);
 	});
+
+	/*
+	if (detailOpened == true && docDetailTable != null) {
+		//alert("Document Details Panel has already opend, please close it first.");
+		docDetailTable.parentNode.removeChild(docDetailTable);
+		//return;
+	}
+	if (currentTarget != null) {
+		currentTarget.classList.remove("done");
+	}
+	*/
 }
 
 function removeStoreApp() {
@@ -91,8 +102,8 @@ function updateContent() {
 		.then((storedInfo) => {
 			if (storedInfo[Object.keys(storedInfo)[0]] != null) {
 				let sbqApp = storedInfo[Object.keys(storedInfo)[0]];
-				arrNodes = sbqApp.arrayNodes;				
-				scrapContainer.innerHTML = sbqApp.sidebarhtml;				
+				arrNodes = sbqApp.arrayNodes;
+				scrapContainer.innerHTML = sbqApp.sidebarhtml;
 				folderport = sbqApp.folderport;
 				scrapbookqhtmlok = sbqApp.scrapbookqhtmlok;
 				scrapbookqrdfok = sbqApp.scrapbookqrdfok;
@@ -243,7 +254,7 @@ function initScrapbookqHeader() {
 	//避免未选中任何对象时操作scrapbookq
 	currentTarget = document.getElementById("scrapbookq");
 	//如果arr没有数据就新建一个，这种情况出现在第一次安装ScrapbookQ的情况下
-	if (arrNodes == null) {
+	if (arrNodes == null || arrNodes.length == 0) {
 		arrNodes = new Array();
 		arrNodes.push(new scrapNode(
 			"urn:" + "scrapbookq" + ":item:" + "scrapbookq",
@@ -615,15 +626,15 @@ function handleMessageScrapq(request, sender, sendResponse) {
 		document.getElementById("nativeserver").setAttribute("checked", "checked");
 
 		browser.tabs.query({ windowId: myWindowId, active: true })
-		.then((tabs) => {
-			return browser.storage.local.get("ScrapbookQApp");
-		})
-		.then((storedInfo) => {
-			if (storedInfo[Object.keys(storedInfo)[0]] != null) {
-				let sbqApp = storedInfo[Object.keys(storedInfo)[0]];
-				scrapContainer.innerHTML = sbqApp.sidebarhtml;				
-			};
-		});
+			.then((tabs) => {
+				return browser.storage.local.get("ScrapbookQApp");
+			})
+			.then((storedInfo) => {
+				if (storedInfo[Object.keys(storedInfo)[0]] != null) {
+					let sbqApp = storedInfo[Object.keys(storedInfo)[0]];
+					scrapContainer.innerHTML = sbqApp.sidebarhtml;
+				};
+			});
 
 		console.log("ScrapBook: " + request.Scrapbook + " port: " + request.Serverport + " rdfloaded: " + request.Rdfloaded + " downloadjs: " + request.Downloadjs + " serverstate: " + request.Serverstate);
 		rdfloaded = (request.Rdfloaded == "1");
@@ -723,8 +734,12 @@ function handleMessageScrapq(request, sender, sendResponse) {
 				console.log("currentTarget.id = " + currentTarget.id + " tagName: " + currentTarget.tagName + " parentNode.tagName: " + currentTarget.parentNode.tagName);
 				newLi.setAttribute("isroot", "0");
 				newLi.setAttribute("class", "tree-root");
-				//currentTarget.insertBefore(newLi, currentTarget.childNodes[1]);
-				currentTarget.parentNode.parentNode.appendChild(newLi);
+				if (currentTarget.parentNode.nextSibling != null) {
+					currentTarget.parentNode.parentNode.insertBefore(newLi, currentTarget.parentNode.nextSibling);
+				}
+				else {
+					currentTarget.parentNode.parentNode.appendChild(newLi);
+				}
 				newLi = null;
 			}
 			//如果当前对象为页面文件，则向父节点<li>的父节点添加，并且修改父节点的isroot和class为当前对象的父节点一样
@@ -741,7 +756,7 @@ function handleMessageScrapq(request, sender, sendResponse) {
 				newLi.setAttribute("class", "tree-leaf");
 				currentTarget.parentNode.appendChild(newLi);
 				newLi = null;
-			}			
+			}
 		}
 		//根据数据新建scrapNode对象，插入当前目标对象之后，如果当前目标对象时folder就插进去
 
@@ -1610,7 +1625,7 @@ function sortByDateScrapNode(scrapArray, currentId, desc) {
 }
 
 function onRebuildSidebar(event) {
-	if (confirm(browser.i18n.getMessage("ConfirmReloadSidebar")) === true) {
+	if (confirm(browser.i18n.getMessage("ConfirmRebuildSidebar")) === true) {
 		removeStoreApp();
 		window.location.reload();
 		/*

@@ -9,6 +9,7 @@ for (imgs = 0; imgs < document.images.length; imgs++) {
     if (imgurl != null && imgurl.length != 0 && imgurl.indexOf("://") != -1) {
 		//console.log("ImageURL: " + imgurl + " length: " + imgurl.length);
         imagesURL.push(imgurl);
+        /*
         //去掉文件名前后的/和?等内容
         let index0 = document.images[imgs].src.lastIndexOf("/");
         let index1 = document.images[imgs].src.search(/[?]/g);
@@ -18,6 +19,7 @@ for (imgs = 0; imgs < document.images.length; imgs++) {
         }
         str0 = document.images[imgs].src.substr(index0 + 1, index1 - index0 - 1);
         document.images[imgs].src = str0;
+        */
     }
 }
 
@@ -27,6 +29,7 @@ for (lnks = 0; lnks < links.length; lnks++) {
     let imgurl = null;
     if (links[lnks].href != null && (links[lnks].rel == "stylesheet" || links[lnks].rel == "shortcut icon")) {
         imagesURL.push(links[lnks].href);
+        /*
         //去掉文件名前后的/和?等内容
         let index0 = links[lnks].href.lastIndexOf("/");
         let index1 = links[lnks].href.search(/[?]/g);
@@ -36,6 +39,7 @@ for (lnks = 0; lnks < links.length; lnks++) {
         }
         str0 = links[lnks].href.substr(index0 + 1, index1 - index0 - 1);
         links[lnks].href = str0;
+        */
     }
 }
 

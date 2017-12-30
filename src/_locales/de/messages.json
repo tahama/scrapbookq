@@ -102,6 +102,9 @@
   },
   "menuModify": {
 	  "message": "📋 ändern"
+  },
+  "ConfirmRebuildSidebar": {
+	  "message": "Wiederaufbau - sidebar braucht ein bisschen Zeit, bitte haben sie geduld, später Firefox Neu starten."
   }  
 }
 

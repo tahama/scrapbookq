@@ -102,6 +102,9 @@
   },
   "menuModify": {
 	  "message": "📋 modifier"
+  },
+  "ConfirmRebuildSidebar": {
+	  "message": "La reconstruction de la barre latérale a besoin d'un peu de temps, s'il vous plaît, patience et plus tard le redémarrage de Firefox."
   } 
 }
 
