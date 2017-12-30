@@ -40,9 +40,9 @@ Windows and Linux support.
 
 ## Change Log.en
 
-*. 0.1.6.1 Fix bug: rebuild and delete ScrapbookQ may clear sidebar, icon display has improved, capture page has improved too.add ConfirmRebuildSidebar message.
-*. 0.1.6 Fix bug:css href error, update message on windows, update es, ru translation, add downloadjs option
-*. 0.1.5 Add sort function
+* 0.1.6.1 Fix bug: rebuild and delete ScrapbookQ may clear sidebar, icon display has improved, capture page has improved too.add ConfirmRebuildSidebar message.
+* 0.1.6 Fix bug:css href error, update message on windows, update es, ru translation, add downloadjs option
+* 0.1.5 Add sort function
 * 0.1.4 Add supprot to windows. Rewrite native App，windows users only need to click mouse twice after install this extension.
 * 0.1.3 Save sidebar data in local storage，accelorate sidebar loading speed，add sidebar reload menu，modify rdfloaded function
 * 0.1.2 fix bug:list checkbox state wrong, now manual onle open at first time after installation or enconter an error.
