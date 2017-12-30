@@ -51,13 +51,10 @@ Windows and Linux support.
 
 ## 特性
 
-1. 0.1.6.1版改进图标显示、改进页面格式、修复bug：rebuild + 删除 ScrapbookQ后sidebar空白、添加ConfirmRebuildSidebar翻译
-1. 0.1.6版修复下载css文件href错误问题，更新windows平台的消息，添加es、ru用户翻译文件，添加下载javascript选项及功能
-1. 0.1.5版增加排序功能
-1. 0.1.4版支持 windows 和 linux
 1. 兼容原ScrapBook文档格式
 1. 支持导入原ScrapBook文档(scrapbookq.conf里添加原ScrapBook文档路径)
 1. 支持浏览器侧边栏管理档案：增、改、删、刷新(后期会增加排序)
+1. 0.1.4版开始支持 windows 和 linux
 
 ## 关于作者
 
@@ -65,6 +62,9 @@ Windows and Linux support.
 
 ## Change Log.zh-CN
 
+* 0.1.6.1版改进图标显示、改进页面格式、修复bug：rebuild + 删除 ScrapbookQ后sidebar空白、添加ConfirmRebuildSidebar翻译
+* 0.1.6 版修复下载css文件href错误问题，更新windows平台的消息，添加es、ru用户翻译文件，添加下载javascript选项及功能
+* 0.1.5 版增加排序功能
 * 0.1.4 加入windows支持。用go重写了本地应用程序，这样就不需要windows用户自己去安装其他软件了，只要安装插件再点两次鼠标就行了。
 * 0.1.3 sidebar数据存储到local storage，加快sidebar加载速度，加入sidebar重载功能，修改rdfloaded标志功能
 * 0.1.2 修复下拉列表多选框状态错误，修改只在第一次/遇到错误才打开用户说明页面，不用每次都打开
