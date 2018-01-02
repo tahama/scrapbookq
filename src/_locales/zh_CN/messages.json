@@ -23,10 +23,10 @@
     "message": "*保存数据 💾"
   },   
   "LoadDataUp": {
-    "message": "状态信息 🔼"
+    "message": "📶🔼"
   }, 
   "LoadDataDown": {
-    "message": "状态信息 🔽"
+    "message": "📶🔽"
   },    
    "OpenInNewTab": {
     "message": "在新标签页打开"
@@ -105,6 +105,15 @@
   },
   "ConfirmRebuildSidebar": {
 	  "message": "重建侧边栏需要一点时间，请耐心等待，稍后重新启动Firefox。"
+  },
+  "SearchButton": {
+	  "message": "🔍"
+  },
+  "SearchText": {
+	  "message": "🔎搜索 A = a"
+  },
+  "SearchTextCs": {
+	  "message": "🔎搜索 A ≠ a"
   }
 }
 

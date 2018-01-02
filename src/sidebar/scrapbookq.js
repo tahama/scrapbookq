@@ -5,12 +5,12 @@ var serverport = null;
 var scrapbook = null;
 var folderport = new Array();
 var scrapbookqhtmlok, scrapbookqrdfok, scrapbookrdfok, serverstatus, rdfloaded, downloadjs;
-
+var currentidfolder = null;
 var currentTarget = null;
 //var scrapContainer = document.querySelector(".scrap-container");
 var docDetailContainer = document.querySelector(".docDetail-Container");
 var arrNodes = null;
-
+var searchmodecs = false;
 //标记第一次进入递归，tree-root不缩进，第二次及以后则为tree-node和tree-leaf则缩进,后来发现和class功能重合了，
 
 //class=tree-root/tree-leaf vs isroot=0/1
@@ -34,9 +34,10 @@ function storeApp() {
 	//scrapContainer.setAttribute("contenteditable", false);
 	browser.tabs.query({ windowId: myWindowId, active: true }).then((tabs) => {
 		let contentToStore = {};
-		let sbqApp = new ScrapBookQApp(arrNodes, scrapContainer.innerHTML, folderport, scrapbookqhtmlok, scrapbookqrdfok, scrapbookrdfok, rdfloaded, downloadjs);
-		//let removeScrapbookq = browser.storage.local.remove("ScrapbookQApp");
-		//removeScrapbookq.then(onRemoved, onError);
+		let sbqApp = null;
+		let removeScrapbookq = browser.storage.local.remove("ScrapbookQApp");
+		removeScrapbookq.then(onRemoved, onError);
+		sbqApp = new ScrapBookQApp(arrNodes, scrapContainer.innerHTML, folderport, scrapbookqhtmlok, scrapbookqrdfok, scrapbookrdfok, rdfloaded, downloadjs);
 		contentToStore["ScrapbookQApp"] = sbqApp;
 		browser.storage.local.set(contentToStore);
 
@@ -131,7 +132,7 @@ and update its content.
 */
 browser.windows.getCurrent({ populate: true }).then((windowInfo) => {
 	myWindowId = windowInfo.id;
-	//console.log("windowInfo.id: " + windowInfo.id);  
+	console.log("windowInfo.id: " + windowInfo.id);
 	updateContent();
 });
 
@@ -216,6 +217,13 @@ function registeLlistener() {
 	list.addEventListener("contextmenu", toggleCss, false);
 }
 
+function HTMLParser() {
+	var html = document.implementation.createDocument(null, "html", null);
+	var body = document.createElement("body");
+	html.documentElement.appendChild(body);
+	return body;
+}
+
 function initScrapbookqHeader() {
 	registeLlistener();
 
@@ -226,8 +234,11 @@ function initScrapbookqHeader() {
 	var nativeappli = document.getElementById("nativeappli");
 	var nativeserverli = document.getElementById("nativeserverli");
 	var downloadjsli = document.getElementById("downloadjsli");
+	var searchmodeli = document.getElementById("searchmodeli");
+	var searchmode = document.getElementById("searchmode");
 	//var downloadjsinput = document.getElementById("downloadjs");
-	var mylibutton = document.getElementById("mylisavedata");
+	var mylisearchbutton = document.getElementById("mylisearchbutton");
+	var searchtext = document.getElementById("searchtext");
 	var scrapbookqrdf = document.getElementById("scrapbookqrdf");
 	var scrapbookrdf = document.getElementById("scrapbookrdf");
 	myul.addEventListener("mouseout", onOut, true);
@@ -237,11 +248,25 @@ function initScrapbookqHeader() {
 	nativeappli.addEventListener("mouseover", onOver, true);
 	nativeserverli.addEventListener("mouseover", onOver, true);
 	downloadjsli.addEventListener("mouseover", onOver, true);
-	mylibutton.addEventListener("mouseover", onOver, true);//function () { mylibutton.className = "liMenuOver" }, true);
-	mylibutton.addEventListener("mouseout", function () { mylibutton.className = "liMenu" }, true);
-	mylibutton.addEventListener("mousedown", function () { mylibutton.className = "liMenuPress" }, true);
-	mylibutton.addEventListener("click", function () { mylibutton.className = "liMenu"; saveScrapbookqData(); }, true);
-	mylibutton.innerText = browser.i18n.getMessage("SaveData");
+	searchmodeli.addEventListener("mouseover", onOver, true);
+	searchmode.addEventListener("change", function (event) {
+		if (searchmode.checked) {
+			searchmodecs = true;
+			searchtext.placeholder = browser.i18n.getMessage("SearchTextCs");
+		}
+		else {
+			searchmodecs = false;
+			searchtext.placeholder = browser.i18n.getMessage("SearchText");
+		}
+	}, true);
+	mylisearchbutton.addEventListener("mouseover", onOver, true);//function () { mylisearchbutton.className = "liMenuOver" }, true);
+	mylisearchbutton.addEventListener("mouseout", function () { mylisearchbutton.className = "liMenu" }, true);
+	mylisearchbutton.addEventListener("mousedown", function () { mylisearchbutton.className = "liMenuPress" }, true);
+	//mylisearchbutton.addEventListener("click", function () { mylisearchbutton.className = "liMenu"; saveScrapbookqData(); }, true);
+	mylisearchbutton.addEventListener("click", onSearch, true);
+
+	mylisearchbutton.innerText = browser.i18n.getMessage("SearchButton");
+	searchtext.placeholder = browser.i18n.getMessage("SearchText");
 	informationli.innerText = browser.i18n.getMessage("LoadDataDown");
 	document.getElementById("scrapbookqrdf").setAttribute("disabled", "disabled");
 	document.getElementById("scrapbookrdf").setAttribute("disabled", "disabled");
@@ -307,11 +332,64 @@ function initScrapbookqHeader() {
 		}
 	}
 
+	function onSearch(event) {
+		var mylisearchbutton = document.getElementById("mylisearchbutton");
+		mylisearchbutton.className = "liMenu";
+		var searchtext = document.getElementById("searchtext");
+		if (searchtext.value == null || searchtext.value.length == 0) {
+			return;
+		}
+		var searchresultarr = new Array();
+		searchScrapNode(searchtext.value, arrNodes, searchresultarr, searchmodecs);
+
+		//window.open("http://www.w3school.com.cn", "_blank"); 		
+		var DOMPars = HTMLParser();
+		let head = document.createElement("head");
+		let meta = document.createElement("meta");
+		meta.setAttribute("charset", "utf8");
+		head.appendChild(meta);
+		DOMPars.appendChild(head);
+		let newURL = null;
+
+		DOMPars.appendChild(document.createTextNode(searchresultarr.length));
+		DOMPars.appendChild(document.createElement("BR"));
+		/*
+				var searchresultarr = new Array();
+				searchresultarr.push({ title: "baidu", url: "http://www.baidu.com" });
+				searchresultarr.push({ title: "bing", url: "http://www.bing.com" });
+				searchresultarr.push({ title: "google", url: "http://www.google.com" });
+				*/
+		currentidfolder = "scrapbookq";
+		let searchurl = null;
+		for (let i = 0; i < searchresultarr.length; i++) {
+			DOMPars.appendChild(document.createTextNode(i + " . "));
+			newURL = document.createElement("A");
+			newURL.setAttribute("href", (searchresultarr[i].url));
+			newURL.setAttribute("target", "_blank");
+			newURL.appendChild(document.createTextNode("Link"));
+			DOMPars.appendChild(newURL);
+			DOMPars.appendChild(document.createTextNode(" : "));
+			newURL = document.createElement("A");
+			searchurl = "http://localhost:" + serverport + "/" + currentidfolder + "/data/" + searchresultarr[i].id + "/index.html";
+			newURL.setAttribute("href", searchurl);
+			newURL.setAttribute("target", "_blank");
+			newURL.appendChild(document.createTextNode(searchresultarr[i].title));
+			DOMPars.appendChild(newURL);
+			DOMPars.appendChild(document.createElement("BR"));
+		}
+
+		let searchresultfile = new File([DOMPars.innerHTML], "search.html", {
+			type: "text/html",
+		});
+		let searchresultURL = window.URL.createObjectURL(searchresultfile);
+		window.open(searchresultURL);
+	}
+
 	function onOver(event) {
 		//console.log("On: " + event.target.id);
 		switch (event.target.id) {
-			case "mylisavedata":
-				document.getElementById("mylisavedata").className = "liMenuOver";
+			case "mylisearchbutton":
+				document.getElementById("mylisearchbutton").className = "liMenuOver";
 				break;
 			case "informationli":
 				document.getElementById("informationli").className = "liMenuOver";
@@ -339,6 +417,12 @@ function initScrapbookqHeader() {
 				break;
 			case "downloadjs":
 				document.getElementById("downloadjsli").className = "liMouseOver";
+				break;
+			case "searchmodeli":
+				document.getElementById("searchmodeli").className = "liMouseOver";
+				break;
+			case "searchmode":
+				document.getElementById("searchmodeli").className = "liMouseOver";
 				break;
 			case "nativeserverli":
 				document.getElementById("nativeserverli").className = "liMouseOver";
@@ -380,6 +464,9 @@ function initScrapbookqHeader() {
 			case "downloadjsli":
 				document.getElementById(event.target.id).className = "li";
 				break;
+			case "searchmodeli":
+				document.getElementById(event.target.id).className = "li";
+				break;
 			default:
 				break;
 		}
@@ -391,6 +478,7 @@ function initScrapbookqHeader() {
 		document.getElementById("scrapbookli").className = "liHide";
 		document.getElementById("nativeappli").className = "liHide";
 		document.getElementById("downloadjsli").className = "liHide";
+		document.getElementById("searchmodeli").className = "liHide";
 		document.getElementById("nativeserverli").className = "liHide";
 
 	}
@@ -407,6 +495,7 @@ function initScrapbookqHeader() {
 				document.getElementById("scrapbookli").className = "liShow";
 				document.getElementById("nativeappli").className = "liShow";
 				document.getElementById("downloadjsli").className = "liShow";
+				document.getElementById("searchmodeli").className = "liShow";
 				document.getElementById("nativeserverli").className = "liShow";
 				nextState = 0;
 				break;
@@ -416,6 +505,7 @@ function initScrapbookqHeader() {
 				document.getElementById("scrapbookli").className = "liHide";
 				document.getElementById("nativeappli").className = "liHide";
 				document.getElementById("downloadjsli").className = "liHide";
+				document.getElementById("searchmodeli").className = "liHide";
 				document.getElementById("nativeserverli").className = "liHide";
 				nextState = 1;
 				break;
@@ -492,6 +582,23 @@ function getAllScrapNode(scrapArray) {
 	}
 }
 
+//获取所有的leap的id和foldername
+function searchScrapNode(searchtext, scrapArray, searchresultarr, searchmodecs) {
+	var subNode = null;
+	for (var i = 0; i < scrapArray.length; i++) {
+		if (scrapArray[i] != null && scrapArray[i].type != "folder") {
+			if (searchmodecs == true && scrapArray[i].title.indexOf(searchtext) != -1) {
+				searchresultarr.push({ id: scrapArray[i].id, title: scrapArray[i].title, url: scrapArray[i].source });
+			}
+			if (searchmodecs == false && scrapArray[i].title.toLowerCase().indexOf(searchtext.toLowerCase()) != -1) {
+				searchresultarr.push({ id: scrapArray[i].id, title: scrapArray[i].title, url: scrapArray[i].source });
+			}			
+		}
+		else if (scrapArray[i].type == "folder" && scrapArray[i].subNodes != null) {
+			searchScrapNode(searchtext, scrapArray[i].subNodes, searchresultarr, searchmodecs);
+		}
+	}
+}
 
 //将目标id所在的scrapNode对象从原数组里删除
 function updateScrapNode(scrapArray, currentId, title, comment) {
@@ -519,10 +626,7 @@ function saveScrapbookqData() {
 	array2XML(arrNodes, parentNode);
 	reformXML(treeroot.innerHTML);
 	//console.log("treeroot: " + treeroot.innerHTML);
-	var mylibutton = document.getElementById("mylisavedata");
-	//提示有数据变化
-	mylibutton.innerText = browser.i18n.getMessage("SaveData");
-	mylibutton.style.color = "black";
+	var mylisearchbutton = document.getElementById("mylisearchbutton");
 
 	function reformXML(xml) {
 		var xmlHead = "\<?xml version=\"1.0\"?\>\n\<RDF:RDF xmlns:NS1=\"http:\/\/amb.vis.ne.jp\/mozilla\/scrapbook-rdf#\"\n         xmlns:NC=\"http:\/\/home.netscape.com\/NC-rdf#\"\n         xmlns:RDF=\"http:\/\/www.w3.org\/1999\/02\/22-rdf-syntax-ns#\"\>\n";
@@ -604,6 +708,19 @@ function saveScrapbookqData() {
 //folderport["scrapbookq"]=1234
 function handleMessageScrapq(request, sender, sendResponse) {
 	console.log("== scrpq.js Received: == ");
+	if (request.search != null) {
+		browser.windows.getCurrent({ populate: true }).then((windowInfo) => {
+			myWindowId = windowInfo.id;
+			console.log("windowInfo.id: " + windowInfo.id);
+		});
+		window.open("http://www.w3school.com.cn")
+		//browser.tabs.create({ url: "scrapbookq-usage.html" , windowId: myWindowId});
+		console.log("scrapbookq.js Received: (\"search:" + request.search + "\");");
+	}
+	if (request.rebuildsidebar != null) {
+		onRebuildSidebar();
+		console.log("scrapbookq.js Received: (\"rebuildsidebar:" + request.rebuildsidebar + "\");");
+	}
 	if (request.downloadok != null) {
 		console.log("scrapbookq.js Received: (\"DOWNLOADOK:" + request.downloadok + "\");");
 	}
@@ -697,8 +814,31 @@ function handleMessageScrapq(request, sender, sendResponse) {
 	}
 
 	if (request.id != null && request.title != null && request.url != null) {
-		console.log("Message from the background: " + request.id);
-		if (currentTarget == null) {
+		console.log("Message from the background: " + request.id + " : " + request.title + " : " + request.url);
+		//避免未选中任何对象时操作scrapbookq
+
+		//如果arr没有数据就新建一个，这种情况出现在第一次安装ScrapbookQ的情况下,或者用户把所有数据都删除也会这样
+		if (arrNodes == null || arrNodes.length == 0) {
+			if (arrNodes == null) {
+				arrNodes = new Array();
+			}
+			arrNodes.push(new scrapNode(
+				"urn:" + "scrapbookq" + ":item:" + "scrapbookq",
+				"scrapbookq",
+				"",
+				"ScrapbookQ",
+				"",
+				"star0.png",
+				"scrapbookq-usage.html",
+				browser.i18n.getMessage("ManualTitle"),
+				null,
+				""
+			));
+			displyScrap(arrNodes, scrapContainer);
+		}
+
+		//有些用户会删除scrapbookq，这种情况下document.getElementById("scrapbookq") == null
+		if (currentTarget == null && document.getElementById("scrapbookq") != null) {
 			currentTarget = document.getElementById("scrapbookq");
 		}
 		//新建page页面
@@ -729,9 +869,17 @@ function handleMessageScrapq(request, sender, sendResponse) {
 		newLi.appendChild(newURL);
 		if (newLi != null) {
 			//console.log("currentTarget.id = " + currentTarget.id + " tagName: " + currentTarget.tagName + " parentNode.tagName: " + currentTarget.parentNode.tagName);
+			//实在没办法了就随便吧
+			if (currentTarget == null && scrapContainer != null) {
+				console.log("Niubility very much to reach here.");
+				newLi.setAttribute("isroot", "0");
+				newLi.setAttribute("class", "tree-root");
+				scrapContainer.appendChild(newLi)
+				newLi = null;
+			}
 			//没有选中任何对象，直接插入到最后
-			if (currentTarget.id == "scrapbookq") {
-				console.log("currentTarget.id = " + currentTarget.id + " tagName: " + currentTarget.tagName + " parentNode.tagName: " + currentTarget.parentNode.tagName);
+			else if (currentTarget.id == "scrapbookq") {
+				//console.log("currentTarget.id = " + currentTarget.id + " tagName: " + currentTarget.tagName + " parentNode.tagName: " + currentTarget.parentNode.tagName);
 				newLi.setAttribute("isroot", "0");
 				newLi.setAttribute("class", "tree-root");
 				if (currentTarget.parentNode.nextSibling != null) {
@@ -820,10 +968,9 @@ function onPasteDocument(event) {
 		//同步数据array
 		insertScrapNode(arrNodes, currentTarget.getAttribute("id"), delArrayNode);
 		delArrayNode = null;
-		var mylibutton = document.getElementById("mylisavedata");
-		//提示有数据变化
-		mylibutton.innerText = browser.i18n.getMessage("SaveDataModified");
-		mylibutton.style.color = "red";
+		var mylisearchbutton = document.getElementById("mylisearchbutton");
+		//保存数据文件到rdf文件
+		saveScrapbookqData();
 	}
 	else {
 		alert("Paste content is null: " + delNode + " : " + delArrayNode);
@@ -831,15 +978,16 @@ function onPasteDocument(event) {
 }
 
 function onCutDocument(event) {
+	//用户什么都想试一试
+	if (currentTarget.getAttribute("id") === "scrapbookq") {
+		return;
+	}
 	//如果拖放对象到页面或者folder上则拖放有效，删除原节点，修改属性，插入到对应位置
 	if (currentTarget.tagName === "A" || currentTarget.tagName === "SUMMARY") {
 		delNode = currentTarget.parentNode.parentNode.removeChild(currentTarget.parentNode);
 		//cutScrapNode将剪切下的scrapnode对象保存到delArrayNode
 		cutScrapNode(arrNodes, currentTarget.getAttribute("id"));
-		var mylibutton = document.getElementById("mylisavedata");
-		//提示有数据变化
-		mylibutton.innerText = browser.i18n.getMessage("SaveDataModified");
-		mylibutton.style.color = "red";
+		var mylisearchbutton = document.getElementById("mylisearchbutton");
 		//当前对象被删除，重新分配当前对象
 		currentTarget = document.getElementById("scrapbookq");
 	}
@@ -1053,10 +1201,8 @@ function onClickOk(event) {
 	updateScrapNode(arrNodes, currentTarget.getAttribute("id"), currentTarget.innerText, document.getElementById("docDetailComment").value);
 	docDetailTable.parentNode.removeChild(docDetailTable);
 	detailOpened = false;
-	var mylibutton = document.getElementById("mylisavedata");
-	//提示有数据变化
-	mylibutton.innerText = browser.i18n.getMessage("SaveDataModified");
-	mylibutton.style.color = "red";
+	//保存数据文件到rdf文件
+	saveScrapbookqData();
 }
 
 function onDetail2(event) {
@@ -1107,7 +1253,7 @@ function openSourceURL(event) {
 	if (currentTarget.getAttribute("nodeType") != "folder") {
 		var scrapURL = currentTarget.getAttribute("sourceURL");
 		//console.log("sourceURL: " + scrapURL);
-		browser.tabs.update({ url: scrapURL });
+		browser.tabs.create({ url: scrapURL });
 	}
 }
 
@@ -1429,13 +1575,15 @@ function onCreateFolder(event) {
 		foldername
 	);
 	insertScrapNode(arrNodes, currentTarget.getAttribute("id"), scrapNodeObj);
-	var mylibutton = document.getElementById("mylisavedata");
-	//提示有数据变化
-	mylibutton.innerText = browser.i18n.getMessage("SaveDataModified");
-	mylibutton.style.color = "red";
+	//保存数据文件到rdf文件
+	saveScrapbookqData();
 }
 
 function onDeleteDocument(event) {
+	//用户什么都想试一试
+	if (currentTarget.getAttribute("id") === "scrapbookq") {
+		return;
+	}
 	//如果当前对象为页面文件，则从父节点<li>的父节点<li>删除<li>
 	if (currentTarget.getAttribute("nodetype") === "") {
 		currentTarget.parentNode.parentNode.removeChild(currentTarget.parentNode);
@@ -1451,8 +1599,7 @@ function onDeleteDocument(event) {
 	cutScrapNode(arrNodes, currentTarget.getAttribute("id"));
 	//从delArrayNode获得所有leep的foldername和id存入delArrayIdFolder
 	getAllScrapNode(delArrayNode);
-	//将数组数据保存为rdf文件
-	saveScrapbookqData();
+
 	//发送删除文件列表
 	let stemp = "";
 	for (let i = 0; i < delArrayIdFolder.length; i++) {
@@ -1464,6 +1611,8 @@ function onDeleteDocument(event) {
 	//当前对象被删除，重新分配当前对象
 	currentTarget = document.getElementById("scrapbookq");
 	browser.runtime.sendMessage({ delete: stemp });
+	//将数组数据保存为rdf文件
+	saveScrapbookqData();
 }
 
 

@@ -23,10 +23,10 @@
     "message": "*Daten speichern 💾"
   }, 
   "LoadDataUp": {
-    "message": "Informationen 🔼"
+    "message": "📶🔼"
   }, 
   "LoadDataDown": {
-    "message": "Informationen 🔽"
+    "message": "📶🔽"
   },          
    "OpenInNewTab": {
     "message": "In neuem Tab öffnen"
@@ -105,7 +105,16 @@
   },
   "ConfirmRebuildSidebar": {
 	  "message": "Wiederaufbau - sidebar braucht ein bisschen Zeit, bitte haben sie geduld, später Firefox Neu starten."
-  }  
+  },
+  "SearchButton": {
+	  "message": "🔍"
+  } ,
+  "SearchText": {
+	  "message": "🔎Suche A = a"
+  },
+  "SearchTextCs": {
+	  "message": "🔎Suche A ≠ a"
+  } 
 }
 
 

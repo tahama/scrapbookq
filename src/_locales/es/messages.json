@@ -23,10 +23,10 @@
     "message": "*Guardar Datos 💾"
   }, 
   "LoadDataUp": {
-    "message": "Información 🔼"
+    "message": "📶🔼"
   }, 
   "LoadDataDown": {
-    "message": "Información 🔽"
+    "message": "📶🔽"
   },          
    "OpenInNewTab": {
     "message": "Abrir en Nueva Pestaña"
@@ -105,5 +105,14 @@
   },
   "ConfirmRebuildSidebar": {
 	  "message": "La reconstrucción de la barra lateral necesita un poco de tiempo, paciencia por favor, luego reiniciar firefox."
+  },
+  "SearchButton": {
+	  "message": "🔍"
+  },
+  "SearchText": {
+	  "message": "🔎Search A = a"
+  },
+  "SearchTextCs": {
+	  "message": "🔎Search A ≠ a"
   }
 }

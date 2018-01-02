@@ -5,7 +5,7 @@ import (
 	"strings"
 	"io/ioutil"
 	"encoding/json"
-//	"log"
+	"log"
 	"io"
 	"bufio"
 	"net/http"
@@ -15,7 +15,16 @@ import (
 )
 
 var config map[string]interface{}
+
 func main() {
+	logfile,err:=os.OpenFile("test.log",os.O_RDWR|os.O_CREATE,0666)
+    if err!=nil{
+        fmt.Printf("%s\r\n",err.Error())
+        os.Exit(-1)
+    }
+    defer logfile.Close()
+	logger:=log.New(logfile,"\r\n",log.Ldate|log.Ltime|log.Llongfile)
+	
 	if len(os.Args) == 2 && os.Args[1] == "init" {
 		initScrapbookq ()
 		return
@@ -85,11 +94,14 @@ func main() {
 
 	var msg []byte
 	for {
-	msg = getMsg()
+		msg = getMsg()
 
 		if string(msg[0:11]) == "DOWNLOADOK:" {
 			time.Sleep(time.Duration(2)*time.Second)
 			rmurlmsg := RmURL(string(msg[11:]))
+			//sendMsgString(fmt.Sprintf("DOWNLOADOK: %s errorMsg: %s", string(msg[11:]), rmurlmsg))
+			sendMsgString(fmt.Sprintf("DOWNLOADOK: %s errorMsg: %d", string(msg[11:]), len(rmurlmsg)))
+			logger.Println(rmurlmsg)
 			sendMsgString(fmt.Sprintf("DOWNLOADOK: %s errorMsg: %s", string(msg[11:]), rmurlmsg))
 		}
 		
@@ -455,6 +467,13 @@ func deleteFiles (files string) (string, string){
 }
 
 func RmURL(files string) (errstring string){
+	logfile,err:=os.OpenFile("rmurl.log",os.O_RDWR|os.O_CREATE,0666)
+    if err!=nil{
+        fmt.Printf("%s\r\n",err.Error())
+        os.Exit(-1)
+    }
+    defer logfile.Close()
+	logger:=log.New(logfile,"\r\n",log.Ldate|log.Ltime|log.Llongfile)
 	var indexfilepath string
 	//var errstring string
 	currentwd, err := os.Getwd()
@@ -481,28 +500,30 @@ func RmURL(files string) (errstring string){
     indexfileTarget, _ := PathExists(indexfilepath)
     if indexfileTarget == false {
 		errstring = fmt.Sprintf("%s index.html does not exit.", indexfilepath) 
+		logger.Println(errstring)
 		return
     } else {
+		//logfile.Sync()
+		//time.Sleep(time.Duration(2)*time.Second)
 		fis, err := os.Open(indexfilepath)
 		if err != nil {
 			//errMsg := fmt.Errorf("%v", err)
 			errstring = fmt.Sprintf("Open file error: %s", indexfilepath) 
+			logger.Println(errstring)
 			return
 		}
-		time.Sleep(time.Duration(5)*time.Second)
+		time.Sleep(time.Duration(2)*time.Second)
 		buff, _ := ioutil.ReadAll(fis)
 		html := string(buff)		
 		var myExpLTGTOneLine = regexp.MustCompile(`(?i)(?P<first><[^<>]*)\n(?P<second>[^<>]*>)`)
 		//ltgts := myExpLTGTOneLine.FindAllStringSubmatch(html, -1)
 		html = myExpLTGTOneLine.ReplaceAllString(html, "$first$second")
-	
 		if config["downloadjs"].(string) == "1" {
 			var myExpJSsrc = regexp.MustCompile(`(?i)<script(?P<first>.*?)src=[\"\']{1}[^\"\']*/(?P<second>[^\"\'\?]*?)(\?.*?)*[\"\']{1}(?P<third>.*?)>`)
 			//jss := myExpJSsrc.FindAllStringSubmatch(html, -1)
 			html = myExpJSsrc.ReplaceAllString(html, "<scrapbookqscript$first src=\"" + "$second" + "\"$third>")
 		}
 		
-
 		var myExpCSSsrc = regexp.MustCompile(`(?i)<link(?P<first>.*?rel=[\"\']{1}stylesheet\".*?)href=[\"\']{1}[^\"\']*/(?P<second>[^\"\'\?]*?)(\?.*?)*[\"\']{1}(?P<third>.*?)>`)
 		//if !myExpCSSsrc.MatchString(html) {
 		var myExpCSSsrc2 = regexp.MustCompile(`(?i)<link(?P<first>.*?)href=[\"\']{1}[^\"\']*/(?P<second>[^\"\'\?]*?)(\?.*?)*[\"\']{1}(?P<third>.*?rel=[\"\']{1}stylesheet\".*?)/{0,1}>`)
@@ -534,7 +555,8 @@ func RmURL(files string) (errstring string){
 			return
 		}
 		fis.WriteString(html)
-		errstring = fmt.Sprintf("RmURL index.html OK: %s", indexfilepath)
+		//errstring = fmt.Sprintf("RmURL index.html OK: %s", indexfilepath)
+		errstring = fmt.Sprintf("RmURL index.html OK.")
 		return
 	}	
 }

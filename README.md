@@ -40,6 +40,8 @@ Windows and Linux support.
 
 ## Change Log.en
 
+* 0.1.7.0 Fix bug: scrapbookqmsg send message error under windows system. Add "Search" function, both Case sensitive or non Case Sensitive. Delete "SaveData" button, update UI.
+* 0.1.6.2 Fix bug: empty sidebar has no menu to rebuild itself. Add "Rebuild" menu item to browser right click menu.
 * 0.1.6.1 Fix bug: rebuild and delete ScrapbookQ may clear sidebar, icon display has improved, capture page has improved too.add ConfirmRebuildSidebar message.
 * 0.1.6 Fix bug:css href error, update message on windows, update es, ru translation, add downloadjs option
 * 0.1.5 Add sort function
@@ -62,6 +64,8 @@ Windows and Linux support.
 
 ## Change Log.zh-CN
 
+* 0.1.7.0 版修复bug：windows下发送消息异常。添加搜索功能，可以设置是否大小写敏感。删除"保存"按钮，改成"搜索"按钮。更新界面。
+* 0.1.6.2 版修复bug：空白侧边栏没有右键菜单，所以不能通过右键菜单来重建侧边栏。添加"重建"菜单项到浏览器右键菜单
 * 0.1.6.1版改进图标显示、改进页面格式、修复bug：rebuild + 删除 ScrapbookQ后sidebar空白、添加ConfirmRebuildSidebar翻译
 * 0.1.6 版修复下载css文件href错误问题，更新windows平台的消息，添加es、ru用户翻译文件，添加下载javascript选项及功能
 * 0.1.5 版增加排序功能

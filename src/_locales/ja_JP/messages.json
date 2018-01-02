@@ -23,10 +23,10 @@
     "message": "*データを保存する 💾"
   }, 
   "LoadDataUp": {
-    "message": "情報 🔼"
+    "message": "📶🔼"
   }, 
   "LoadDataDown": {
-    "message": "情報 🔽"
+    "message": "📶🔽"
   },          
    "OpenInNewTab": {
     "message": "新しいタブで開く"
@@ -105,7 +105,16 @@
   },
   "ConfirmRebuildSidebar": {
 	  "message": "再建侧边栏少し時間がかかる、待っててください、後に再起動Firefox。"
-  } 
+  },
+  "SearchButton": {
+	  "message": "🔍"
+  } ,
+  "SearchText": {
+	  "message": "🔎検索 A = a"
+  },
+  "SearchTextCs": {
+	  "message": "🔎検索 A ≠ a"
+  }
 }
 
 

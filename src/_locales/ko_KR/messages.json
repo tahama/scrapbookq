@@ -23,10 +23,10 @@
     "message": "*데이터 저장 💾"
   }, 
   "LoadDataUp": {
-    "message": "정보 🔼"
+    "message": "📶🔼"
   }, 
   "LoadDataDown": {
-    "message": "정보 🔽"
+    "message": "📶🔽"
   },          
    "OpenInNewTab": {
     "message": "새 탭에서 열기"
@@ -105,6 +105,15 @@
   },
   "ConfirmRebuildSidebar": {
 	  "message": "재건 사이드바 시간을 좀 더 기다려 주십시오, 나중에 다시 시작 Firefox."
+  },
+  "SearchButton": {
+	  "message": "🔍"
+  },
+  "SearchText": {
+	  "message": "🔎검색 A = a"
+  },
+  "SearchTextCs": {
+	  "message": "🔎검색 A ≠ a"
   }
 }
 

@@ -5,19 +5,19 @@ var downloadjs = "0";
 var downloadlist = new Array();
 
 var platform = "linux";
-console.log(platform);
 if (navigator.platform == "Win64" || navigator.platform == "Win32") {
   platform = "windows";
 }
+console.log(platform);
 
-function downloaditem(downloadidlist, favicon, folderid, folderpath, title, url, htmlok) {
+function downloaditem(downloadidlist, favicon, folderid, folderpath, title, url, indexid) {
   this.favicon = favicon;
   this.downloadidlist = downloadidlist;
   this.folderid = folderid;
   this.folderpath = folderpath;
   this.title = title;
   this.url = url;
-  this.htmlok = htmlok;
+  this.indexid = indexid;
 }
 /*
 Open a new tab, and load "my-page.html" into it.
@@ -178,7 +178,7 @@ function onSaveCurrentPage() {
   //console.log(pageFiles);
   var folderpath = "scrapbookq/data/";
   var downloadidlist = new Array();
-  var downloaditemobj = new downloaditem(downloadidlist, faviconfilename, folderid, folderpath, currentTab.title, currentTab.url, false);
+  var downloaditemobj = new downloaditem(downloadidlist, faviconfilename, folderid, folderpath, currentTab.title, currentTab.url, -1);
   downloadlist.push(downloaditemobj);
 
   for (pagefilesidx = 0; pagefilesidx < pageFiles.length; pagefilesidx++) {
@@ -235,7 +235,7 @@ function handleCreated(item) {
         }
         downloadlist[i].downloadidlist.push(item.id);
         if (item.filename.indexOf("index.html") != -1) {
-          downloadlist[i].htmlok = true;
+          downloadlist[i].indexid = (item.id);
         }     
         return;
       }
@@ -254,7 +254,7 @@ function handleChanged(delta) {
           downloadlist[i].downloadidlist.splice(j, 1);
           console.log(delta.id + " ****** downloadids.length: " + downloadlist[i].downloadidlist.length);
           //index.html 下载完成后就发消息
-          if (downloadlist[i].htmlok == true) {
+          if (downloadlist[i].indexid == delta.id) {
             port.postMessage("DOWNLOADOK:" + "scrapbookq/" + downloadlist[i].folderid);
             console.log("background.js port.postMessage(\"DOWNLOADOK:" + "scrapbookq/" + downloadlist[i].folderid + "\");");
             browser.runtime.sendMessage({ downloadok: downloadlist[i].folderid });
@@ -510,11 +510,24 @@ browser.menus.create({
   }
 }, onCreated);
 
+
+browser.menus.create({
+  id: "RebuildSidebar",
+  title: browser.i18n.getMessage("menuRebuildSidebar"),
+  contexts: ["all"],
+  icons: {
+    "16": "icons/modify.png",
+  }
+}, onCreated);
+
 /*
 browser.menus.create({
-  id: "TestCase",
-  title: browser.i18n.getMessage("TestCase"),
+  id: "SearchTitle",
+  title: browser.i18n.getMessage("menuRebuildSidebar"),
   contexts: ["all"],
+  icons: {
+    "16": "icons/modify.png",
+  }
 }, onCreated);
 
 
@@ -557,11 +570,14 @@ browser.menus.onClicked.addListener((info, tab) => {
       onShowDownloadDefaultFolder();
       console.log("Clicked the tools OpenDownloadDir");
       break;
-    case "TestCase":
-      browser.tabs.create({ url: "sidebar/scrapbookq-usage.html" });
-      browser.tabs.executeScript({ file: "sidebar/testlocalfiles.js" });
-      console.log("Clicked the tools TestCase");
+    case "RebuildSidebar":
+      browser.runtime.sendMessage({ rebuildsidebar: "rebuild" });
+      console.log("Clicked the tools RebuildSidebar");
       break;
+      case "SearchTitle":
+      browser.runtime.sendMessage({ search: "title" });
+      console.log("Clicked the tools RebuildSidebar");
+      break;      
     case "StartServer":
       port.postMessage("STARTSERVER");
       console.log("port.postMessage(\"STARTSERVER\")");

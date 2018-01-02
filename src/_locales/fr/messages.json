@@ -23,10 +23,10 @@
     "message": "*Enregistrer des données 💾"
   }, 
   "LoadDataUp": {
-    "message": "Information 🔼"
+    "message": "📶🔼"
   }, 
   "LoadDataDown": {
-    "message": "Information 🔽"
+    "message": "📶🔽"
   },          
    "OpenInNewTab": {
     "message": "Ouvrir dans un nouvel onglet"
@@ -105,7 +105,16 @@
   },
   "ConfirmRebuildSidebar": {
 	  "message": "La reconstruction de la barre latérale a besoin d'un peu de temps, s'il vous plaît, patience et plus tard le redémarrage de Firefox."
-  } 
+  },
+  "SearchButton": {
+	  "message": "🔍"
+  },
+  "SearchText": {
+	  "message": "🔎Recherche A = a"
+  },
+  "SearchTextCs": {
+	  "message": "🔎Recherche A ≠ a"
+  }   
 }
 
 
