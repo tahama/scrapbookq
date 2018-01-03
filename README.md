@@ -19,7 +19,7 @@ Windows and Linux support.
 1. Find and open "scrapbookq" folder, then edit scrapbookq.conf
 1. Set rdfpath to the path of scrapbook.rdf, which is mostly at "ScrapBook" folder.
 1. for example, scrapbook.rdf path is D:\123\ScrapBook\scrapbook.rdf 
-1. looks like: rdfpath=D:\\123\\ScrapBook\\
+1. looks like: rdfpath=D:\\\\123\\\\ScrapBook\\\\
     
 ## Funtions
 
