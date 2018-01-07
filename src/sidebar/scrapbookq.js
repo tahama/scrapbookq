@@ -69,10 +69,11 @@ function removeStoreApp() {
 	removeScrapbookq.then(onRemoved, onError);
 
 	function onRemoved() {
-		//console.log("storeApp OK");
+		console.log("removeStoreApp OK");
 	}
 
 	function onError(e) {
+		console.log("removeStoreApp error.");
 		console.log(e);
 	}
 }
@@ -350,6 +351,7 @@ function initScrapbookqHeader() {
 		head.appendChild(meta);
 		DOMPars.appendChild(head);
 		let newURL = null;
+		let newIMG = null;
 
 		DOMPars.appendChild(document.createTextNode(searchresultarr.length));
 		DOMPars.appendChild(document.createElement("BR"));
@@ -363,6 +365,9 @@ function initScrapbookqHeader() {
 		let searchurl = null;
 		for (let i = 0; i < searchresultarr.length; i++) {
 			DOMPars.appendChild(document.createTextNode(i + " . "));
+			//newIMG = document.createElement("IMG");
+			//newIMG.setAttribute("src", (searchresultarr[i].icon));
+			//DOMPars.appendChild(newIMG);
 			newURL = document.createElement("A");
 			newURL.setAttribute("href", (searchresultarr[i].url));
 			newURL.setAttribute("target", "_blank");
@@ -520,7 +525,9 @@ function insertScrapNode(scrapArray, currentId, scrapNodeObj) {
 	var subNode = null;
 	for (var i = 0; i < scrapArray.length; i++) {
 		if (scrapArray[i].id == currentId) {
-			if (scrapArray[i].type == "folder") {
+			//目录打开则插入目录，这句使数据和显示混合在一起了，后期维护要麻烦
+			let cfolder = document.getElementById(currentId);
+			if (scrapArray[i].type == "folder" && cfolder.parentNode.open === true) {
 				//如果是目录，直接压入子目录
 				if (scrapArray[i].subNodes != null) {
 					scrapArray[i].subNodes.push(scrapNodeObj);
@@ -574,7 +581,7 @@ function getAllScrapNode(scrapArray) {
 	if (scrapArray != null && scrapArray.type == "") {
 		delArrayIdFolder.push(scrapArray.foldername + "/" + scrapArray.id);
 	}
-	else if (scrapArray.type == "folder" && scrapArray.subNodes != null) {
+	else if (scrapArray != null && scrapArray.type == "folder" && scrapArray.subNodes != null) {
 		//如果是目录非空则递归搜索
 		for (var i = 0; i < scrapArray.subNodes.length; i++) {
 			getAllScrapNode(scrapArray.subNodes[i]);
@@ -588,11 +595,11 @@ function searchScrapNode(searchtext, scrapArray, searchresultarr, searchmodecs) 
 	for (var i = 0; i < scrapArray.length; i++) {
 		if (scrapArray[i] != null && scrapArray[i].type != "folder") {
 			if (searchmodecs == true && scrapArray[i].title.indexOf(searchtext) != -1) {
-				searchresultarr.push({ id: scrapArray[i].id, title: scrapArray[i].title, url: scrapArray[i].source });
+				searchresultarr.push({ id: scrapArray[i].id, title: scrapArray[i].title, url: scrapArray[i].source, icon: scrapArray[i].icon });
 			}
 			if (searchmodecs == false && scrapArray[i].title.toLowerCase().indexOf(searchtext.toLowerCase()) != -1) {
-				searchresultarr.push({ id: scrapArray[i].id, title: scrapArray[i].title, url: scrapArray[i].source });
-			}			
+				searchresultarr.push({ id: scrapArray[i].id, title: scrapArray[i].title, url: scrapArray[i].source, icon: scrapArray[i].icon });
+			}
 		}
 		else if (scrapArray[i].type == "folder" && scrapArray[i].subNodes != null) {
 			searchScrapNode(searchtext, scrapArray[i].subNodes, searchresultarr, searchmodecs);
@@ -890,20 +897,23 @@ function handleMessageScrapq(request, sender, sendResponse) {
 				}
 				newLi = null;
 			}
-			//如果当前对象为页面文件，则向父节点<li>的父节点添加，并且修改父节点的isroot和class为当前对象的父节点一样
-			else if (currentTarget.tagName === "A") {
-				//console.log("currentDrop.parentNode.getAttribute(isroot)", currentDrop.parentNode.getAttribute("isroot"));
-				newLi.setAttribute("isroot", currentTarget.parentNode.getAttribute("isroot"));
-				newLi.setAttribute("class", currentTarget.parentNode.getAttribute("class"));
-				currentTarget.parentNode.parentNode.insertBefore(newLi, currentTarget.parentNode);
-				newLi = null;
-			}
-			//如果当前对象为folder，则向父节点<details>添加，也就是放到folder里面，需要修改siroot=1和class=tree-leaf
-			else if (currentTarget.tagName === "SUMMARY") {
+			//如果目录打开则插进去
+			else if (currentTarget.tagName == "SUMMARY" && currentTarget.parentNode.open === true) {
 				newLi.setAttribute("isroot", "1");
 				newLi.setAttribute("class", "tree-leaf");
 				currentTarget.parentNode.appendChild(newLi);
 				newLi = null;
+			}
+			//否则插到后面
+			else if (currentTarget.parentNode.nextSibling != null) {
+				newLi.setAttribute("isroot", currentTarget.parentNode.getAttribute("isroot"));
+				newLi.setAttribute("class", currentTarget.parentNode.getAttribute("class"));
+				currentTarget.parentNode.parentNode.insertBefore(newLi, currentTarget.parentNode.nextSibling);
+			}
+			else {
+				newLi.setAttribute("isroot", currentTarget.parentNode.getAttribute("isroot"));
+				newLi.setAttribute("class", currentTarget.parentNode.getAttribute("class"));
+				currentTarget.parentNode.parentNode.appendChild(newLi);
 			}
 		}
 		//根据数据新建scrapNode对象，插入当前目标对象之后，如果当前目标对象时folder就插进去
@@ -950,21 +960,28 @@ function onMouseUp(event) {
 //将剪切下来的对象插入到当前目标对象页面之前/folder之内，暂时不考虑delArrayNode=null的情况
 function onPasteDocument(event) {
 	if (delNode != null || delArrayNode != null) {
-		//如果当前对象为页面文件，则向父节点<li>的父节点添加，并且修改父节点的isroot和class为当前对象的父节点一样
-		if (currentTarget.tagName === "A") {
-			//console.log("currentDrop.parentNode.getAttribute(isroot)", currentDrop.parentNode.getAttribute("isroot"));
-			delNode.setAttribute("isroot", currentTarget.parentNode.getAttribute("isroot"));
-			delNode.setAttribute("class", currentTarget.parentNode.getAttribute("class"));
-			currentTarget.parentNode.parentNode.insertBefore(delNode, currentTarget.parentNode);
-			delNode = null;
-		}
-		//如果当前对象为folder，则向父节点<details>添加，也就是放到folder里面，需要修改siroot=1和class=tree-leaf
-		else if (currentTarget.tagName === "SUMMARY") {
+		//如果当前对象为目录，并且目录打开，插进去
+		if (currentTarget.tagName === "SUMMARY" && currentTarget.parentNode.open === true) {
 			delNode.setAttribute("isroot", "1");
 			delNode.setAttribute("class", "tree-leaf");
 			currentTarget.parentNode.appendChild(delNode);
 			delNode = null;
 		}
+		//其他情况一律插到后面
+		else if (currentTarget.parentNode.nextSibling != null) {
+			//console.log("currentDrop.parentNode.getAttribute(isroot)", currentDrop.parentNode.getAttribute("isroot"));
+			delNode.setAttribute("isroot", currentTarget.parentNode.getAttribute("isroot"));
+			delNode.setAttribute("class", currentTarget.parentNode.getAttribute("class"));
+			currentTarget.parentNode.parentNode.insertBefore(delNode, currentTarget.parentNode.nextSibling);
+			delNode = null;
+		}
+		else {
+			delNode.setAttribute("isroot", currentTarget.parentNode.getAttribute("isroot"));
+			delNode.setAttribute("class", currentTarget.parentNode.getAttribute("class"));
+			currentTarget.parentNode.parentNode.appendChild(delNode);
+			delNode = null;						
+		}
+		
 		//同步数据array
 		insertScrapNode(arrNodes, currentTarget.getAttribute("id"), delArrayNode);
 		delArrayNode = null;
@@ -1259,7 +1276,14 @@ function openSourceURL(event) {
 
 
 function toggleCss(event) {
-	//window.location.href = "data/20171029142147/index.html";		
+	//window.location.href = "data/20171029142147/index.html";	
+	let highlighting = document.querySelectorAll(".done");
+	//console.log( highlighting);
+	for (let i = 0; i < highlighting.length; i++) {
+		if (highlighting[i]) {
+			highlighting[i].classList.remove("done");
+		}
+	}
 	if (event.target.tagName === "A") {
 		//取消前一次的点击对象高亮，记录当前点击对象并高亮
 		if (currentTarget != null) {
@@ -1526,6 +1550,7 @@ function loadXMLDoc(dname) {
 }
 
 function onCreateFolder(event) {
+	console.log("currentTarget.parentNode.isroot: " + currentTarget.parentNode.getAttribute("isroot") + "currentTarget.parentNode.classList: " + currentTarget.parentNode.classList + " currentTarget.classList: " + currentTarget.classList + " currentTarget.id = " + currentTarget.id + " tagName: " + currentTarget.tagName + " parentNode.tagName: " + currentTarget.parentNode.tagName);
 	var treenode = null;
 	var nodeSummary = null;
 	var treeleaf = null;
@@ -1550,16 +1575,19 @@ function onCreateFolder(event) {
 	nodeSummary.setAttribute("nodeType", "folder");
 	nodeSummary.setAttribute("foldername", foldername);
 	treenode.appendChild(nodeSummary);
-	//向父节点<li>/<detail>的父节点添加
-	if (currentTarget.tagName == "A") {
-		currentTarget.parentNode.parentNode.insertBefore(treenode, currentTarget.parentNode);
-	}
-	else if (currentTarget.tagName == "SUMMARY") {
+	//如果目录打开则插进去
+	if (currentTarget.tagName == "SUMMARY" && currentTarget.parentNode.open === true) {
 		treenode.setAttribute("class", "tree-node");
-		treenode.setAttribute("isroot", "0");
-		currentTarget.appendChild(treenode);
+		treenode.setAttribute("isroot", "1");
+		currentTarget.parentNode.appendChild(treenode);
 	}
-	//根据数据新建scrapNode对象，插入当前目标对象之后，如果当前目标对象时folder就插进去
+	//否则插到后面
+	else if (currentTarget.parentNode.nextSibling != null) {
+		currentTarget.parentNode.parentNode.insertBefore(treenode, currentTarget.parentNode.nextSibling);
+	}
+	else {
+		currentTarget.parentNode.parentNode.appendChild(treenode);
+	}
 
 	//scrapNode(about, id, type, title, chars, icon, source, comment, subNodes, foldername) 
 	var scrapNodeObj = new scrapNode(
@@ -1585,19 +1613,22 @@ function onDeleteDocument(event) {
 		return;
 	}
 	//如果当前对象为页面文件，则从父节点<li>的父节点<li>删除<li>
-	if (currentTarget.getAttribute("nodetype") === "") {
+	if (currentTarget.getAttribute("nodetype") != "folder") {
 		currentTarget.parentNode.parentNode.removeChild(currentTarget.parentNode);
 	}
 	//如果当前对象为folder，则从父节点<details>的父节点<div>或其他删除<details>，然后删除<summary>
-	else if (confirm(browser.i18n.getMessage("ConfirmDeleteDirectory")) === true) {
+	else if (currentTarget.getAttribute("nodetype") === "folder" && confirm(browser.i18n.getMessage("ConfirmDeleteDirectory")) === true) {
 		currentTarget.parentNode.parentNode.removeChild(currentTarget.parentNode);
 		currentTarget.parentNode.removeChild(currentTarget);
 	}
+	else {
+		return;
+	}
 	//同步数据
 
-	//将对象节点从原数组删除，存储到delArrayNode
+	//将对象节点从原数组删除，存储到 delArrayNode
 	cutScrapNode(arrNodes, currentTarget.getAttribute("id"));
-	//从delArrayNode获得所有leep的foldername和id存入delArrayIdFolder
+	//从delArrayNode获得所有leep的foldername和id存入 delArrayIdFolder
 	getAllScrapNode(delArrayNode);
 
 	//发送删除文件列表
@@ -1610,7 +1641,10 @@ function onDeleteDocument(event) {
 	delArrayIdFolder = [];
 	//当前对象被删除，重新分配当前对象
 	currentTarget = document.getElementById("scrapbookq");
-	browser.runtime.sendMessage({ delete: stemp });
+	//删除纯目录/纯子目录时delArrayIdFolder为空
+	if (stemp.length > 0) {
+		browser.runtime.sendMessage({ delete: stemp });
+	}
 	//将数组数据保存为rdf文件
 	saveScrapbookqData();
 }
@@ -1676,6 +1710,7 @@ function sortByTitleScrapNode(scrapArray, currentId, desc) {
 		if (scrapArray[i].id == currentId && scrapArray[i].type == "folder" && scrapArray[i].subNodes != null) {
 			scrapArray[i].subNodes = sortByTitle(scrapArray[i].subNodes, desc);
 			sortedNode = scrapArray[i].subNodes;
+			break;
 		}
 		else if (scrapArray[i].type == "folder" && scrapArray[i].subNodes != null) {
 			sortByTitleScrapNode(scrapArray[i].subNodes, currentId);
@@ -1766,15 +1801,20 @@ function sortByDateScrapNode(scrapArray, currentId, desc) {
 				return a.id - b.id;
 			});
 			if (desc) scrapArray[i].subNodes.reverse();
+			sortedNode = scrapArray[i].subNodes;
 		}
 		else if (scrapArray[i].type == "folder" && scrapArray[i].subNodes != null) {
-			sortByTitleScrapNode(scrapArray[i].subNodes, currentId);
+			sortByDateScrapNode(scrapArray[i].subNodes, currentId);
 		}
 	}
 }
 
 function onRebuildSidebar(event) {
 	if (confirm(browser.i18n.getMessage("ConfirmRebuildSidebar")) === true) {
+		while (document.body.firstChild) {
+			document.body.firstChild.remove();
+		}
+		arrNodes = null;
 		removeStoreApp();
 		window.location.reload();
 		/*
