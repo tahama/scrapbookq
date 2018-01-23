@@ -2,7 +2,7 @@
 ## linux
 go build -ldflags "-s -w" Projects/goProjects/scrapbookqmsg/scrapbookqmsg.go 
 upx -9 scrapbookqmsg
-
+GOARCH=386 go build -ldflags "-s -w" ~/Projects/FirefoxAddon/scrapbookq/scrapbookqmsg/scrapbookqmsg.go
 ## windows
 
 go build -ldflags "-s -w" scrapbookqmsg.go

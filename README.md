@@ -40,6 +40,12 @@ Windows and Linux support.
 
 ## Change Log.en
 
+* 0.1.8.0 New features:
+    1. Support multi ScrapBook folder.
+    1. Now Save data in ScrapBook folder.
+    1. Fix bug:delete empty folder, high light items. 
+    1. modify insert method.
+    1. update document.
 * 0.1.7.0 Fix bug: scrapbookqmsg send message error under windows system. Add "Search" function, both Case sensitive or non Case Sensitive. Delete "SaveData" button, update UI.
 * 0.1.6.2 Fix bug: empty sidebar has no menu to rebuild itself. Add "Rebuild" menu item to browser right click menu.
 * 0.1.6.1 Fix bug: rebuild and delete ScrapbookQ may clear sidebar, icon display has improved, capture page has improved too.add ConfirmRebuildSidebar message.
@@ -64,6 +70,12 @@ Windows and Linux support.
 
 ## Change Log.zh-CN
 
+* 0.1.8.0 新特性:
+    1. 支持多ScrapBook数据目录.
+    1. 现在保存数据到ScrapBook目录里了.
+    1. Fix bug: 删除空目录异常, 高亮异常.
+    1. 改变插入的姿势.
+    1. 更新部分文档.
 * 0.1.7.0 版修复bug：windows下发送消息异常。添加搜索功能，可以设置是否大小写敏感。删除"保存"按钮，改成"搜索"按钮。更新界面。
 * 0.1.6.2 版修复bug：空白侧边栏没有右键菜单，所以不能通过右键菜单来重建侧边栏。添加"重建"菜单项到浏览器右键菜单
 * 0.1.6.1版改进图标显示、改进页面格式、修复bug：rebuild + 删除 ScrapbookQ后sidebar空白、添加ConfirmRebuildSidebar翻译

@@ -1,14 +1,18 @@
 //文件超出300行了，需要分割了
 var scrapContainer = document.querySelector(".scrap-container");
 
+var datadirty = false;
+var statedirty = false;
 var serverport = null;
-var scrapbook = null;
-var folderport = new Array();
-var scrapbookqhtmlok, scrapbookqrdfok, scrapbookrdfok, serverstatus, rdfloaded, downloadjs;
-var currentidfolder = null;
+var scrapbookrdfdirs = null;
+var serverstatus, rdfloaded, downloadjs;
+//标识导入的scrapbook目录和新建的scrapbookq目录
+var currentRdfName = null;
 var currentTarget = null;
 //var scrapContainer = document.querySelector(".scrap-container");
 var docDetailContainer = document.querySelector(".docDetail-Container");
+var sidebarHtmlList = null;
+var arrNodesList = null;
 var arrNodes = null;
 var searchmodecs = false;
 //标记第一次进入递归，tree-root不缩进，第二次及以后则为tree-node和tree-leaf则缩进,后来发现和class功能重合了，
@@ -23,8 +27,6 @@ var delArrayNode = null;
 var delArrayIdFolder = new Array();
 //用来显示属性的table
 var docDetailTable = null;
-//标识导入的scrapbook目录和新建的scrapbookq目录
-var foldername = null;
 //标识属性页面是否已经被打开
 var detailOpened = false;
 
@@ -32,36 +34,65 @@ var myWindowId;
 
 function storeApp() {
 	//scrapContainer.setAttribute("contenteditable", false);
-	browser.tabs.query({ windowId: myWindowId, active: true }).then((tabs) => {
-		let contentToStore = {};
-		let sbqApp = null;
-		let removeScrapbookq = browser.storage.local.remove("ScrapbookQApp");
-		removeScrapbookq.then(onRemoved, onError);
-		sbqApp = new ScrapBookQApp(arrNodes, scrapContainer.innerHTML, folderport, scrapbookqhtmlok, scrapbookqrdfok, scrapbookrdfok, rdfloaded, downloadjs);
-		contentToStore["ScrapbookQApp"] = sbqApp;
-		browser.storage.local.set(contentToStore);
-
-		function onRemoved() {
-			console.log("Remove storeApp OK");
-		}
-
-		function onError(e) {
-			console.log("Remove storeApp Error: " + e);
-		}
-		//var clearStorage = browser.storage.local.clear();
-		//clearStorage.then(onCleared, onError);
-	});
-
-	/*
-	if (detailOpened == true && docDetailTable != null) {
-		//alert("Document Details Panel has already opend, please close it first.");
-		docDetailTable.parentNode.removeChild(docDetailTable);
-		//return;
+	if (datadirty == true || statedirty == true) {
+		if (currentRdfName != null) {
+		browser.runtime.sendMessage({ currentRdfName: currentRdfName });
 	}
-	if (currentTarget != null) {
-		currentTarget.classList.remove("done");
+		if (datadirty == true) {
+			console.log("stroreApp currentRdfName: " + currentRdfName);
+			saveScrapbookqData();
+		}
+		browser.tabs.query({ windowId: myWindowId, active: true }).then((tabs) => {
+			let contentToStore = {};
+			let sbqApp = null;
+			let removeScrapbookq = browser.storage.local.remove("ScrapbookQApp");
+			removeScrapbookq.then(onRemoved, onError);
+
+			if (arrNodesList == null) {
+				arrNodesList = new Array();
+			}
+			arrNodesList[currentRdfName] = arrNodes;
+
+			if (sidebarHtmlList == null) {
+				sidebarHtmlList = new Array();
+			}
+			sidebarHtmlList[currentRdfName] = scrapContainer.innerHTML;
+
+			sbqApp = new ScrapBookQApp(
+				arrNodesList,
+				sidebarHtmlList,
+				currentRdfName,
+				rdfloaded,
+				downloadjs,
+				serverport,
+				scrapbookrdfdirs);
+			contentToStore["ScrapbookQApp"] = sbqApp;
+			browser.storage.local.set(contentToStore);
+
+			function onRemoved() {
+				console.log("Remove storeApp OK");
+			}
+
+			function onError(e) {
+				console.log("Remove storeApp Error: " + e);
+			}
+			//var clearStorage = browser.storage.local.clear();
+			//clearStorage.then(onCleared, onError);
+		});
+
+		/*
+		if (detailOpened == true && docDetailTable != null) {
+			//alert("Document Details Panel has already opend, please close it first.");
+			docDetailTable.parentNode.removeChild(docDetailTable);
+			//return;
+		}
+		if (currentTarget != null) {
+			currentTarget.classList.remove("done");
+		}
+		*/
+		datadirty = false;
+		statedirty = false;
 	}
-	*/
 }
 
 function removeStoreApp() {
@@ -76,6 +107,20 @@ function removeStoreApp() {
 		console.log("removeStoreApp error.");
 		console.log(e);
 	}
+}
+
+function clearStoreApp() {
+	function onCleared() {
+		console.log("clearStoreApp OK");
+	}
+
+	function onError(e) {
+		console.log("clearStoreApp error.");
+		console.log(e);
+	}
+
+	var clearStorage = browser.storage.local.clear();
+	clearStorage.then(onCleared, onError);
 }
 
 /*
@@ -96,7 +141,7 @@ Update the sidebar's content.
 2) Get its stored content.
 3) Put it in the content box.
 */
-function updateContent() {
+function updateContent(currentRdf) {
 	browser.tabs.query({ windowId: myWindowId, active: true })
 		.then((tabs) => {
 			return browser.storage.local.get("ScrapbookQApp");
@@ -104,17 +149,32 @@ function updateContent() {
 		.then((storedInfo) => {
 			if (storedInfo[Object.keys(storedInfo)[0]] != null) {
 				let sbqApp = storedInfo[Object.keys(storedInfo)[0]];
-				arrNodes = sbqApp.arrayNodes;
-				scrapContainer.innerHTML = sbqApp.sidebarhtml;
-				folderport = sbqApp.folderport;
-				scrapbookqhtmlok = sbqApp.scrapbookqhtmlok;
-				scrapbookqrdfok = sbqApp.scrapbookqrdfok;
-				scrapbookrdfok = sbqApp.scrapbookrdfok;
+				console.log("updateContent sbqApp.");
+				if (currentRdf != null) {
+					currentRdfName = currentRdf;
+				}
+				else {
+					currentRdfName = sbqApp.currentRdfName;
+				}
 				rdfloaded = sbqApp.rdfloaded;
 				downloadjs = sbqApp.downloadjs;
+				serverport = sbqApp.serverport;
+				scrapbookrdfdirs = sbqApp.scrapbook;
+
+				if (currentRdfName != null) {
+					if (sbqApp.arrNodesList[currentRdfName] != null) {
+						arrNodes = sbqApp.arrNodesList[currentRdfName];
+					}
+					if (sbqApp.sidebarHtmlList[currentRdfName] != null) {
+						scrapContainer.innerHTML = sbqApp.sidebarHtmlList[currentRdfName];
+					}
+					browser.runtime.sendMessage({ currentRdfName: currentRdfName });
+				}
+				//console.log(sbqApp);
 			};
 		});
 	browser.runtime.sendMessage({ testserver: "TestServer" });
+	console.log("sendMessage: TestServer");
 }
 
 /*
@@ -231,7 +291,6 @@ function initScrapbookqHeader() {
 	var myul = document.getElementById("myul");
 	var informationli = document.getElementById("informationli");
 	var scrapbookqli = document.getElementById("scrapbookqli");
-	var scrapbookli = document.getElementById("scrapbookli");
 	var nativeappli = document.getElementById("nativeappli");
 	var nativeserverli = document.getElementById("nativeserverli");
 	var downloadjsli = document.getElementById("downloadjsli");
@@ -240,12 +299,10 @@ function initScrapbookqHeader() {
 	//var downloadjsinput = document.getElementById("downloadjs");
 	var mylisearchbutton = document.getElementById("mylisearchbutton");
 	var searchtext = document.getElementById("searchtext");
-	var scrapbookqrdf = document.getElementById("scrapbookqrdf");
-	var scrapbookrdf = document.getElementById("scrapbookrdf");
+	//var scrapbookqrdf = document.getElementById("scrapbookqrdf");
 	myul.addEventListener("mouseout", onOut, true);
 	informationli.addEventListener("click", change, true);
 	scrapbookqli.addEventListener("mouseover", onOver, true);
-	scrapbookli.addEventListener("mouseover", onOver, true);
 	nativeappli.addEventListener("mouseover", onOver, true);
 	nativeserverli.addEventListener("mouseover", onOver, true);
 	downloadjsli.addEventListener("mouseover", onOver, true);
@@ -269,67 +326,113 @@ function initScrapbookqHeader() {
 	mylisearchbutton.innerText = browser.i18n.getMessage("SearchButton");
 	searchtext.placeholder = browser.i18n.getMessage("SearchText");
 	informationli.innerText = browser.i18n.getMessage("LoadDataDown");
-	document.getElementById("scrapbookqrdf").setAttribute("disabled", "disabled");
-	document.getElementById("scrapbookrdf").setAttribute("disabled", "disabled");
 	document.getElementById("nativeapp").setAttribute("disabled", "disabled");
 	document.getElementById("nativeserver").setAttribute("disabled", "disabled");
 	document.getElementById("downloadjs").setAttribute("disabled", "disabled");
-	//scrapbookqrdf.addEventListener("change", function () { if (scrapbookqrdf.checked) loadRDFDoc("scrapbookq") }, true);
-	//scrapbookrdf.addEventListener("change", function () { if (scrapbookrdf.checked) loadRDFDoc("scrapbook") }, true);
-
+	/*
+	scrapbookqrdf.addEventListener("click", function () {
+		//加载新数据、更新输出、保存数据、更新状态、传输状态
+		currentRdfName = this.value;
+		console.log("currentRdfName: " + this.value);
+		loadXMLDoc("http://localhost:" + serverport + "/" + currentRdfName + "/rdf/scrapbook.rdf");
+		xmlDoc = xmlhttp.responseXML;
+		while (scrapContainer.firstChild) {
+			scrapContainer.firstChild.remove();
+		}
+		arrNodes = new Array();
+		initScrap(arrNodes, xmlDoc);
+		displyScrap(arrNodes, scrapContainer);
+	});
+	*/
 	//避免未选中任何对象时操作scrapbookq
 	currentTarget = document.getElementById("scrapbookq");
-	//如果arr没有数据就新建一个，这种情况出现在第一次安装ScrapbookQ的情况下
-	if (arrNodes == null || arrNodes.length == 0) {
-		arrNodes = new Array();
-		arrNodes.push(new scrapNode(
-			"urn:" + "scrapbookq" + ":item:" + "scrapbookq",
-			"scrapbookq",
-			"",
-			"ScrapbookQ",
-			"",
-			"star0.png",
-			"scrapbookq-usage.html",
-			browser.i18n.getMessage("ManualTitle"),
-			null,
-			""
-		));
-	}
-	document.getElementById("informationli").style.color = "red";
-	document.getElementById("informationli").innerText = browser.i18n.getMessage("Loading");
 	loadRDFDoc();
-	document.getElementById("informationli").style.color = "black";
-	document.getElementById("informationli").innerText = browser.i18n.getMessage("LoadDataDown");
+
+	let inputradio = null;
+	for (let i = 0; i < scrapbookrdfdirs.length; i++) {
+		if (scrapbookrdfdirs[i].length > 0 && document.getElementById("scrapbook" + i) == null) {
+			inputradio = document.createElement("INPUT");
+			inputradio.setAttribute("type", "radio");
+			inputradio.setAttribute("name", "rdffiles");
+			inputradio.setAttribute("id", "scrapbook" + i);
+			inputradio.setAttribute("value", "scrapbook" + i);
+			inputradio.setAttribute("title", scrapbookrdfdirs[i]);
+			inputradio.addEventListener("click", function () {
+				//加载新数据、更新输出、保存数据、更新状态、传输状态
+				currentRdfName = this.value;
+				console.log("currentRdfName: " + currentRdfName);
+				arrNodes = new Array();
+				
+				while (scrapContainer.firstChild) {
+					//console.log(scrapContainer.firstChild);
+					scrapContainer.firstChild.remove();
+				}
+				
+				browser.tabs.query({ windowId: myWindowId, active: true })
+					.then((tabs) => {
+						return browser.storage.local.get("ScrapbookQApp");
+					})
+					.then((storedInfo) => {
+						if (storedInfo[Object.keys(storedInfo)[0]] != null) {
+							let sbqApp = storedInfo[Object.keys(storedInfo)[0]];
+							if (currentRdfName != null) {
+								if (sbqApp.arrNodesList[currentRdfName] != null) {
+									arrNodes = sbqApp.arrNodesList[currentRdfName];
+									//console.log("Load arrNodes ok");
+								}
+								if (sbqApp.sidebarHtmlList[currentRdfName] != null) {
+									scrapContainer.innerHTML = sbqApp.sidebarHtmlList[currentRdfName];
+									//console.log("Load sidebarhtml ok");
+								}
+							}
+						};
+					});
+				//updateContent(currentRdfName);
+				loadRDFDoc();				
+			});
+			document.getElementById("scrapbookqli").appendChild(inputradio);
+			document.getElementById("scrapbookqli").appendChild(document.createTextNode("scrapbook" + i));
+			document.getElementById("scrapbookqli").appendChild(inputradio = document.createElement("BR"));
+		}
+	}
+
+	if (currentRdfName != null && document.getElementById(currentRdfName) != null) {
+		document.getElementById(currentRdfName).setAttribute("checked", "checked");
+	}
+
 
 	//在完全载入rdf并生成html后在保存入storage
 	window.addEventListener("mouseout", storeApp);
 
-	//folderport.scrapbookq = 3338 folderport.ScrapBook = 3339
-	function loadRDFDoc(rdfname) {
+	function loadRDFDoc() {
+		//如果arr没有数据就新建一个，这种情况出现在第一次安装ScrapbookQ的情况下,或者清空arr时
+		if (arrNodes == null || arrNodes.length == 0) {
+			arrNodes = new Array();
+			arrNodes.push(new scrapNode(
+				"urn:" + "scrapbookq" + ":item:" + "scrapbookq",
+				"scrapbookq",
+				"",
+				"ScrapbookQ",
+				"",
+				"star0.png",
+				"scrapbookq-usage.html",
+				browser.i18n.getMessage("ManualTitle"),
+				null,
+				""
+			));
+		}
 		scrapContainer = document.querySelector(".scrap-container");
-		//loadXMLDoc("scrapbookq.rdf");
-		if (scrapbookqrdfok == true) {
-			loadXMLDoc("http://localhost:" + folderport.scrapbookq + "/scrapbookq.rdf");
+		if (serverport != null && currentRdfName != null) {
+			console.log("loadXMLDoc(" + "http://localhost:" + serverport + "/" + currentRdfName + "/rdf/scrapbook.rdf" + ")");
+			document.getElementById("informationli").style.color = "red";
+			document.getElementById("informationli").innerText = browser.i18n.getMessage("Loading");
+			loadXMLDoc("http://localhost:" + serverport + "/" + currentRdfName + "/rdf/scrapbook.rdf");
 			xmlDoc = xmlhttp.responseXML;
 			initScrap(arrNodes, xmlDoc);
 			displyScrap(arrNodes, scrapContainer);
-		}
-		if (scrapbookrdfok == true) {
-			//加载新数据、更新输出、保存数据、更新状态、传输状态
-			loadXMLDoc("http://localhost:" + folderport.scrapbook + "/scrapbook.rdf");
-			xmlDoc = xmlhttp.responseXML;
-			initScrap(arrNodes, xmlDoc);
-			displyScrap(arrNodes, scrapContainer);
-			if (rdfloaded == false) {
-				saveScrapbookqData();
-				rdfloaded = true;
-				browser.runtime.sendMessage({ rdfloaded: "1" });
-			}
-		}
-		if (scrapbookqhtmlok == true && 1 > 2) {
-			loadXMLDoc("http://localhost:" + folderport.scrapbookq + "/scrapbookq.html");
-			//scrapContainer.innerHTML = xmlhttp.responseText;
-			displyScrap(arrNodes, scrapContainer);
+			document.getElementById("informationli").style.color = "black";
+			document.getElementById("informationli").innerText = browser.i18n.getMessage("LoadDataDown");
+			statedirty = true;
 		}
 	}
 
@@ -361,7 +464,7 @@ function initScrapbookqHeader() {
 				searchresultarr.push({ title: "bing", url: "http://www.bing.com" });
 				searchresultarr.push({ title: "google", url: "http://www.google.com" });
 				*/
-		currentidfolder = "scrapbookq";
+		currentRdfName = "scrapbookq";
 		let searchurl = null;
 		for (let i = 0; i < searchresultarr.length; i++) {
 			DOMPars.appendChild(document.createTextNode(i + " . "));
@@ -375,7 +478,7 @@ function initScrapbookqHeader() {
 			DOMPars.appendChild(newURL);
 			DOMPars.appendChild(document.createTextNode(" : "));
 			newURL = document.createElement("A");
-			searchurl = "http://localhost:" + serverport + "/" + currentidfolder + "/data/" + searchresultarr[i].id + "/index.html";
+			searchurl = "http://localhost:" + serverport + "/" + currentRdfName + "/data/" + searchresultarr[i].id + "/index.html";
 			newURL.setAttribute("href", searchurl);
 			newURL.setAttribute("target", "_blank");
 			newURL.appendChild(document.createTextNode(searchresultarr[i].title));
@@ -402,15 +505,11 @@ function initScrapbookqHeader() {
 			case "scrapbookqli":
 				document.getElementById("scrapbookqli").className = "liMouseOver";
 				break;
+			/*
 			case "scrapbookqrdf":
 				document.getElementById("scrapbookqli").className = "liMouseOver";
 				break;
-			case "scrapbookli":
-				document.getElementById("scrapbookli").className = "liMouseOver";
-				break;
-			case "scrapbookrdf":
-				document.getElementById("scrapbookli").className = "liMouseOver";
-				break;
+			*/
 			case "nativeappli":
 				document.getElementById("nativeappli").className = "liMouseOver";
 				break;
@@ -457,9 +556,6 @@ function initScrapbookqHeader() {
 			case "scrapbookqli":
 				document.getElementById(event.target.id).className = "li";
 				break;
-			case "scrapbookli":
-				document.getElementById(event.target.id).className = "li";
-				break;
 			case "nativeappli":
 				document.getElementById(event.target.id).className = "li";
 				break;
@@ -480,7 +576,6 @@ function initScrapbookqHeader() {
 	function hideli() {
 		document.getElementById("informationli").innerText = browser.i18n.getMessage("LoadDataDown"); //↓
 		document.getElementById("scrapbookqli").className = "liHide";
-		document.getElementById("scrapbookli").className = "liHide";
 		document.getElementById("nativeappli").className = "liHide";
 		document.getElementById("downloadjsli").className = "liHide";
 		document.getElementById("searchmodeli").className = "liHide";
@@ -497,7 +592,6 @@ function initScrapbookqHeader() {
 			case 1:
 				document.getElementById("informationli").innerText = browser.i18n.getMessage("LoadDataUp"); //↑
 				document.getElementById("scrapbookqli").className = "liShow";
-				document.getElementById("scrapbookli").className = "liShow";
 				document.getElementById("nativeappli").className = "liShow";
 				document.getElementById("downloadjsli").className = "liShow";
 				document.getElementById("searchmodeli").className = "liShow";
@@ -507,7 +601,6 @@ function initScrapbookqHeader() {
 			case 0:
 				document.getElementById("informationli").innerText = browser.i18n.getMessage("LoadDataDown"); //↓
 				document.getElementById("scrapbookqli").className = "liHide";
-				document.getElementById("scrapbookli").className = "liHide";
 				document.getElementById("nativeappli").className = "liHide";
 				document.getElementById("downloadjsli").className = "liHide";
 				document.getElementById("searchmodeli").className = "liHide";
@@ -579,7 +672,7 @@ function cutScrapNode(scrapArray, currentId) {
 function getAllScrapNode(scrapArray) {
 	//如果是leap，获取数据，返回
 	if (scrapArray != null && scrapArray.type == "") {
-		delArrayIdFolder.push(scrapArray.foldername + "/" + scrapArray.id);
+		delArrayIdFolder.push(currentRdfName + "/" + scrapArray.id);
 	}
 	else if (scrapArray != null && scrapArray.type == "folder" && scrapArray.subNodes != null) {
 		//如果是目录非空则递归搜索
@@ -624,7 +717,7 @@ function updateScrapNode(scrapArray, currentId, title, comment) {
 	}
 }
 
-//保存scrapbookq数据到downloadfolder/scrapbookq/scrapbookq.rdf文件
+//保存scrapbookq数据到downloadfolder/scrapbookq/scrapbook.rdf文件
 function saveScrapbookqData() {
 	var treeroot = document.createElement("RDF:RDF");
 	var parentNode = document.createElement("RDF:Seq");
@@ -692,7 +785,8 @@ function saveScrapbookqData() {
 			}
 			treeleaf.setAttribute("NS1:source", currentNode[i].source);
 			treeleaf.setAttribute("NS1:comment", currentNode[i].comment);
-			treeleaf.setAttribute("NS1:foldername", currentNode[i].foldername);
+			//treeleaf.setAttribute("NS1:foldername", currentNode[i].foldername);
+			treeleaf.setAttribute("NS1:foldername", "scrapbook");
 			treeroot.appendChild(treeleaf);
 
 			treeli = document.createElement("RDF:li");
@@ -711,10 +805,45 @@ function saveScrapbookqData() {
 	}
 }
 
-
-//folderport["scrapbookq"]=1234
 function handleMessageScrapq(request, sender, sendResponse) {
 	console.log("== scrpq.js Received: == ");
+	if (request.currentRdfNameisnull != null) {
+		if (currentRdfName != null) {
+			browser.runtime.sendMessage({ currentRdfName: currentRdfName });
+			alert("Please try capture again.");
+		}
+		else {
+			alert("Please select one scrapbook folder and try capture again.");
+		}
+	}
+	if (request.downloadlist != null) {
+		var formData = new FormData();
+		formData.append("currentRdfName", request.currentRdfName);
+		formData.append("folderid", request.folderid);
+		formData.append("downloadlist", request.downloadlist);
+		var xhr = new XMLHttpRequest();
+		let posturl = "http://localhost:" + serverport + "/" + request.currentRdfName + "/";
+		console.log("POST rdf file: " + posturl);
+		xhr.open("POST", posturl);
+		//xhr.setRequestHeader("foldername", currentRdfName);
+		xhr.send(formData);
+	}
+	if (request.testcase != null) {
+		console.log("post scrapbook.html")
+		saveScrapbookqData();
+		/*
+		let domHtml = "<html><h1>Hello</h1></html>";
+		let file = new File([domHtml], "scrapbookq.html", {
+			type: "text/xml",
+		});
+
+		var formData = new FormData();
+		formData.append("file", file, "scrapbook.html");
+		var xhr = new XMLHttpRequest();
+		xhr.open("POST", "http://localhost:33338/scrapbookq/");
+		xhr.send(formData);
+		*/
+	}
 	if (request.search != null) {
 		browser.windows.getCurrent({ populate: true }).then((windowInfo) => {
 			myWindowId = windowInfo.id;
@@ -728,8 +857,15 @@ function handleMessageScrapq(request, sender, sendResponse) {
 		onRebuildSidebar();
 		console.log("scrapbookq.js Received: (\"rebuildsidebar:" + request.rebuildsidebar + "\");");
 	}
-	if (request.downloadok != null) {
-		console.log("scrapbookq.js Received: (\"DOWNLOADOK:" + request.downloadok + "\");");
+	//{ downloadmsg: response.downloadmsg, currentRdfName: response.currentRdfName, folderid: response.folderid }
+	if (request.downloadmsg != null) {
+		if (request.folderid != null && document.getElementById(request.folderid) != null) {
+			document.getElementById(request.folderid).removeAttribute("disabled"); 
+		}
+		else if (request.currentRdfName != currentRdfName) {
+			alert("Please select correct ScrapBook folder when downloading pages.");
+		}
+		console.log("scrapbookq.js Received: currentRdfName: " + request.currentRdfName + " folderid: " + request.folderid + " downloadmsg: " + request.downloadmsg);
 	}
 	//console.log(request);
 	if (request.NativeAppConnectError != null) {
@@ -756,7 +892,9 @@ function handleMessageScrapq(request, sender, sendResponse) {
 			.then((storedInfo) => {
 				if (storedInfo[Object.keys(storedInfo)[0]] != null) {
 					let sbqApp = storedInfo[Object.keys(storedInfo)[0]];
-					scrapContainer.innerHTML = sbqApp.sidebarhtml;
+					if (currentRdfName != null) {
+						//scrapContainer.innerHTML = sbqApp.sidebarHtmlList[currentRdfName];
+					}
 				};
 			});
 
@@ -764,7 +902,7 @@ function handleMessageScrapq(request, sender, sendResponse) {
 		rdfloaded = (request.Rdfloaded == "1");
 		downloadjs = (request.Downloadjs == "1");
 		serverport = request.Serverport;
-		scrapbook = request.Scrapbook;
+		scrapbookrdfdirs = new Array();
 		serverstatus = (request.Serverstate == "1");
 		if (downloadjs == true) {
 			document.getElementById("downloadjs").setAttribute("checked", "true");
@@ -773,32 +911,18 @@ function handleMessageScrapq(request, sender, sendResponse) {
 			document.getElementById("downloadjs").removeAttribute("checked");
 		}
 
-
-		if (true) {
-			scrapbookqrdfok = true;
-			folderport["scrapbookq"] = serverport + "/scrapbookq";
-			document.getElementById("scrapbookqrdf").setAttribute("checked", "true");
-		}
-		else {
-			scrapbookqrdfok = false;
-			document.getElementById("scrapbookqrdf").removeAttribute("checked");
+		if (request.Scrapbook.length != 0) {
+			let rdfdirs = request.Scrapbook.split(";");
+			for (let i = 0; i < rdfdirs.length; i++) {
+				if (rdfdirs[i].length > 0) {
+					scrapbookrdfdirs.push(rdfdirs[i]);
+				}
+			}
 		}
 
-		scrapbookqhtmlok = true; //(request.sbqhtml == "1");
-
-		if (request.Scrapbook == "1") {
-			scrapbookrdfok = true;
-			folderport["scrapbook"] = serverport + "/scrapbook";
-			document.getElementById("scrapbookrdf").setAttribute("checked", "true");
-		}
-		else {
-			scrapbookrdfok = false;
-			document.getElementById("scrapbookrdf").removeAttribute("checked");
-		}
-		console.log("scrapbookqrdfok: " + scrapbookqrdfok + " scrapbookqhtmlok: " + scrapbookqhtmlok + " scrapbookrdfok: " + scrapbookrdfok + " serverstatus: " + serverstatus);
+		console.log("serverstatus: " + serverstatus);
 		if (serverstatus == true) {
 			setTimeout(initScrapbookqHeader, 2000);
-			//initScrapbookqHeader();
 		}
 	}
 	//{ test: "TEST", serverstate: servertest[1] }
@@ -820,7 +944,7 @@ function handleMessageScrapq(request, sender, sendResponse) {
 		alert("Some files deleted faild: " + request.undelete);
 	}
 
-	if (request.id != null && request.title != null && request.url != null) {
+	if (request.id != null && request.title != null && request.url != null && request.currentRdfName != null && request.currentRdfName === currentRdfName) {
 		console.log("Message from the background: " + request.id + " : " + request.title + " : " + request.url);
 		//避免未选中任何对象时操作scrapbookq
 
@@ -854,26 +978,27 @@ function handleMessageScrapq(request, sender, sendResponse) {
 		var newIcon = null;
 		//新建page页面的url
 		var newURL = null;
-		foldername = "scrapbookq";
 		newLi = document.createElement("li");
 		newIcon = document.createElement("img");
 		if (request.favicon != null) {
-			newIcon.setAttribute("src", "http://localhost:" + folderport[foldername] + "/data/" + request.id + "/" + request.favicon);
+			newIcon.setAttribute("src", "http://localhost:" + serverport + "/" + currentRdfName + "/data/" + request.id + "/" + request.favicon);
 		}
 		else {
 			//有些页面没有favicon，使用缺省图标
-			newIcon.setAttribute("src", "".concat(foldername, "/data/", "file0.png"));
+			newIcon.setAttribute("src", "".concat(currentRdfName, "/data/", "file0.png"));
 		}
 		newIcon.setAttribute("height", "14");
 		newIcon.setAttribute("width", "12");
 		newLi.appendChild(newIcon);
-		newURL = document.createElement("a");
+		newURL = document.createElement("A");
 		newURL.setAttribute("id", request.id);
 		newURL.setAttribute("nodetype", "");
-		newURL.setAttribute("foldername", foldername);
+		newURL.setAttribute("foldername", currentRdfName);
 		newURL.setAttribute("sourceurl", request.url);
 		newURL.appendChild(document.createTextNode(request.title));
 		newLi.appendChild(newURL);
+		//先禁用等待时机,算了，还得处理click事件，以后吧
+		//newURL.setAttribute("disabled", "disabled");
 		if (newLi != null) {
 			//console.log("currentTarget.id = " + currentTarget.id + " tagName: " + currentTarget.tagName + " parentNode.tagName: " + currentTarget.parentNode.tagName);
 			//实在没办法了就随便吧
@@ -892,8 +1017,13 @@ function handleMessageScrapq(request, sender, sendResponse) {
 				if (currentTarget.parentNode.nextSibling != null) {
 					currentTarget.parentNode.parentNode.insertBefore(newLi, currentTarget.parentNode.nextSibling);
 				}
-				else {
+				else if (currentTarget.parentNode.parentNode != null) {
 					currentTarget.parentNode.parentNode.appendChild(newLi);
+				}
+				else {
+					newLi.setAttribute("isroot", "0");
+					newLi.setAttribute("class", "tree-root");
+					scrapContainer.appendChild(newLi)
 				}
 				newLi = null;
 			}
@@ -920,21 +1050,22 @@ function handleMessageScrapq(request, sender, sendResponse) {
 
 		//scrapNode(about, id, type, title, chars, icon, source, comment, subNodes, foldername) 
 		var scrapNodeObj = new scrapNode(
-			"urn:" + foldername + ":item:" + request.id,
+			"urn:" + currentRdfName + ":item:" + request.id,
 			request.id,
 			"",
 			request.title,
 			"",
-			foldername + "/data/" + request.id + "/" + request.favicon,
+			currentRdfName + "/data/" + request.id + "/" + request.favicon,
 			request.url,
 			"",
 			null,
-			foldername
+			currentRdfName
 		);
 		//同步数据
 		insertScrapNode(arrNodes, currentTarget.getAttribute("id"), scrapNodeObj);
 		//保存数据文件到rdf文件
-		saveScrapbookqData();
+		datadirty = true;
+		//saveScrapbookqData();
 	}
 }
 
@@ -979,15 +1110,16 @@ function onPasteDocument(event) {
 			delNode.setAttribute("isroot", currentTarget.parentNode.getAttribute("isroot"));
 			delNode.setAttribute("class", currentTarget.parentNode.getAttribute("class"));
 			currentTarget.parentNode.parentNode.appendChild(delNode);
-			delNode = null;						
+			delNode = null;
 		}
-		
+
 		//同步数据array
 		insertScrapNode(arrNodes, currentTarget.getAttribute("id"), delArrayNode);
 		delArrayNode = null;
 		var mylisearchbutton = document.getElementById("mylisearchbutton");
 		//保存数据文件到rdf文件
-		saveScrapbookqData();
+		datadirty = true;
+		//saveScrapbookqData();
 	}
 	else {
 		alert("Paste content is null: " + delNode + " : " + delArrayNode);
@@ -1219,7 +1351,8 @@ function onClickOk(event) {
 	docDetailTable.parentNode.removeChild(docDetailTable);
 	detailOpened = false;
 	//保存数据文件到rdf文件
-	saveScrapbookqData();
+	datadirty = true;
+	//saveScrapbookqData();
 }
 
 function onDetail2(event) {
@@ -1243,7 +1376,7 @@ function openScrapURL(event) {
 			scrapURL = "scrapbookq-usage.html";
 		}
 		else {
-			scrapURL = "http://localhost:" + folderport[currentTarget.getAttribute("foldername")] + "/data/" + currentTarget.getAttribute("id") + "/index.html";
+			scrapURL = "http://localhost:" + serverport + "/" + currentRdfName + "/data/" + currentTarget.getAttribute("id") + "/index.html";
 		}
 
 		browser.tabs.update({ url: scrapURL });
@@ -1259,7 +1392,7 @@ function openScrapURLNewTab(event) {
 			scrapURL = "scrapbookq-usage.html";
 		}
 		else {
-			scrapURL = "http://localhost:" + folderport[currentTarget.getAttribute("foldername")] + "/data/" + currentTarget.getAttribute("id") + "/index.html";
+			scrapURL = "http://localhost:" + serverport + "/" + currentRdfName + "/data/" + currentTarget.getAttribute("id") + "/index.html";
 		}
 		browser.tabs.create({ url: scrapURL });
 	}
@@ -1307,7 +1440,6 @@ function toggleCss(event) {
  * @param {*} arrNodes 
  */
 function initScrap(arrNodes, xmlDoc) {
-	foldername = "scrapbook";
 	isroot = 0;
 	//xmlDoc = xmlhttp.responseXML;
 	var y = xmlDoc.getElementsByTagName("RDF:Seq");
@@ -1382,10 +1514,9 @@ function displyScrap(currentNode, parentNode) {
 			img = document.createElement("img");
 			img.setAttribute("height", "14");
 			img.setAttribute("width", "12");
-			//folderport["scrapbookq"]=1234
 			if (currentNode[i].icon != "" && currentNode[i].icon.indexOf("/") != -1) {
-				//scrapbook/data/20171020232214/favicon.ico -> http://localhost:3339/data/20171020232214/favicon.ico 
-				img.setAttribute("src", "http://localhost:" + folderport[currentNode[i].icon.slice(0, currentNode[i].icon.indexOf("/"))] + currentNode[i].icon.slice(currentNode[i].icon.indexOf("/")));
+				// scrapbook/data/20171020232214/favicon.ico -> http://localhost:3338/scrapbook0/data/20171020232214/favicon.ico 
+				img.setAttribute("src", "http://localhost:" + serverport + "/" + currentRdfName + currentNode[i].icon.slice(currentNode[i].icon.indexOf("/")));
 			}
 			if (currentNode[i].icon == "") {
 				img.setAttribute("src", "icons/file0.png");
@@ -1475,16 +1606,16 @@ function getScrapNodes(RDFResource, arrNodes) {
 }
 
 /*保存sidebar的arr和html以及几个必须状态值到local storage*/
-function ScrapBookQApp(arrayNodes, sidebarhtml, folderport, scrapbookqhtmlok, scrapbookqrdfok, scrapbookrdfok, rdfloaded, downloadjs) {
-	this.arrayNodes = arrayNodes;
-	this.sidebarhtml = sidebarhtml;
-	this.folderport = folderport;
-	this.scrapbookqhtmlok = scrapbookqhtmlok;
-	this.scrapbookqrdfok = scrapbookqrdfok;
-	this.scrapbookrdfok = scrapbookrdfok;
+function ScrapBookQApp(arrNodesList, sidebarHtmlList, currentRdfName, rdfloaded, downloadjs, serverport, scrapbook) {
+	this.arrNodesList = arrNodesList;
+	this.sidebarHtmlList = sidebarHtmlList;
+	this.currentRdfName = currentRdfName;
 	this.rdfloaded = rdfloaded;
 	this.downloadjs = downloadjs;
+	this.serverport = serverport;
+	this.scrapbook = scrapbook;
 }
+
 function scrapNode(about, id, type, title, chars, icon, source, comment, subNodes, foldername) {
 	this.about = about;
 	this.id = id;
@@ -1550,7 +1681,7 @@ function loadXMLDoc(dname) {
 }
 
 function onCreateFolder(event) {
-	console.log("currentTarget.parentNode.isroot: " + currentTarget.parentNode.getAttribute("isroot") + "currentTarget.parentNode.classList: " + currentTarget.parentNode.classList + " currentTarget.classList: " + currentTarget.classList + " currentTarget.id = " + currentTarget.id + " tagName: " + currentTarget.tagName + " parentNode.tagName: " + currentTarget.parentNode.tagName);
+	//console.log("currentTarget.parentNode.isroot: " + currentTarget.parentNode.getAttribute("isroot") + "currentTarget.parentNode.classList: " + currentTarget.parentNode.classList + " currentTarget.classList: " + currentTarget.classList + " currentTarget.id = " + currentTarget.id + " tagName: " + currentTarget.tagName + " parentNode.tagName: " + currentTarget.parentNode.tagName);
 	var treenode = null;
 	var nodeSummary = null;
 	var treeleaf = null;
@@ -1558,7 +1689,6 @@ function onCreateFolder(event) {
 	var aText = null;
 	var folderTitle = browser.i18n.getMessage("NewDirectory");
 	var nowId = getNow();
-	foldername = "scrapbookq";
 	treenode = document.createElement("details");
 	//只有父节点<li>里面才有"isroot"属性，当前节点为<A>
 	if (currentTarget.parentNode.getAttribute("isroot") == "0") {
@@ -1573,7 +1703,7 @@ function onCreateFolder(event) {
 	nodeSummary.textContent = folderTitle;
 	nodeSummary.setAttribute("id", nowId);
 	nodeSummary.setAttribute("nodeType", "folder");
-	nodeSummary.setAttribute("foldername", foldername);
+	nodeSummary.setAttribute("foldername", currentRdfName);
 	treenode.appendChild(nodeSummary);
 	//如果目录打开则插进去
 	if (currentTarget.tagName == "SUMMARY" && currentTarget.parentNode.open === true) {
@@ -1591,7 +1721,7 @@ function onCreateFolder(event) {
 
 	//scrapNode(about, id, type, title, chars, icon, source, comment, subNodes, foldername) 
 	var scrapNodeObj = new scrapNode(
-		"urn:" + foldername + ":item:" + nowId,
+		"urn:" + currentRdfName + ":item:" + nowId,
 		nowId,
 		"folder",
 		folderTitle,
@@ -1600,11 +1730,12 @@ function onCreateFolder(event) {
 		"",
 		"",
 		null,
-		foldername
+		currentRdfName
 	);
 	insertScrapNode(arrNodes, currentTarget.getAttribute("id"), scrapNodeObj);
 	//保存数据文件到rdf文件
-	saveScrapbookqData();
+	datadirty = true;
+	//saveScrapbookqData();
 }
 
 function onDeleteDocument(event) {
@@ -1646,7 +1777,8 @@ function onDeleteDocument(event) {
 		browser.runtime.sendMessage({ delete: stemp });
 	}
 	//将数组数据保存为rdf文件
-	saveScrapbookqData();
+	datadirty = true;
+	//saveScrapbookqData();
 }
 
 
@@ -1675,6 +1807,8 @@ function onSortByTitle() {
 			//sortedNode.pop();
 		}
 	}
+	//将数组数据保存为rdf文件
+	datadirty = true;
 }
 
 function onSortByTitleDesc() {
@@ -1701,6 +1835,8 @@ function onSortByTitleDesc() {
 			//sortedNode.pop();
 		}
 	}
+	//将数组数据保存为rdf文件
+	datadirty = true;
 }
 
 //将目标id所在的scrapNode对象的子节点进行排序
@@ -1763,6 +1899,8 @@ function onSortByDate() {
 			//sortedNode.pop();
 		}
 	}
+	//将数组数据保存为rdf文件
+	datadirty = true;
 }
 
 
@@ -1790,6 +1928,8 @@ function onSortByDateDesc() {
 			//sortedNode.pop();
 		}
 	}
+	//将数组数据保存为rdf文件
+	datadirty = true;
 }
 
 //将目标id所在的scrapNode对象的子节点进行排序
@@ -1811,11 +1951,12 @@ function sortByDateScrapNode(scrapArray, currentId, desc) {
 
 function onRebuildSidebar(event) {
 	if (confirm(browser.i18n.getMessage("ConfirmRebuildSidebar")) === true) {
-		while (document.body.firstChild) {
-			document.body.firstChild.remove();
+		while (scrapContainer.firstChild) {
+			scrapContainer.firstChild.remove();
 		}
 		arrNodes = null;
 		removeStoreApp();
+		clearStoreApp();
 		window.location.reload();
 		/*
 		browser.runtime.sendMessage({ testserver: "TestServer" });
@@ -1888,15 +2029,24 @@ function downloadScrapbookqData(domHtml) {
 	function onFailed(error) {
 		console.log(`Download failed: ${error}`);
 	}
-	//alert("保存文件到scrapbookq/scrapbookq.rdf");
 
 	//pageHtml = request.pagecontent; pageFiles = request.pagefiles;
-	let file = new File([domHtml], "scrapbookq.rdf", {
+	let file = new File([domHtml], "scrapbook.rdf", {
 		type: "text/xml",
 	});
 
-	downloadUrl = window.URL.createObjectURL(file);
-	downloading = browser.downloads.download({ url: downloadUrl, filename: "scrapbookq/scrapbookq.rdf", conflictAction: "overwrite" });
+	var formData = new FormData();
+	formData.append("foldername", currentRdfName);
+	formData.append("file", file, "scrapbook.rdf");
+	var xhr = new XMLHttpRequest();
+	let rdfurl = "http://localhost:" + serverport + "/" + currentRdfName + "/";
+	console.log("POST rdf file: " + rdfurl);
+	xhr.open("POST", rdfurl);
+	//xhr.setRequestHeader("foldername", currentRdfName);
+	xhr.send(formData);
+
+	//downloadUrl = window.URL.createObjectURL(file);
+	//downloading = browser.downloads.download({ url: downloadUrl, filename: "scrapbookq/scrapbook.rdf", conflictAction: "overwrite" });
 
 	/* 不用了，直接存储到storage里
 	file = new File([scrapContainer.innerHTML], "scrapbookq.html", {

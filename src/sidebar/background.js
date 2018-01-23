@@ -3,6 +3,7 @@ var msgContents = new Array();
 msgContents[0] = 0;
 var downloadjs = "0";
 var downloadlist = new Array();
+var currentRdfName = null;
 
 var platform = "linux";
 if (navigator.platform == "Win64" || navigator.platform == "Win32") {
@@ -131,11 +132,16 @@ function onSaveCurrentPage() {
   function onFailed(error) {
     console.log(`Download failed: ${error}`);
   }
-
+  if (currentRdfName != null && currentTab.url != null) {
   folderid = getNow();
   //现在改为直接下载源index.html
-  downloading = browser.downloads.download({ url: currentTab.url, filename: "scrapbookq/data/" + folderid + "/index.html", conflictAction: "overwrite" });
+  downloading = browser.downloads.download({ url: currentTab.url, filename: "scrapbookq/" + currentRdfName + "_" + folderid + "_index.html", conflictAction: "overwrite" });
   downloading.then(onStartedDownload, onFailed);
+  var downloadfiles = new Array();
+    downloadfiles.push(currentRdfName + ";;;" + folderid + ";;;");
+    //index.html现在还是改成由JS下载，后台直接下载由于没有解释执行js而缺少由JS添加的内容
+    //downloadfiles.push(currentTab.url + ";;" + "index.html" + ";;;");
+  }
   //有些页面html搜索不到favicon，所以在background.js里添加下载链接
   //browser.tabs.query({ currentWindow: true, active: true }).then(function (tabs) {
   if (currentTab.favIconUrl != null) {
@@ -150,11 +156,14 @@ function onSaveCurrentPage() {
     faviconfilename = downloadUrl.substr(index0 + 1, index1 - index0 - 1);
     pagefilename += faviconfilename;
     //console.log(downloadUrl + " 下载的文件名: " + pagefilename);  
-    downloading = browser.downloads.download({ url: downloadUrl, filename: pagefilename, conflictAction: "overwrite" });
-    downloading.then(onStartedDownload, onFailed);
+    //downloading = browser.downloads.download({ url: downloadUrl, filename: pagefilename, conflictAction: "overwrite" });
+    //downloading.then(onStartedDownload, onFailed);
+    if (currentRdfName != null && downloadUrl != null && faviconfilename != null) {
+      downloadfiles.push(downloadUrl + ";;" + faviconfilename + ";;;");
+    }
     //pageFiles.unshift(currentTab.favIconUrl);
     // browser.runtime.sendMessage({ id: folderid, title: currentTab.title, url: currentTab.url, favicon: faviconfilename });
-    
+
   }
   //});  
   var arrnull = new Array();
@@ -180,7 +189,7 @@ function onSaveCurrentPage() {
   var downloadidlist = new Array();
   var downloaditemobj = new downloaditem(downloadidlist, faviconfilename, folderid, folderpath, currentTab.title, currentTab.url, -1);
   downloadlist.push(downloaditemobj);
-
+  var imagefilename = null;
   for (pagefilesidx = 0; pagefilesidx < pageFiles.length; pagefilesidx++) {
     downloadUrl = pageFiles[pagefilesidx];
     //抛弃内嵌的base64编码的图片
@@ -191,14 +200,28 @@ function onSaveCurrentPage() {
       if (index1 < 0) {
         index1 = pageFiles[pagefilesidx].length;
       }
+      imagefilename = pageFiles[pagefilesidx].substr(index0 + 1, index1 - index0 - 1);
       pagefilename = "scrapbookq/data/" + folderid + "/";
-      pagefilename += pageFiles[pagefilesidx].substr(index0 + 1, index1 - index0 - 1);
+      pagefilename += imagefilename;
 
       //console.log(pageFiles[pagefilesidx] + "下载的文件名: " + pagefilesidx + " = " + pagefilename);
-      downloading = browser.downloads.download({ url: downloadUrl, filename: pagefilename, conflictAction: "overwrite" });
-      downloading.then(onStartedDownload, onFailed);
+      //downloading = browser.downloads.download({ url: downloadUrl, filename: pagefilename, conflictAction: "overwrite" });
+      //downloading.then(onStartedDownload, onFailed);
+      if (currentRdfName != null && downloadUrl != null && imagefilename != null) {
+        downloadfiles.push(downloadUrl + ";;" + imagefilename + ";;;");
+      }
     }
+  } 
+  var strdownloadfiles = "";
+  for (let i = 1; i < downloadfiles.length; i++) {
+    strdownloadfiles = strdownloadfiles + downloadfiles[i];
   }
+  //console.log("strdownloadfiles: " + strdownloadfiles);
+  //port.postMessage("DOWNLOADLIST:" + strdownloadfiles);
+  browser.runtime.sendMessage( {downloadlist:strdownloadfiles, folderid: folderid, currentRdfName: currentRdfName} );
+
+  //console.log("background.js port.postMessage(\"TESTSERVER\");"); 
+
   //downloading.then(onStartedDownload, onFailed);
   //pageHtml = request.pagecontent; pageFiles = request.pagefiles;
   /*
@@ -217,16 +240,20 @@ function handleCreated(item) {
   //要处理不同平台的路径分隔符
   let itemfolderid = null;
   if (platform == "windows") {
-    itemfolderid = item.filename.split("\\").reverse()[1];
+    //itemfolderid = item.filename.split("\\").reverse()[1];
+    //现在处理文件名: scrapbook0_xxxxxxxxxx_index.html
+    itemfolderid = item.filename.split("_").reverse()[1];
   }
   else {
-    itemfolderid = item.filename.split("/").reverse()[1]
+    //itemfolderid = item.filename.split("/").reverse()[1]
+    itemfolderid = item.filename.split("_").reverse()[1]
   }
 
-  console.log("id: " + item.id + " url: " + item.url + " exists:" + item.exists);
+  console.log("id: " + item.id + " url: " + item.url + " itemfolderid:" + itemfolderid);
   if (item.url.slice(0, 18) != "blob:moz-extension") {
     for (let i = 0; i < downloadlist.length; i++) {
       //只处理自己生成的下载项目：folderid
+      console.log(i + " itemfolderid: " + itemfolderid + " == " + downloadlist[i].folderid)
       if (itemfolderid == downloadlist[i].folderid) {
         for (let j = 0; j < downloadlist[i].downloadidlist.length; j++) {
           if (item.id == downloadlist[i].downloadidlist[j]) {
@@ -236,7 +263,7 @@ function handleCreated(item) {
         downloadlist[i].downloadidlist.push(item.id);
         if (item.filename.indexOf("index.html") != -1) {
           downloadlist[i].indexid = (item.id);
-        }     
+        }
         return;
       }
     }
@@ -255,11 +282,11 @@ function handleChanged(delta) {
           console.log(delta.id + " ****** downloadids.length: " + downloadlist[i].downloadidlist.length);
           //index.html 下载完成后就发消息
           if (downloadlist[i].indexid == delta.id) {
-            port.postMessage("DOWNLOADOK:" + "scrapbookq/" + downloadlist[i].folderid);
-            console.log("background.js port.postMessage(\"DOWNLOADOK:" + "scrapbookq/" + downloadlist[i].folderid + "\");");
+            port.postMessage("DOWNLOADOK:" + currentRdfName + "/" + downloadlist[i].folderid);
+            console.log("background.js port.postMessage(\"DOWNLOADOK:" + currentRdfName + downloadlist[i].folderid + "\");");
             browser.runtime.sendMessage({ downloadok: downloadlist[i].folderid });
             //function downloaditem(downloadidlist, favicon, folderid, folderpath, title, url)
-            browser.runtime.sendMessage({ id: downloadlist[i].folderid, title: downloadlist[i].title, url: downloadlist[i].url, favicon: downloadlist[i].favicon });
+            browser.runtime.sendMessage({ currentRdfName: currentRdfName, id: downloadlist[i].folderid, title: downloadlist[i].title, url: downloadlist[i].url, favicon: downloadlist[i].favicon });
             //browser.tabs.executeScript({ code: "window.location.reload();" });
             console.log("background.js browser.runtime.sendMessage({ downloadok:" + downloadlist[i].folderid + "});");
             downloadlist.splice(i, 1);
@@ -303,6 +330,11 @@ function sendMessageToTabs(tabs) {
 }
 
 function handleMessage(request, sender, sendResponse) {
+  
+  if (request.currentRdfName != null) {
+    currentRdfName = request.currentRdfName;
+    console.log("background.js currentRdfName: " + currentRdfName);
+  }
   if (request.testserver != null) {
     port.postMessage("TESTSERVER");
     console.log("background.js port.postMessage(\"TESTSERVER\");");
@@ -324,7 +356,13 @@ function handleMessage(request, sender, sendResponse) {
       }
     }
     //console.log(pageFiles);
-    onSaveCurrentPage();
+    if (currentRdfName != null) {
+		onSaveCurrentPage();		
+	}
+	else {
+		browser.runtime.sendMessage({ currentRdfNameisnull: true });
+	}
+    
     //browser.tabs.query({ currentWindow: true, active: true }).then(sendMessageToTabs);
   }
   //browser.runtime.sendMessage({ rdfloaded: "1" });
@@ -429,12 +467,15 @@ listen for messages from the app.
 
 port.onMessage.addListener((response) => {
   console.log("background.js Received from APP: " + response.length + " = " + response);
-
   //{ Scrapbook string Rdfloaded string Serverport string Serverstate string }
   if (response.Serverport != null) {
     console.log("background.js sendMessage servers: Downloadjs = " + response.Downloadjs);
     downloadjs = response.Downloadjs;
     browser.runtime.sendMessage({ Scrapbook: response.Scrapbook, Rdfloaded: response.Rdfloaded, Downloadjs: response.Downloadjs, Serverport: response.Serverport, Serverstate: response.Serverstate });
+  }
+  else if (response.Downloadmsg != null) {
+    console.log("background.js sendMessage servers: downloadmsg = " + response.Downloadmsg);
+    browser.runtime.sendMessage({ downloadmsg: response.Downloadmsg, currentRdfName: response.CurrentRdfName, folderid: response.Folderid });
   }
   else if (response.indexOf("TEST") != -1) {
     const servertest = response.split(":");
@@ -445,9 +486,7 @@ port.onMessage.addListener((response) => {
     console.log(response.slice(response.indexOf("Undeleted:")));
     browser.runtime.sendMessage({ undelete: response.slice(response.indexOf("Undeleted:")) });
   }
-
   //processMsg(response);
-
   //browser.tabs.executeScript({ file: "sidebar/testlocalfiles.js" });    
 });
 
@@ -520,6 +559,15 @@ browser.menus.create({
   }
 }, onCreated);
 
+browser.menus.create({
+  id: "TestCase",
+  title: "TestCase",
+  contexts: ["all"],
+  icons: {
+    "16": "icons/star.png",
+  }
+}, onCreated);
+
 /*
 browser.menus.create({
   id: "SearchTitle",
@@ -574,10 +622,10 @@ browser.menus.onClicked.addListener((info, tab) => {
       browser.runtime.sendMessage({ rebuildsidebar: "rebuild" });
       console.log("Clicked the tools RebuildSidebar");
       break;
-      case "SearchTitle":
+    case "SearchTitle":
       browser.runtime.sendMessage({ search: "title" });
       console.log("Clicked the tools RebuildSidebar");
-      break;      
+      break;
     case "StartServer":
       port.postMessage("STARTSERVER");
       console.log("port.postMessage(\"STARTSERVER\")");
@@ -593,6 +641,10 @@ browser.menus.onClicked.addListener((info, tab) => {
       downloading = browser.downloads.download({ url: "http://localhost:3338/Projects/FirefoxAddon/native-messaging/app/ping_pong.json", filename: "scrapbookq/ping_pong.py", conflictAction: "overwrite" });
       downloading = browser.downloads.download({ url: "http://localhost:3338/Projects/FirefoxAddon/native-messaging/app/init_config.sh", filename: "scrapbookq/ping_pong.py", conflictAction: "overwrite" });
       //console.log(info.selectionText);
+      break;
+    case "TestCase":
+      browser.runtime.sendMessage({ testcase: "postrdf" });
+      console.log("Clicked the tools testcase");
       break;
   }
 });

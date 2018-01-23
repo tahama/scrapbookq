@@ -8,8 +8,9 @@
 <body>
     <h1>ScrapbookQ 安装指南</h1>
     欢迎使用ScrapbookQ<br>
-    <a href="https://github.com/tahama/scrapbookq">web site on github</a><br>
-    <a href="https://addons.mozilla.org/firefox/addon/scrapbookq">web site on Mozilla</a><br>
+    <a href="https://github.com/tahama/scrapbookq">项目网址</a><br>
+    <a href="https://addons.mozilla.org/firefox/addon/scrapbookq">扩展网址</a><br>
+    <a href="https://github.com/tahama/scrapbookq/issues">视频演示 & Q.A</a><br> 
 
     <h2>自动化安装步骤</h2>
     <ol>
@@ -97,7 +98,8 @@
     <ol>
         <li>修改scrapbookq\scrapbookq.conf</li>
         <li>在rdfpath值的末尾添加ScrapBook数据文件scrapbook.rdf所在路径</li>
-        <li>大概这个样子：rdfpath=D:\\Document\\ScrapBook\\</li>
+        <li>大概这个样子 (windows): rdfpath=C:\\111\\ScrapBook\\;D:\\222\\ScrapBook\\;E:\\333\\ScrapBook\\ </li>
+        <li>大概这个样子 ( linux ): rdfpath=/111/ScrapBook/;/222/ScrapBook/;/333/ScrapBook/;</li>        
         <li>重新启动firefox浏览器、如果原有ScrapBook数据比较多，第一次读取数据会有点慢</li>
     </ol>
     <script type="text/javascript" src="initscrapbookqdir.js"></script>    
